@@ -1,3 +1,1 @@
 # PMSAPI
-**Pallet Management System
-**
