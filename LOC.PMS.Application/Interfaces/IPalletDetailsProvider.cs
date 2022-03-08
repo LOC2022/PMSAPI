@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using LOC.PMS.Model;
 
 namespace LOC.PMS.Application.Interfaces
