@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LOC.PMS.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.#ctor(LOC.PMS.Application.Interfaces.IPalletDetailsProvider)">
+            <summary>
+            
+            </summary>
+            <param name="palletDetailsProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddPallet(LOC.PMS.Model.PalletDetailsRequest)">
+            <summary>
+            
+            </summary>
+            <param name="palletDetailsRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LOC.PMS.WebAPI.Program">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Program.Main(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LOC.PMS.WebAPI.Validators.ProductRequestValidator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Validators.ProductRequestValidator.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>
