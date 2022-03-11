@@ -6,49 +6,68 @@
     <members>
         <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
             <summary>
-            
+            Pallet Details Controller.
             </summary>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.#ctor(LOC.PMS.Application.Interfaces.IPalletDetailsProvider)">
             <summary>
-            
+            Pallet Details Controller constructor.
             </summary>
             <param name="palletDetailsProvider"></param>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddPallet(LOC.PMS.Model.PalletDetailsRequest)">
             <summary>
-            
+            Add new pallet to the server.
             </summary>
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Program">
             <summary>
-            
+            Start of Application
             </summary>
         </member>
         <member name="M:LOC.PMS.WebAPI.Program.Main(System.String[])">
             <summary>
-            
+            Start of Application - Main method.
             </summary>
             <param name="args"></param>
         </member>
         <member name="M:LOC.PMS.WebAPI.Program.CreateHostBuilder(System.String[])">
             <summary>
-            
+            Create Host Builder.
             </summary>
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="T:LOC.PMS.WebAPI.Validators.ProductRequestValidator">
+        <member name="T:LOC.PMS.WebAPI.Startup">
             <summary>
-            
+            Application Startup class.
             </summary>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Validators.ProductRequestValidator.#ctor">
+        <member name="P:LOC.PMS.WebAPI.Startup.Configuration">
             <summary>
-            
+            Configuration object
             </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+             Application Startup class constructor.
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
         </member>
     </members>
 </doc>

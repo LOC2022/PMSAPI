@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LOC.PMS.Model
+﻿namespace LOC.PMS.Model
 {
     public class PalletDetailsRequest
     {
@@ -17,8 +15,6 @@ namespace LOC.PMS.Model
         public string WhereUsed { get; set; }
 
         public string PalletType { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
 
         public string ModifiedBy { get; set; }
 

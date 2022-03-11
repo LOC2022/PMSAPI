@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using LOC.PMS.Infrastructure;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,20 +13,34 @@ using Microsoft.OpenApi.Models;
 
 namespace LOC.PMS.WebAPI
 {
+    /// <summary>
+    /// Application Startup class.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Configuration object
+        /// </summary>
+        public IConfiguration Configuration { get; }
+
+        /// <summary>
+        ///  Application Startup class constructor.
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        //config
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInfrastructure();
             services.AddControllers();
+            services.AddInfrastructure();
+            services.AddHealthChecks();
 
             services.AddApiVersioning(svcAction =>
             {
@@ -47,9 +62,14 @@ namespace LOC.PMS.WebAPI
                 opt.IncludeXmlComments(xmlPath);
                 opt.EnableAnnotations();
             });
+            services.AddFluentValidationRulesToSwagger();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -58,10 +78,12 @@ namespace LOC.PMS.WebAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseAuthorization();
+            app.UseHealthChecks("/health");
+
             #region Swagger
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
