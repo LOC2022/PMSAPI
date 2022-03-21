@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
@@ -40,43 +37,66 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpPost("AddPallet"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddPallet([FromBody] PalletDetailsRequest palletDetailsRequest)
+        public async Task<IActionResult> AddOrModifyPallet([FromBody] PalletDetails palletDetailsRequest)
         {
-            await _palletDetailsProvider.AddPallet(palletDetailsRequest);
+            await _palletDetailsProvider.AddOrModifyPallet(palletDetailsRequest);
             return Ok();
         }
 
         /// <summary>
-        /// 
+        /// Get Pallet details for the specified pallet part no.
         /// </summary>
-        /// <param name="_dayPlan"></param>
+        /// <param name="palletPartNo"></param>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "A.",
+            Description = "Get Pallet details for the specified pallet part no.",
             Tags = new[] { "PostSuccess" },
             OperationId = "PostSuccess")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
-        //[SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("ImportDayPlan"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> ImportDayPlan([FromBody] DayPlan _dayPlan)
+        [HttpPost("GetPalletByPartNo"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetPalletByPartNo([FromQuery] string palletPartNo)
         {
-            List<DayPlan> Order = new List<DayPlan>();  
-            string FPath = "C:\\Users\\Muthazagan R\\Desktop\\PMS\\TestFilr";
-            string FileString =  _dayPlan.ByteArray.Replace("base64",string.Empty);
-            var Doc=Convert.FromBase64String(FileString);
-            string FilePath = Path.Combine(FPath, DateTime.Now.ToString("ddMMyyyy") + ".csv");
-            System.IO.File.WriteAllBytes(FilePath, Doc);
-
-            Order = System.IO.File.ReadAllLines(FilePath)
-                .Skip(1)
-                .Select(v => DayPlan.FromCsv(v))
-                .ToList();
-            await _palletDetailsProvider.AddDayPlanData(Order);
-            return Ok();
+            IEnumerable<PalletDetails> response = await _palletDetailsProvider.GetPalletDetails(palletPartNo);
+            return Ok(response);
         }
 
+        /// <summary>
+        /// Get all Pallet details.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Get all Pallet details.",
+            Tags = new[] { "PostSuccess" },
+            OperationId = "PostSuccess")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("GetAllPallet"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetAllPallet()
+        {
+            IEnumerable<PalletDetails> response = await _palletDetailsProvider.GetPalletDetails("ALL");
+            return Ok(response);
+        }
 
+        /// <summary>
+        /// Get all Pallet details.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Delete the Pallet details for the specified pallet part no.",
+            Tags = new[] { "PostSuccess" },
+            OperationId = "PostSuccess")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("DeletePalletByPartNo"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeletePalletByPartNo(int palletId)
+        {
+            await _palletDetailsProvider.DeletePalletByPartNo(palletId);
+            return Ok();
+        }
 
     }
 }

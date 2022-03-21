@@ -15,18 +15,30 @@
             </summary>
             <param name="palletDetailsProvider"></param>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddPallet(LOC.PMS.Model.PalletDetailsRequest)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddOrModifyPallet(LOC.PMS.Model.PalletDetails)">
             <summary>
             Add new pallet to the server.
             </summary>
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.ImportDayPlan(LOC.PMS.Model.DayPlan)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPalletByPartNo(System.String)">
             <summary>
-            
+            Get Pallet details for the specified pallet part no.
             </summary>
-            <param name="_dayPlan"></param>
+            <param name="palletPartNo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetAllPallet">
+            <summary>
+            Get all Pallet details.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletByPartNo(System.Int32)">
+            <summary>
+            Get all Pallet details.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Program">

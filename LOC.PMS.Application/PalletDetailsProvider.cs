@@ -5,10 +5,11 @@ using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
 using Serilog;
+using static System.Threading.Tasks.TaskStatus;
 
 namespace LOC.PMS.Application
 {
-    public class PalletDetailsProvider:IPalletDetailsProvider
+    public class PalletDetailsProvider : IPalletDetailsProvider
     {
         private readonly IPalletRepository _palletRepository;
         private readonly ILogger _logger;
@@ -41,7 +42,7 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task AddPallet(PalletDetailsRequest palletDetailsRequest)
+        public async Task AddOrModifyPallet(PalletDetails palletDetailsRequest)
         {
             try
             {
@@ -59,6 +60,50 @@ namespace LOC.PMS.Application
             {
                 _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
                     .Error(exception, "Exception occurred during pallet insert .");
+                await Task.FromException(exception);
+            }
+        }
+        public async Task<IEnumerable<PalletDetails>> GetPalletDetails(string palletPartNo)
+        {
+            palletPartNo ??= "ALL";
+
+            try
+            {
+                _logger.ForContext("palletPartNo", palletPartNo)
+                    .Information("Get Pallet by part no.");
+
+                //business logic
+
+                return await _palletRepository.SelectPalletDetails(palletPartNo);
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletPartNo", palletPartNo)
+                    .Error(exception, "Exception occurred while trying to get pallet based on part no..");
+                await Task.FromException(exception);
+            }
+
+            return null;
+        }
+
+        public async Task DeletePalletByPartNo(int palletId)
+        {
+            try
+            {
+                _logger.ForContext("palletPartNo", palletId)
+                    .Information("Delete Pallet request - Start");
+
+                //business logic
+
+                await _palletRepository.DeletePallets(palletId);
+
+                _logger.ForContext("PalletDetailsRequest", palletId)
+                    .Information("Delete Pallet request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletPartNo", palletId)
+                    .Error(exception, $"Exception occurred during pallet delete operation for pallet no. - {palletId}");
                 await Task.FromException(exception);
             }
         }

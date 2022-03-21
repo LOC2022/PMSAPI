@@ -1,6 +1,6 @@
 ﻿namespace LOC.PMS.Model
 {
-    public class PalletDetailsRequest
+    public class PalletDetails
     {
         public string PalletPartNo { get; set; }
 
@@ -16,8 +16,14 @@
 
         public string PalletType { get; set; }
 
-        public string ModifiedBy { get; set; }
+        public int LocationId { get; set; }
 
-        public bool IsActive { get; set; }
+        public int Availability { get; set; }
+
+        public string CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; }
+
+
     }
 }

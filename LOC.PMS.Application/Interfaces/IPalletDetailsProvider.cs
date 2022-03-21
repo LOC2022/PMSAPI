@@ -6,7 +6,8 @@ namespace LOC.PMS.Application.Interfaces
 {
     public interface IPalletDetailsProvider
     {
-        Task AddPallet(PalletDetailsRequest palletDetailsRequest);
-        Task AddDayPlanData(List<DayPlan> order);
+        Task AddOrModifyPallet(PalletDetails palletDetailsRequest);
+        Task<IEnumerable<PalletDetails>> GetPalletDetails(string palletPartNo);
+        Task DeletePalletByPartNo(int palletId);
     }
 }
