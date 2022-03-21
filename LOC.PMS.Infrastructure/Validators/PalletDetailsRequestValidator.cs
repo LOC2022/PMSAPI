@@ -8,7 +8,7 @@ namespace LOC.PMS.Infrastructure.Validators
     /// <summary>
     /// Add pallet details validation.
     /// </summary>
-    public class AddPalletRequestValidator : AbstractValidator<PalletDetailsRequest>
+    public class AddPalletRequestValidator : AbstractValidator<PalletDetails>
     {
         public AddPalletRequestValidator()
         {
