@@ -22,6 +22,13 @@
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.ImportDayPlan(LOC.PMS.Model.DayPlan)">
+            <summary>
+            
+            </summary>
+            <param name="_dayPlan"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Program">
             <summary>
             Start of Application
