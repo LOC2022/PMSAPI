@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -41,5 +45,38 @@ namespace LOC.PMS.WebAPI.Controllers
             await _palletDetailsProvider.AddPallet(palletDetailsRequest);
             return Ok();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_dayPlan"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "A.",
+            Tags = new[] { "PostSuccess" },
+            OperationId = "PostSuccess")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        //[SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("ImportDayPlan"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> ImportDayPlan([FromBody] DayPlan _dayPlan)
+        {
+            List<DayPlan> Order = new List<DayPlan>();  
+            string FPath = "C:\\Users\\Muthazagan R\\Desktop\\PMS\\TestFilr";
+            string FileString =  _dayPlan.ByteArray.Replace("base64",string.Empty);
+            var Doc=Convert.FromBase64String(FileString);
+            string FilePath = Path.Combine(FPath, DateTime.Now.ToString("ddMMyyyy") + ".csv");
+            System.IO.File.WriteAllBytes(FilePath, Doc);
+
+            Order = System.IO.File.ReadAllLines(FilePath)
+                .Skip(1)
+                .Select(v => DayPlan.FromCsv(v))
+                .ToList();
+            await _palletDetailsProvider.AddDayPlanData(Order);
+            return Ok();
+        }
+
+
+
     }
 }

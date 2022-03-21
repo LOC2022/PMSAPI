@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using Newtonsoft.Json;
 
 namespace LOC.PMS.Infrastructure.Repositories
 {
@@ -15,6 +16,18 @@ namespace LOC.PMS.Infrastructure.Repositories
         public PalletRepository(IContext context)
         {
             _context = context;
+        }
+
+        public Task AddDayPlanData(List<DayPlan> order)
+        {
+            var JObject = JsonConvert.SerializeObject(order);
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@ImData", JObject),
+              
+            };
+            _context.ExecuteStoredProcedure("[dbo].[ImportDayPlan]", sqlParams.ToArray());
+            return Task.CompletedTask;
         }
 
         public Task InsertPallets(PalletDetailsRequest palletDetailsRequest)
