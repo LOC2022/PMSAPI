@@ -5,11 +5,10 @@ using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
 using Serilog;
-using static System.Threading.Tasks.TaskStatus;
 
 namespace LOC.PMS.Application
 {
-    public class PalletDetailsProvider : IPalletDetailsProvider
+    public class PalletDetailsProvider:IPalletDetailsProvider
     {
         private readonly IPalletRepository _palletRepository;
         private readonly ILogger _logger;
