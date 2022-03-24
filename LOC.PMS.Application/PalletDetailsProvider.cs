@@ -19,6 +19,27 @@ namespace LOC.PMS.Application
             _logger = logger;
         }
 
+        public async Task AddDayPlanData(List<DayPlan> order)
+        {
+            try
+            {
+                _logger.ForContext("PalletDetailsRequest", order)
+                    .Information("Add Pallet request - Start");
+
+                //business logic
+
+                await _palletRepository.AddDayPlanData(order);
+
+                _logger.ForContext("PalletDetailsRequest", order)
+                    .Information("Add Pallet request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("PalletDetailsRequest", order)
+                    .Error(exception, "Exception occurred during pallet insert .");
+                await Task.FromException(exception);
+            }
+        }
 
         public async Task AddOrModifyPallet(PalletDetails palletDetailsRequest)
         {
