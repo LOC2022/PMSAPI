@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using Newtonsoft.Json;
 
 namespace LOC.PMS.Infrastructure.Repositories
 {
