@@ -41,6 +41,14 @@ namespace LOC.PMS.WebAPI
             services.AddControllers();
             services.AddInfrastructure();
             services.AddHealthChecks();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("EnableCors", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().Build();
+
+                });
+            });
 
             services.AddApiVersioning(svcAction =>
             {
@@ -77,6 +85,7 @@ namespace LOC.PMS.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("EnableCors");
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
