@@ -16,10 +16,11 @@ namespace LOC.PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task InsertPallets(PalletDetails palletDetailsRequest)
+        public Task ModifyPalletDetails(PalletDetails palletDetailsRequest)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
+                new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletId),
                 new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletPartNo),
                 new SqlParameter("@PalletName", palletDetailsRequest.PalletName),
                 new SqlParameter("@PalletWeight", palletDetailsRequest.PalletWeight),
@@ -29,30 +30,65 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@PalletType", palletDetailsRequest.PalletType),
                 new SqlParameter("@LocationId", palletDetailsRequest.LocationId),
                 new SqlParameter("@Availability", palletDetailsRequest.Availability),
-                new SqlParameter("@CreatedBy", palletDetailsRequest.CreatedBy),
+                new SqlParameter("@CreatedBy", palletDetailsRequest.CreatedBy)
             };
 
-            _context.ExecuteStoredProcedure("[dbo].[PalletMaster_Insert]", sqlParams.ToArray());
+            _context.ExecuteStoredProcedure("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<PalletDetails>> SelectPalletDetails(string palletPartNo)
+        public Task ModifyPalletLocation(LocationMaster palletLocation)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletPartNo", palletPartNo)
+                new SqlParameter("@LocationId", palletLocation.LocationId),
+                new SqlParameter("@Location", palletLocation.Location),
+                new SqlParameter("@IsActive", palletLocation.IsActive),
+                new SqlParameter("@CreatedBy", palletLocation.CreatedBy)
+
+            };
+
+            _context.ExecuteStoredProcedure("[dbo].[PalletLocationMaster_Modify]", sqlParams.ToArray());
+            return Task.CompletedTask;
+        }
+
+        public Task<IEnumerable<PalletDetails>> SelectPalletDetails(int palletId)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@PalletId", palletId)
             };
 
             return _context.QueryStoredProcedureAsync<PalletDetails>("[dbo].[PalletMaster_Select]", sqlParams.ToArray());
+        }
+
+        public Task<IEnumerable<LocationMaster>> SelectPalletLocation(int locationId)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@LocationId", locationId)
+            };
+
+            return _context.QueryStoredProcedureAsync<LocationMaster>("[dbo].[PalletLocationMaster_Select]", sqlParams.ToArray());
         }
 
         public Task DeletePallets(int palletId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletPa", palletId)
+                new SqlParameter("@PalletId", palletId)
             };
             _context.ExecuteStoredProcedure("[dbo].[PalletMaster_Delete]", sqlParams.ToArray());
+            return Task.CompletedTask;
+        }
+
+        public Task DeletePalletLocation(int locationId)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@LocationId", locationId)
+            };
+            _context.ExecuteStoredProcedure("[dbo].[PalletLocationMaster_Delete]", sqlParams.ToArray());
             return Task.CompletedTask;
         }
     }

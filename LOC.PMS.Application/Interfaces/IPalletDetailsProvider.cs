@@ -6,8 +6,17 @@ namespace LOC.PMS.Application.Interfaces
 {
     public interface IPalletDetailsProvider
     {
-        Task AddOrModifyPallet(PalletDetails palletDetailsRequest);
-        Task<IEnumerable<PalletDetails>> GetPalletDetails(string palletPartNo);
-        Task DeletePalletByPartNo(int palletId);
+        Task ModifyPalletDetails(PalletDetails palletDetailsRequest);
+
+        Task ModifyPalletLocation(LocationMaster palletLocation);
+
+        Task<IEnumerable<PalletDetails>> GetPalletDetails(int palletId);
+
+        Task<IEnumerable<LocationMaster>> GetPalletLocation(int locationId);
+
+        Task DeletePalletByPalletId(int palletId);
+
+        Task DeletePalletLocationById(int locationId);
+
     }
 }
