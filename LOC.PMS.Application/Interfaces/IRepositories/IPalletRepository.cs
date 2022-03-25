@@ -6,10 +6,17 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 {
     public interface IPalletRepository
     {
-        Task InsertPallets(PalletDetails palletDetailsRequest);
+        Task ModifyPalletDetails(PalletDetails palletDetailsRequest);
 
-        Task<IEnumerable<PalletDetails>> SelectPalletDetails(string palletPartNo);
+        Task ModifyPalletLocation(LocationMaster palletLocation);
+
+        Task<IEnumerable<PalletDetails>> SelectPalletDetails(int palletId);
+
+        Task<IEnumerable<LocationMaster>> SelectPalletLocation(int locationId);
 
         Task DeletePallets(int palletId);
+
+        Task DeletePalletLocation(int locationId);
+
     }
 }

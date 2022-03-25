@@ -1,7 +1,11 @@
-﻿namespace LOC.PMS.Model
+﻿using System;
+
+namespace LOC.PMS.Model
 {
     public class PalletDetails
     {
+        public int PalletId { get; set; }
+
         public string PalletPartNo { get; set; }
 
         public string PalletName { get; set; }
@@ -20,10 +24,18 @@
 
         public int Availability { get; set; }
 
-        public string CreatedDate { get; set; }
-
         public string CreatedBy { get; set; }
 
+    }
 
+    public class LocationMaster
+    {
+        public int LocationId { get; set; }
+        
+        public string Location { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public string CreatedBy { get; set; }
     }
 }

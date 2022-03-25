@@ -4,6 +4,59 @@
         <name>LOC.PMS.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:LOC.PMS.WebAPI.Controllers.MembershipController">
+            <summary>
+            Pallet Details Controller.
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.#ctor(LOC.PMS.Application.Interfaces.IMembershipProvider)">
+            <summary>
+            Pallet Details Controller constructor.
+            </summary>
+            <param name="membershipProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyUserMaster(LOC.PMS.Model.UserMaster)">
+            <summary>
+            Add new pallet to the server.
+            </summary>
+            <param name="palletDetailsRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyGroupMaster(LOC.PMS.Model.GroupMaster)">
+            <summary>
+            Add or Modify Group Master..
+            </summary>
+            <param name="groupMasterRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyFeatureMaster(LOC.PMS.Model.FeatureMaster)">
+            <summary>
+            Add or Modify Feature Master.
+            </summary>
+            <param name="featureMasterRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetFeatureById(System.Int32)">
+            <summary>
+            Get Feature for the specified FeatureID from Feature Master
+            </summary>
+            <param name="featureId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetGroupById(System.Int32)">
+            <summary>
+            Get Group for the specified GroupID from Group Master.
+            </summary>
+            <param name="groupId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetUserById(System.Int32)">
+            <summary>
+            Get Feature for the specified FeatureID from Feature Master
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
             <summary>
             Pallet Details Controller.
@@ -22,20 +75,34 @@
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPalletByPartNo(System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddOrModifyPalletLocation(LOC.PMS.Model.LocationMaster)">
             <summary>
-            Get Pallet details for the specified pallet part no.
+            Add new pallet to the server.
             </summary>
-            <param name="palletPartNo"></param>
+            <param name="palletLocationDetailsRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetAllPallet">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPallets(System.Int32)">
             <summary>
-            Get all Pallet details.
+            Get Pallet details for the specified pallet id. If pallet id is not specified then it will return all pallets from pallet master.
+            </summary>
+            <param name="palletId"></param>
+            <returns>List of PalletDetails</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPalletLocationDetails(System.Int32)">
+            <summary>
+            Get Pallet location details for the specified location id. If location id is not specified then it will return all locations from location master.
+            </summary>
+            <param name="locationId"></param>
+            <returns>List of PalletDetails</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletByPalletId(System.Int32)">
+            <summary>
+            Delete Pallet details.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletByPartNo(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletLocationById(System.Int32)">
             <summary>
             Get all Pallet details.
             </summary>
