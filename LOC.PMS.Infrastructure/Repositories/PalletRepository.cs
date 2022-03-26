@@ -20,7 +20,7 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletId),
+                new SqlParameter("@PalletPartId", palletDetailsRequest.PalletId),
                 new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletPartNo),
                 new SqlParameter("@PalletName", palletDetailsRequest.PalletName),
                 new SqlParameter("@PalletWeight", palletDetailsRequest.PalletWeight),
