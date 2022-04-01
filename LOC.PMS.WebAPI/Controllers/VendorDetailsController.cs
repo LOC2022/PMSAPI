@@ -45,8 +45,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("AddOrModifyVendor"), MapToApiVersion("1.0")]
         public async Task<IActionResult> AddOrModifyVendor([FromBody] VendorMaster vendorDetailsRequest)
         {
-            await _vendorDetailsProvider.ModifyVendorDetails(vendorDetailsRequest);
-            return Ok();
+            var response = await _vendorDetailsProvider.ModifyVendorDetails(vendorDetailsRequest);
+            return Ok(response);
         }
 
         /// <summary>
