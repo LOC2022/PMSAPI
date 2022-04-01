@@ -22,7 +22,7 @@ namespace LOC.PMS.Application
 
         public async Task<int> ModifyVendorDetails(VendorMaster vendorDetailsRequest)
         {
-            var returnPalletPartId = DefaultReturnValue;
+            var returnVendorId = DefaultReturnValue;
 
             try
             {
@@ -31,11 +31,10 @@ namespace LOC.PMS.Application
 
                 //business logic
 
-                returnPalletPartId = await _vendorDetailsRepository.ModifyVendorDetails(vendorDetailsRequest);
+                returnVendorId = await _vendorDetailsRepository.ModifyVendorDetails(vendorDetailsRequest);
 
                 _logger.ForContext("vendorDetailsRequest", vendorDetailsRequest)
                     .Information("Add or Modify vendor details - End");
-                return returnPalletPartId;
             }
             catch (Exception exception)
             {
@@ -44,7 +43,7 @@ namespace LOC.PMS.Application
                 await Task.FromException(exception);
             }
 
-            return returnPalletPartId;
+            return returnVendorId;
         }
 
         public async Task<IEnumerable<VendorMaster>> GetVendorDetails(int vendorId)
@@ -73,7 +72,7 @@ namespace LOC.PMS.Application
             try
             {
                 _logger.ForContext("vendorId", vendorId)
-                    .Information("Deactivate vendor request - Staert");
+                    .Information("Deactivate vendor request - Start");
 
                 //business logic
 
