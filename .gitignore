@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/.github/workflows/ace-pms-api.yml
+/LOC.PMS.WebAPI/Properties/ServiceDependencies/ace-pms-api/profile.arm.json
