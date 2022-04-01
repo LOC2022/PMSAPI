@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Z.Dapper.Plus;
+using Z.BulkOperations;
 
 namespace LOC.PMS.Infrastructure
 {
@@ -783,35 +787,51 @@ namespace LOC.PMS.Infrastructure
 
         #endregion
 
-        private ParameterConversionResult translateToConvertResult(params IDbDataParameter[] parameters)
+        #region BulkOperation
+
+        public void BulkCopy<T>(T list, int batchSize, bool insertIfNotExists = true)
         {
-            var convertResults = new ParameterConversionResult();
-            if (parameters.Length > 0)
+            using (var connection = new SqlConnection(this.connectionString))
             {
-                foreach (var parameter in parameters)
+                connection.UseBulkOptions(options =>
                 {
-                    if (parameter.Direction == ParameterDirection.Output | parameter.Direction == ParameterDirection.ReturnValue)
-                        convertResults.ReturnParameterNames.Add(parameter.ParameterName);
-
-                    convertResults.DynamicParameters.Add(parameter.ParameterName, parameter.Value, parameter.DbType, parameter.Direction, parameter.Size);
-                }
-            }
-
-            return convertResults;
+                    options.InsertIfNotExists = insertIfNotExists;
+                    options.BatchSize = batchSize;
+                }).BulkInsert(list);
+            }	
         }
 
-        private class ParameterConversionResult
+        #endregion
+
+    private ParameterConversionResult translateToConvertResult(params IDbDataParameter[] parameters)
+    {
+        var convertResults = new ParameterConversionResult();
+        if (parameters.Length > 0)
         {
-            public ParameterConversionResult()
+            foreach (var parameter in parameters)
             {
-                this.DynamicParameters = new DynamicParameters();
-                this.ReturnParameterNames = new List<string>();
+                if (parameter.Direction == ParameterDirection.Output | parameter.Direction == ParameterDirection.ReturnValue)
+                    convertResults.ReturnParameterNames.Add(parameter.ParameterName);
+
+                convertResults.DynamicParameters.Add(parameter.ParameterName, parameter.Value, parameter.DbType, parameter.Direction, parameter.Size);
             }
-
-            public DynamicParameters DynamicParameters { get; set; }
-            public List<string> ReturnParameterNames { get; set; }
-
         }
+
+        return convertResults;
+    }
+
+    private class ParameterConversionResult
+    {
+        public ParameterConversionResult()
+        {
+            this.DynamicParameters = new DynamicParameters();
+            this.ReturnParameterNames = new List<string>();
+        }
+
+        public DynamicParameters DynamicParameters { get; set; }
+        public List<string> ReturnParameterNames { get; set; }
 
     }
+
+}
 }

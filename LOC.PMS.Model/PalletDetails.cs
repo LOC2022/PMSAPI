@@ -22,6 +22,8 @@ namespace LOC.PMS.Model
 
         public int LocationId { get; set; }
 
+        public int D2LDays { get; set; }
+
         public int Availability { get; set; }
 
         public string CreatedBy { get; set; }

@@ -11,7 +11,7 @@ namespace LOC.PMS.Infrastructure.Validators
     public class AddPalletRequestValidator : AbstractValidator<PalletDetails>
     {
         public AddPalletRequestValidator()
-        {
+            {
             RuleFor(request => request.PalletPartNo)
                 .NotEmpty().NotNull().WithMessage("Pallet Part Number is required.")
                 .MinimumLength(5)

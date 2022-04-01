@@ -4,19 +4,19 @@ using LOC.PMS.Model;
 
 namespace LOC.PMS.Application.Interfaces.IRepositories
 {
-    public interface IPalletRepository
+    public interface IPalletDetailsRepository
     {
-        Task ModifyPalletDetails(PalletDetails palletDetailsRequest);
+        Task<int> ModifyPalletDetails(PalletDetails palletDetailsRequest);
 
-        Task ModifyPalletLocation(LocationMaster palletLocation);
+        Task<int> ModifyPalletLocation(LocationMaster palletLocation);
 
         Task<IEnumerable<PalletDetails>> SelectPalletDetails(int palletId);
 
         Task<IEnumerable<LocationMaster>> SelectPalletLocation(int locationId);
 
-        Task DeletePallets(int palletId);
+        Task DeactivatePallets(int palletId);
 
-        Task DeletePalletLocation(int locationId);
+        Task DeactivatePalletLocation(int locationId);
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LOC.PMS.Model
 {
@@ -6,7 +7,7 @@ namespace LOC.PMS.Model
     {
         public UserMaster UserMasterDetails { get; set; }
 
-        public GroupMaster GroupMasterDetails { get; set; }
+        public AddGroupRequest GroupMasterDetails { get; set; }
 
         public FeatureMaster FeatureMasterDetails { get; set; }
 
@@ -15,18 +16,28 @@ namespace LOC.PMS.Model
     public class FeatureMaster
     {
         public int FeatureId { get; set; }
+
         public string FeatureName { get; set; }
     }
 
-    public class GroupMaster
+    public class AddGroupRequest
     {
         public int GroupId { get; set; }
+
         public string GroupName { get; set; }
+
+        public List<GroupFeatures> GroupFeaturesList { get; set; }
+
+        public string ModifiedBy { get; set; }
     }
 
     public class UserMaster
     {
-        public string Name { get; set; }
+        public  int UserId { get; set; }
+
+        public string UserName { get; set; }
+
+        public string Password { get; set; }
 
         [Phone]
         public string PhoneNumber { get; set; }
@@ -34,11 +45,41 @@ namespace LOC.PMS.Model
         [EmailAddress]
         public string Email { get; set; }
 
-        public string Password { get; set; }
-
         public string Group { get; set; }
 
         public bool IsActive { get; set; }
+
+    }
+
+    public class GroupFeatures
+    {
+        public int FeatureId { get; set; }
+
+        public bool IsEnabled { get; set; }
+
+    }
+
+    public class GroupRights
+    {
+        public int GroupRightsId { get; set; }
+
+        public int GroupId { get; set; }
+
+        public int FeatureId { get; set; }
+
+        public bool IsEnabled { get; set; }
+
+        public string ModifiedBy { get; set; }
+
+    }
+
+    public class GroupDetails
+    {
+        public int GroupId { get; set; }
+
+        public string GroupName { get; set; }
+
+        public string ActiveFeatures { get; set; }
 
     }
 }

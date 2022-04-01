@@ -7,16 +7,24 @@ namespace LOC.PMS.Application.Interfaces
 {
     public interface IMembershipProvider
     {
-        Task AddOrModifyUserMaster(UserMaster userMasterRequest);
+        Task<int> AddOrModifyUserMaster(UserMaster userMasterRequest);
 
-        Task AddOrModifyGroupMaster(GroupMaster groupMasterRequest);
+        Task<int> AddGroup(AddGroupRequest addGroupRequest);
 
-        Task AddOrModifyFeatureMaster(FeatureMaster featureMasterRequest);
+        Task<int> AddOrModifyFeatureMaster(FeatureMaster featureMasterRequest);
 
-        Task<IEnumerable<FeatureMaster>> GetFeatureById(int featureId);
+        Task<IEnumerable<FeatureMaster>> GetFeatures(int featureId);
 
-        Task<IEnumerable<GroupMaster>> GetGroupById(int groupId);
+        Task<IEnumerable<GroupDetails>> GetGroups(int groupId);
 
-        Task<IEnumerable<UserMaster>> GetUserById(int userId);
+        Task<IEnumerable<UserMaster>> GetUsers(int userId);
+
+        Task DeactivateUserById(int userId);
+
+        Task DeactivateFeatureById(int featureId);
+
+        Task DeactivateGroupById(int groupId);
+
+        Task<int> ActivateGroupByName(string groupName);
     }
 }

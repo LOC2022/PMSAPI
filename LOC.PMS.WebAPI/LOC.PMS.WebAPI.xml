@@ -22,11 +22,11 @@
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyGroupMaster(LOC.PMS.Model.GroupMaster)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddGroup(LOC.PMS.Model.AddGroupRequest)">
             <summary>
             Add or Modify Group Master..
             </summary>
-            <param name="groupMasterRequest"></param>
+            <param name="addGroupRequest"></param>
             <returns></returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyFeatureMaster(LOC.PMS.Model.FeatureMaster)">
@@ -36,25 +36,49 @@
             <param name="featureMasterRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetFeatureById(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetFeatures(System.Int32)">
             <summary>
-            Get Feature for the specified FeatureID from Feature Master
+            Get the User for the specified feature Id from Feature Master. If feature id is not specified then it will return all records.
             </summary>
             <param name="featureId"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetGroupById(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetGroups(System.Int32)">
             <summary>
-            Get Group for the specified GroupID from Group Master.
+            Get the Group and its enabled rights for the active features, based on specified Group id. If Group id is not specified then it will return all records.
             </summary>
             <param name="groupId"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetUserById(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.GetUsers(System.Int32)">
             <summary>
-            Get Feature for the specified FeatureID from Feature Master
+            Get the User for the specified User Id from User Master. If the User id is not specified then it will return all records.
             </summary>
             <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.DeactivateFeatureById(System.Int32)">
+            <summary>
+             Deactivate feature details.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.DeactivateGroupById(System.Int32)">
+            <summary>
+             Deactivate Group details.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.DeactivateUserById(System.Int32)">
+            <summary>
+             Deactivate User details.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.ActivateGroupByName(System.String)">
+            <summary>
+             Activate/Re-Activate the Group.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
@@ -96,15 +120,46 @@
             <param name="locationId"></param>
             <returns>List of PalletDetails</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletByPalletId(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeactivatePalletByPalletId(System.Int32)">
             <summary>
-            Delete Pallet details.
+            Deactivate Pallet details.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeletePalletLocationById(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeactivatePalletLocationById(System.Int32)">
             <summary>
-            Get all Pallet details.
+             Deactivate Pallet location details.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.VendorDetailsController.#ctor(LOC.PMS.Application.Interfaces.IVendorDetailsProvider)">
+            <summary>
+            
+            </summary>
+            <param name="vendorDetailsProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.VendorDetailsController.AddOrModifyVendor(LOC.PMS.Model.VendorMaster)">
+            <summary>
+            Add or Modify vendor information.
+            </summary>
+            <param name="vendorDetailsRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.VendorDetailsController.GetVendorDetails(System.Int32)">
+            <summary>
+            Get Vendor details for the specified Vendor id. If Vendor id is not specified then it will return all vendor from vendor master.
+            </summary>
+            <param name="vendorId"></param>
+            <returns>List of PalletDetails</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.VendorDetailsController.DeactivateVendorById(System.Int32)">
+            <summary>
+             Deactivate the vendor details for the specified vendor id.
             </summary>
             <returns></returns>
         </member>
