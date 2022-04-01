@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,7 @@ namespace LOC.PMS.WebAPI.Controllers
     {
         private readonly IPalletDetailsProvider _palletDetailsProvider;
 
-        private const int GETALL = 1;
+        private const int GETALL = 0;
 
         /// <summary>
         /// Pallet Details Controller constructor.
@@ -41,8 +40,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("AddOrModifyPallet"), MapToApiVersion("1.0")]
         public async Task<IActionResult> AddOrModifyPallet([FromBody] PalletDetails palletDetailsRequest)
         {
-            await _palletDetailsProvider.ModifyPalletDetails(palletDetailsRequest);
-            return Ok();
+            var response = await _palletDetailsProvider.ModifyPalletDetails(palletDetailsRequest);
+            return Ok(response);
         }
 
         /// <summary>
@@ -60,8 +59,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("AddOrModifyPalletLocation"), MapToApiVersion("1.0")]
         public async Task<IActionResult> AddOrModifyPalletLocation([FromBody] LocationMaster palletLocationDetailsRequest)
         {
-            await _palletDetailsProvider.ModifyPalletLocation(palletLocationDetailsRequest);
-            return Ok();
+            var response = await _palletDetailsProvider.ModifyPalletLocation(palletLocationDetailsRequest);
+            return Ok(response);
         }
 
         /// <summary>
@@ -103,38 +102,38 @@ namespace LOC.PMS.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete Pallet details.
+        /// Deactivate Pallet details.
         /// </summary>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Delete the Pallet details for the specified pallet id.",
-            Tags = new[] { "DeletePalletByPalletId" },
-            OperationId = "DeletePalletByPalletId")]
+            Description = "Deactivate the Pallet details for the specified pallet id.",
+            Tags = new[] { "DeactivatePalletByPalletId" },
+            OperationId = "DeactivatePalletByPalletId")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpDelete("DeletePalletByPalletId"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> DeletePalletByPalletId([FromQuery] int palletId)
+        [HttpPut("DeactivatePalletByPalletId"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeactivatePalletByPalletId([FromQuery] int palletId)
         {
-            await _palletDetailsProvider.DeletePalletByPalletId(palletId);
+            await _palletDetailsProvider.DeactivatePalletByPalletId(palletId);
             return Ok();
         }
 
         /// <summary>
-        /// Get all Pallet details.
+        ///  Deactivate Pallet location details.
         /// </summary>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Delete the Pallet location details for the specified location id.",
-            Tags = new[] { "DeletePalletLocationById" },
-            OperationId = "DeletePalletLocationById")]
+            Description = "Deactivate the Pallet location details for the specified location id.",
+            Tags = new[] { "DeactivatePalletLocationById" },
+            OperationId = "DeactivatePalletLocationById")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("DeletePalletLocationById"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> DeletePalletLocationById(int locationId)
+        [HttpPut("DeactivatePalletLocationById"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeactivatePalletLocationById(int locationId)
         {
-            await _palletDetailsProvider.DeletePalletLocationById(locationId);
+            await _palletDetailsProvider.DeactivatePalletLocationById(locationId);
             return Ok();
         }
     }

@@ -6,17 +6,26 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 {
     public interface IMembershipRepository
     {
-        Task ModifyFeatureMaster(FeatureMaster featureMasterRequest);
+        Task<int> ModifyFeatureMaster(FeatureMaster featureMasterRequest);
 
-        Task ModifyGroupMaster(GroupMaster groupMasterRequest);
+        Task<int> AddGroup(AddGroupRequest addGroupRequest);
 
-        Task ModifyUserMaster(UserMaster userMasterRequest);
+        Task<int> ModifyUserMaster(UserMaster userMasterRequest);
 
         Task<IEnumerable<FeatureMaster>> SelectFeatureById(int featureId);
 
-        Task<IEnumerable<GroupMaster>> SelectGroupById(int groupId);
+        Task<IEnumerable<GroupDetails>> SelectGroupById(int groupId);
 
         Task<IEnumerable<UserMaster>> SelectUserById(int userId);
+
+        Task DeactivateUser(int userId);
+
+        Task DeactivateFeature(int featureId);
+
+        Task DeactivateGroup(int groupId);
+
+        Task<int> ActivateGroup(string groupName);
+
 
     }
 }

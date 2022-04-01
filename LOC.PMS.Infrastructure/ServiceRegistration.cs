@@ -15,7 +15,11 @@ namespace LOC.PMS.Infrastructure
         public static void AddInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<IPalletDetailsProvider, PalletDetailsProvider>();
-            services.AddTransient<IPalletRepository, PalletRepository>();
+            services.AddTransient<IPalletDetailsRepository, PalletDetailsRepository>();
+            services.AddTransient<IMembershipProvider, MembershipsProvider>();
+            services.AddTransient<IMembershipRepository, MembershipRepository>();
+            services.AddTransient<IVendorDetailsProvider, VendorDetailsProvider>();
+            services.AddTransient<IVendorDetailsRepository, VendorDetailsRepository>();
             services.AddTransient<IContext, Context>();
             services.AddFluentValidation();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

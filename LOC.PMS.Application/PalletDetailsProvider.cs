@@ -10,18 +10,21 @@ namespace LOC.PMS.Application
 {
     public class PalletDetailsProvider:IPalletDetailsProvider
     {
-        private readonly IPalletRepository _palletRepository;
+        private readonly IPalletDetailsRepository _palletRepository;
         private readonly ILogger _logger;
+        private const int DefaultReturnValue = 0;
 
-        public PalletDetailsProvider(IPalletRepository palletRepository, ILogger logger)
+        public PalletDetailsProvider(IPalletDetailsRepository palletRepository, ILogger logger)
         {
             _palletRepository = palletRepository;
             _logger = logger;
         }
 
 
-        public async Task ModifyPalletDetails(PalletDetails palletDetailsRequest)
+        public async Task<int> ModifyPalletDetails(PalletDetails palletDetailsRequest)
         {
+            var returnPalletPartId = DefaultReturnValue;
+
             try
             {
                 _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
@@ -29,10 +32,11 @@ namespace LOC.PMS.Application
 
                 //business logic
 
-                await _palletRepository.ModifyPalletDetails(palletDetailsRequest);
+                returnPalletPartId = await _palletRepository.ModifyPalletDetails(palletDetailsRequest);
 
                 _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
                     .Information("Add Pallet request - End");
+                return returnPalletPartId;
             }
             catch (Exception exception)
             {
@@ -40,10 +44,13 @@ namespace LOC.PMS.Application
                     .Error(exception, "Exception occurred during pallet insert or update.");
                 await Task.FromException(exception);
             }
+
+            return returnPalletPartId;
         }
 
-        public async Task ModifyPalletLocation(LocationMaster palletLocation)
+        public async Task<int> ModifyPalletLocation(LocationMaster palletLocation)
         {
+            var returnPalletLocationId = DefaultReturnValue;
             try
             {
                 _logger.ForContext("palletLocation", palletLocation)
@@ -51,10 +58,12 @@ namespace LOC.PMS.Application
 
                 //business logic
 
-                await _palletRepository.ModifyPalletLocation(palletLocation);
+                returnPalletLocationId =  await _palletRepository.ModifyPalletLocation(palletLocation);
 
                 _logger.ForContext("palletLocation", palletLocation)
                     .Information("Add Pallet request - End");
+
+                return returnPalletLocationId;
             }
             catch (Exception exception)
             {
@@ -62,6 +71,8 @@ namespace LOC.PMS.Application
                     .Error(exception, "Exception occurred during pallet Location insert or update.");
                 await Task.FromException(exception);
             }
+
+            return returnPalletLocationId;
 
         }
 
@@ -107,46 +118,46 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task DeletePalletByPalletId(int palletId)
+        public async Task DeactivatePalletByPalletId(int palletId)
         {
             try
             {
                 _logger.ForContext("palletPartNo", palletId)
-                    .Information("Delete Pallet request - Start");
+                    .Information("Deactivate Pallet request - Start");
 
                 //business logic
 
-                await _palletRepository.DeletePallets(palletId);
+                await _palletRepository.DeactivatePallets(palletId);
 
                 _logger.ForContext("PalletDetailsRequest", palletId)
-                    .Information("Delete Pallet request - End");
+                    .Information("Deactivate Pallet request - End");
             }
             catch (Exception exception)
             {
                 _logger.ForContext("palletPartNo", palletId)
-                    .Error(exception, $"Exception occurred during pallet delete operation for pallet no. - {palletId}");
+                    .Error(exception, $"Exception occurred during pallet Deactivate operation for pallet no. - {palletId}");
                 await Task.FromException(exception);
             }
         }
 
-        public async Task DeletePalletLocationById(int locationId)
+        public async Task DeactivatePalletLocationById(int locationId)
         {
             try
             {
                 _logger.ForContext("locationId", locationId)
-                    .Information("Delete Pallet location request - Start");
+                    .Information("Deactivate Pallet location request - Start");
 
                 //business logic
 
-                await _palletRepository.DeletePalletLocation(locationId);
+                await _palletRepository.DeactivatePalletLocation(locationId);
 
                 _logger.ForContext("locationId", locationId)
-                    .Information("Delete Pallet location request - End");
+                    .Information("Deactivate Pallet location request - End");
             }
             catch (Exception exception)
             {
                 _logger.ForContext("palletPartNo", locationId)
-                    .Error(exception, $"Exception occurred during pallet location delete operation for location id. - {locationId}");
+                    .Error(exception, $"Exception occurred during pallet location Deactivate operation for location id. - {locationId}");
                 await Task.FromException(exception);
             }
         }

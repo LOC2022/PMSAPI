@@ -14,6 +14,8 @@ namespace LOC.PMS.WebAPI.Controllers
     {
         private readonly IMembershipProvider _membershipProvider;
 
+        private const int GETALL = 0;
+
         /// <summary>
         /// Pallet Details Controller constructor.
         /// </summary>
@@ -38,14 +40,14 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("AddOrModifyUserMaster"), MapToApiVersion("1.0")]
         public async Task<IActionResult> AddOrModifyUserMaster([FromBody] UserMaster palletDetailsRequest)
         {
-            await _membershipProvider.AddOrModifyUserMaster(palletDetailsRequest);
-            return Ok();
+           var response = await _membershipProvider.AddOrModifyUserMaster(palletDetailsRequest);
+            return Ok(response);
         }
 
         /// <summary>
         /// Add or Modify Group Master..
         /// </summary>
-        /// <param name="groupMasterRequest"></param>
+        /// <param name="addGroupRequest"></param>
         /// <returns></returns>
         [SwaggerOperation(
             Description = "Add or Modify Group Master.",
@@ -54,11 +56,11 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("AddOrModifyGroupMaster"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddOrModifyGroupMaster([FromBody] GroupMaster groupMasterRequest)
+        [HttpPost("AddGroup"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> AddGroup([FromBody] AddGroupRequest addGroupRequest)
         {
-            await _membershipProvider.AddOrModifyGroupMaster(groupMasterRequest);
-            return Ok();
+            var response = await _membershipProvider.AddGroup(addGroupRequest);
+            return Ok(response);
         }
 
         /// <summary>
@@ -76,65 +78,137 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("AddOrModifyFeatureMaster"), MapToApiVersion("1.0")]
         public async Task<IActionResult> AddOrModifyFeatureMaster([FromBody] FeatureMaster featureMasterRequest)
         {
-            await _membershipProvider.AddOrModifyFeatureMaster(featureMasterRequest);
-            return Ok();
+            var response = await _membershipProvider.AddOrModifyFeatureMaster(featureMasterRequest);
+            return Ok(response);
         }
 
         /// <summary>
-        /// Get Feature for the specified FeatureID from Feature Master
+        /// Get the User for the specified feature Id from Feature Master. If feature id is not specified then it will return all records.
         /// </summary>
         /// <param name="featureId"></param>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Get the the specified Feature from Feature Master.",
-            Tags = new[] { "GetFeatureById" },
-            OperationId = "GetFeatureById")]
+            Description = "Get the User for the specified feature Id from Feature Master. If feature id is not specified then it will return all records.",
+            Tags = new[] { "GetFeatures" },
+            OperationId = "GetFeatures")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("GetFeatureById"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetFeatureById([FromQuery] int featureId)
+        [HttpGet("GetFeatures"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetFeatures([FromQuery] int featureId = GETALL)
         {
-            var response = await _membershipProvider.GetFeatureById(featureId);
+            var response = await _membershipProvider.GetFeatures(featureId);
             return Ok(response);
         }
 
         /// <summary>
-        /// Get Group for the specified GroupID from Group Master.
+        /// Get the Group and its enabled rights for the active features, based on specified Group id. If Group id is not specified then it will return all records.
         /// </summary>
         /// <param name="groupId"></param>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Get the the specified Group from Group Master.",
-            Tags = new[] { "GetGroupById" },
-            OperationId = "GetGroupById")]
+            Description = "Get the Group and its enabled rights for the active features, based on specified Group id. If Group id is not specified then it will return all records.",
+                          Tags = new[] { "GetGroups" },
+            OperationId = "GetGroups")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("GetGroupById"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetGroupById([FromQuery] int groupId)
+        [HttpGet("GetGroups"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetGroups([FromQuery] int groupId = GETALL)
         {
-            var response = await _membershipProvider.GetGroupById(groupId);
+            var response = await _membershipProvider.GetGroups(groupId);
             return Ok(response);
         }
 
         /// <summary>
-        /// Get Feature for the specified FeatureID from Feature Master
+        /// Get the User for the specified User Id from User Master. If the User id is not specified then it will return all records.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Get the the specified Feature from Feature Master.",
+            Description = "Get the User for the specified User Id from User Master. If the User id is not specified then it will return all records.",
             Tags = new[] { "GetUserById" },
             OperationId = "GetUserById")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("GetUserById"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetUserById([FromQuery] int userId)
+        [HttpGet("GetUsers"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetUsers([FromQuery] int userId = GETALL)
         {
-            var response= await _membershipProvider.GetUserById(userId);
+            var response= await _membershipProvider.GetUsers(userId);
             return Ok(response);
+        }
+
+        /// <summary>
+        ///  Deactivate feature details.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Deactivate the feature details for the specified feature id.",
+            Tags = new[] { "DeactivateFeatureById" },
+            OperationId = "DeactivateFeatureById")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPut("DeactivateFeatureById"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeactivateFeatureById(int featureId)
+        {
+            await _membershipProvider.DeactivateFeatureById(featureId);
+            return Ok();
+        }
+
+        /// <summary>
+        ///  Deactivate Group details.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Deactivate the Group details for the specified Group id.",
+            Tags = new[] { "DeactivateGroupById" },
+            OperationId = "DeactivateGroupById")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPut("DeactivateGroupById"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeactivateGroupById(int groupId)
+        {
+            await _membershipProvider.DeactivateGroupById(groupId);
+            return Ok();
+        }
+
+        /// <summary>
+        ///  Deactivate User details.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Deactivate the User details for the specified User id.",
+            Tags = new[] { "DeactivateUserById" },
+            OperationId = "DeactivateUserById")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPut("DeactivateUserById"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> DeactivateUserById(int userId)
+        {
+            await _membershipProvider.DeactivateUserById(userId);
+            return Ok();
+        }
+
+        /// <summary>
+        ///  Activate/Re-Activate the Group.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Activate/Re-Activate the Group",
+            Tags = new[] { "ActivateGroupByName" },
+            OperationId = "ActivateGroupByName")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPut("ActivateGroupByName"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> ActivateGroupByName(string groupName)
+        {
+            await _membershipProvider.ActivateGroupByName(groupName);
+            return Ok();
         }
     }
 }
