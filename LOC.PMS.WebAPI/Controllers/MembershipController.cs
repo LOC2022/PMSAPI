@@ -26,9 +26,9 @@ namespace LOC.PMS.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Add new pallet to the server.
+        /// Add or Modify User Master.
         /// </summary>
-        /// <param name="palletDetailsRequest"></param>
+        /// <param name="userDetailsRequest"></param>
         /// <returns></returns>
         [SwaggerOperation(
             Description = "Add or Modify User Master.",
@@ -38,9 +38,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpPost("AddOrModifyUserMaster"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddOrModifyUserMaster([FromBody] UserMaster palletDetailsRequest)
+        public async Task<IActionResult> AddOrModifyUserMaster([FromBody] UserMaster userDetailsRequest)
         {
-           var response = await _membershipProvider.AddOrModifyUserMaster(palletDetailsRequest);
+           var response = await _membershipProvider.AddOrModifyUserMaster(userDetailsRequest);
             return Ok(response);
         }
 
@@ -88,7 +88,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="featureId"></param>
         /// <returns></returns>
         [SwaggerOperation(
-            Description = "Get the User for the specified feature Id from Feature Master. If feature id is not specified then it will return all records.",
+            Description = "Get the Features for the specified feature Id from Feature Master. If feature id is not specified then it will return all records.",
             Tags = new[] { "GetFeatures" },
             OperationId = "GetFeatures")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]

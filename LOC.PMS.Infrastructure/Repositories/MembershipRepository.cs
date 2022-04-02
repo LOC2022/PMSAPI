@@ -68,12 +68,14 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
+                new SqlParameter("@UserId", userMasterRequest.UserId),
                 new SqlParameter("@UserName", userMasterRequest.UserName),
-                new SqlParameter("@UserEmail", userMasterRequest.Email),
-                new SqlParameter("@IsActive", userMasterRequest.IsActive),
                 new SqlParameter("@Password", userMasterRequest.Password),
-                new SqlParameter("@PhoneNumber", userMasterRequest.PhoneNumber),
-                new SqlParameter("@Group", userMasterRequest.Group),
+                new SqlParameter("@GroupId", userMasterRequest.GroupId),
+                new SqlParameter("@Phone", userMasterRequest.Phone),
+                new SqlParameter("@Email", userMasterRequest.Email),
+                new SqlParameter("@IsActive", userMasterRequest.IsActive),
+                new SqlParameter("@ModifiedBy", userMasterRequest.ModifiedBy),
                 new SqlParameter("ReturnUserId",SqlDbType.Int){Direction = ParameterDirection.ReturnValue}
             };
 

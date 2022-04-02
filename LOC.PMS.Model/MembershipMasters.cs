@@ -40,14 +40,16 @@ namespace LOC.PMS.Model
         public string Password { get; set; }
 
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
 
         [EmailAddress]
         public string Email { get; set; }
 
-        public string Group { get; set; }
+        public int GroupId { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string ModifiedBy { get; set; }
 
     }
 

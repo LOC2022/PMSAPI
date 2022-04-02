@@ -24,7 +24,7 @@ namespace LOC.PMS.Model
 
         public int D2LDays { get; set; }
 
-        public int Availability { get; set; }
+        public PalletAvailability Availability { get; set; }
 
         public string CreatedBy { get; set; }
 

@@ -17,9 +17,9 @@
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddOrModifyUserMaster(LOC.PMS.Model.UserMaster)">
             <summary>
-            Add new pallet to the server.
+            Add or Modify User Master.
             </summary>
-            <param name="palletDetailsRequest"></param>
+            <param name="userDetailsRequest"></param>
             <returns></returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.AddGroup(LOC.PMS.Model.AddGroupRequest)">
