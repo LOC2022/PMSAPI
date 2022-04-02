@@ -3,14 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>warnings</Nullable>
+    <ApplicationInsightsResourceId>/subscriptions/9f413726-4c6b-403e-beb8-4a29c2a9ecc6/resourceGroups/rg-ctind-pms-prod/providers/microsoft.insights/components/ace-pms-api</ApplicationInsightsResourceId>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>LOC.PMS.WebAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.4.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
@@ -23,9 +25,9 @@
     <ProjectReference Include="..\LOC.PMS.Infrastructure\LOC.PMS.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <DocFileItem Remove="LOC.PMS.WebAPI.xml" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 
 </Project>

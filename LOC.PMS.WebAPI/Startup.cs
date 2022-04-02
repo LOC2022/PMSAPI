@@ -71,6 +71,7 @@ namespace LOC.PMS.WebAPI
                 opt.EnableAnnotations();
             });
             services.AddFluentValidationRulesToSwagger();
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         }
 
         /// <summary>
