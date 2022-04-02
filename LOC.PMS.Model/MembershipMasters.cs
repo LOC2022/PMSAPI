@@ -47,6 +47,8 @@ namespace LOC.PMS.Model
 
         public int GroupId { get; set; }
 
+        public string GroupName { get; set; }
+
         public bool IsActive { get; set; }
 
         public string ModifiedBy { get; set; }
