@@ -30,31 +30,7 @@ namespace LOC.PMS.WebAPI.Controllers
         }
 
         
-        //[SwaggerOperation(
-        //    Description = "A.",
-        //    Tags = new[] { "PostSuccess" },
-        //    OperationId = "PostSuccess")]
-        //[SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
-        ////[SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
-        //[SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        //[HttpPost("ImportDayPlan"), MapToApiVersion("1.0")]
-        //public async Task<IActionResult> ImportDayPlan([FromBody] DayPlan _dayPlan)
-        //{
-        //    List<DayPlan> Order = new List<DayPlan>();
-        //    string FPath = "C:\\Users\\Muthazagan R\\Desktop\\PMS\\TestFilr";
-        //    string FileString = _dayPlan.ByteArray.Replace("base64", string.Empty);
-        //    var Doc = Convert.FromBase64String(FileString);
-        //    string FilePath = Path.Combine(FPath, DateTime.Now.ToString("ddMMyyyy") + ".csv");
-        //    System.IO.File.WriteAllBytes(FilePath, Doc);
-
-        //    Order = System.IO.File.ReadAllLines(FilePath)
-        //        .Skip(1)
-        //        .Select(v => DayPlan.FromCsv(v))
-        //        .ToList();
-        //    await _ordesDetailProvider.AddDayPlanData(Order);
-        //    //CreateOrder();
-        //    return Ok();
-        //}
+        
 
         private async void CreateOrder()
         {

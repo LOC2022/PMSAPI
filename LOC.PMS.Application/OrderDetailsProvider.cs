@@ -27,8 +27,8 @@ namespace LOC.PMS.Application
         {
             try
             {
-                _logger.ForContext("PalletDetailsRequest", order)
-                    .Information("Add Pallet request - Start");
+                _logger.ForContext("AddDayPlanData", order)
+                    .Information("Add Day Plan Data request - Start");
 
                 //business logic
 
@@ -39,8 +39,8 @@ namespace LOC.PMS.Application
             }
             catch (Exception exception)
             {
-                _logger.ForContext("PalletDetailsRequest", order)
-                    .Error(exception, "Exception occurred during pallet insert .");
+                _logger.ForContext("Add Day Plan Data", order)
+                    .Error(exception, "Exception occurred during Add Day Plan Data insert .");
                 await Task.FromException(exception);
             }
         }

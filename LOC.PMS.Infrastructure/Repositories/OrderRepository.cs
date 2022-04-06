@@ -105,19 +105,8 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         }
 
-        Task IOrderRepository.CreateOrder()
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        //Task CreateOrder()
-        //{
-        //    string VendorQry = @"select distinct VendorId from [dbo].[DayPlan]
-        //                    where IsActive = 1 and OrderDate=CAST( GETDATE() as DATE)";
-
-
-        //    var dt = _context.ExecuteSql<DayPlan>(VendorQry);
-        //    return Task.CompletedTask;
-        //}
+        
     }
 }

@@ -8,6 +8,6 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
     {
        
         Task AddDayPlanData(List<DayPlan> order);
-        Task CreateOrder();
+       
     }
 }
