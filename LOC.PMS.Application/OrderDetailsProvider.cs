@@ -45,9 +45,6 @@ namespace LOC.PMS.Application
             }
         }
 
-        public  Task CreateOrder()
-        {
-            return _orderRepository.CreateOrder();
-        }
+       
     }
 }

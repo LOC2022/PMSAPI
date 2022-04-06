@@ -23,13 +23,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         public Task AddDayPlanData(List<DayPlan> order)
         {
-            var JObject = JsonConvert.SerializeObject(order);
-            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
-            {
-                new SqlParameter("@ImData", JObject),
-
-            };
-            _context.ExecuteStoredProcedure("[dbo].[ImportDayPlan]", sqlParams.ToArray());
+            _context.BulkCopy(order, order.Count, true);
             CreateOrder();
             return Task.CompletedTask;
         }
@@ -105,8 +99,8 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         }
 
-        
 
-        
+
+
     }
 }

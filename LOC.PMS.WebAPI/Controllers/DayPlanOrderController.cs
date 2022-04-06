@@ -32,10 +32,7 @@ namespace LOC.PMS.WebAPI.Controllers
         
         
 
-        private async void CreateOrder()
-        {
-            await _ordesDetailProvider.CreateOrder();
-        }
+        
 
         /// <summary>
         /// 
