@@ -15,7 +15,7 @@ namespace LOC.PMS.Model
 
         public string Vendor { get; set; }  
         public int VendorId { get; set; }
-        public string OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public string ReqPart { get; set; }
         public int RequiredQty { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -31,6 +31,7 @@ namespace LOC.PMS.Model
             palletDetailsRequest.RequiredQty = Convert.ToInt32(lines[5]);
             palletDetailsRequest.Model = lines[1];
             palletDetailsRequest.Date = lines[4];
+            palletDetailsRequest.OrderDate = Convert.ToDateTime(lines[4]);
             palletDetailsRequest.VendorId = int.Parse(lines[6]);
             palletDetailsRequest.CreatedDate = DateTime.Now;
             return palletDetailsRequest;
