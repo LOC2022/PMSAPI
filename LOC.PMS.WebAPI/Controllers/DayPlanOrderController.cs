@@ -29,10 +29,10 @@ namespace LOC.PMS.WebAPI.Controllers
             this._ordesDetailProvider = ordesDetailProvider;
         }
 
-        
-        
 
-        
+
+
+
 
         /// <summary>
         /// 
@@ -56,13 +56,14 @@ namespace LOC.PMS.WebAPI.Controllers
             {
                 files.FormFile.CopyTo(stream);
             }
-            List<DayPlan> Order = new List<DayPlan>();
-
-            Order = System.IO.File.ReadAllLines(path)
+            List<DayPlan> Order = System.IO.File.ReadAllLines(path)
                 .Skip(1)
                 .Select(v => DayPlan.FromCsv(v))
                 .ToList();
-            await _ordesDetailProvider.AddDayPlanData(Order);            
+            await _ordesDetailProvider.AddDayPlanData(Order);
+
+            string Dest_Path = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles/Processed", DateTime.Now.ToString("ddMMyyyyHHmmss") + "_" + files.FileName);
+            System.IO.File.Move(path, Dest_Path);
             return Ok();
         }
 

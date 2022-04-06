@@ -28,13 +28,11 @@ namespace LOC.PMS.Application
             try
             {
                 _logger.ForContext("AddDayPlanData", order)
-                    .Information("Add Day Plan Data request - Start");
-
-                //business logic
+                    .Information("Add Day Plan Data request - Start");                
 
                 await _orderRepository.AddDayPlanData(order);
 
-                _logger.ForContext("PalletDetailsRequest", order)
+                _logger.ForContext("AddDayPlanData", order)
                     .Information("Add Pallet request - End");
             }
             catch (Exception exception)
