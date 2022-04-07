@@ -7,24 +7,32 @@ namespace LOC.PMS.Model
         public string ByteArray { get; set; }
 
         public string Model { get; set; }
+
         public string RowId { get; set; }
+
         public string PalletPartNo { get; set; }
+
         public string PalletPartName { get; set; }
+
         public string Date { get; set; }
+
         public int Qty { get; set; }
 
         public string Vendor { get; set; }
+
         public int VendorId { get; set; }
+
         public DateTime OrderDate { get; set; }
+
         public string ReqPart { get; set; }
+
         public int RequiredQty { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public int D2LDays { get; set; }
 
         public int NonD2LDays { get; set; }
-
-
 
         public static DayPlan FromCsv(string csvLine)
         {

@@ -19,9 +19,8 @@ namespace LOC.PMS.WebAPI.Controllers
     {
         private readonly IOrdesDetailProvider _ordesDetailProvider;
 
-
         /// <summary>
-        /// Pallet Details Controller constructor.
+        /// Day Plan Order Controller constructor.
         /// </summary>
         /// <param name="ordesDetailProvider"></param>
         public DayPlanOrderController(IOrdesDetailProvider ordesDetailProvider)
@@ -29,13 +28,8 @@ namespace LOC.PMS.WebAPI.Controllers
             this._ordesDetailProvider = ordesDetailProvider;
         }
 
-
-
-
-
-
         /// <summary>
-        /// 
+        /// Import Day plan
         /// </summary>
         /// <param name="files"></param>
         /// <returns></returns>

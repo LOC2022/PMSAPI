@@ -11,13 +11,13 @@
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.#ctor(LOC.PMS.Application.Interfaces.IOrdesDetailProvider)">
             <summary>
-            Pallet Details Controller constructor.
+            Day Plan Order Controller constructor.
             </summary>
             <param name="ordesDetailProvider"></param>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.ImportDayPlan(LOC.PMS.Model.FileModel)">
             <summary>
-            
+            Import Day plan
             </summary>
             <param name="files"></param>
             <returns></returns>

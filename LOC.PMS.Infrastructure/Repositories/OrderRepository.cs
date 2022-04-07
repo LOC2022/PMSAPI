@@ -19,8 +19,6 @@ namespace LOC.PMS.Infrastructure.Repositories
             _context = context;
         }
 
-
-
         public Task AddDayPlanData(List<DayPlan> order)
         {
             _context.BulkCopy(order, order.Count, true);
@@ -108,7 +106,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                             }
 
                         }
-                    }                   
+                    }
 
                     string UpdateQry = $"UPDATE DayPlan SET IsActive=0 WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
                     _context.ExecuteSql(UpdateQry);
@@ -120,15 +118,10 @@ namespace LOC.PMS.Infrastructure.Repositories
             if (palletsByOrderTrans.Count > 0)
                 _context.BulkCopy(palletsByOrderTrans, palletsByOrderTrans.Count, true);
 
-            var str = String.Join(",", palletsByOrderTrans.Select(x=>x.PalletId));
+            var str = String.Join(",", palletsByOrderTrans.Select(x => x.PalletId));
             string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ({str})";
             _context.ExecuteSql(UpdatePalletQry);
 
-
         }
-
-
-
-
     }
 }
