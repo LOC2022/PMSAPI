@@ -4,6 +4,24 @@
         <name>LOC.PMS.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:LOC.PMS.WebAPI.Controllers.DayPlanOrderController">
+            <summary>
+            DayPlanOrderController
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.#ctor(LOC.PMS.Application.Interfaces.IOrdesDetailProvider)">
+            <summary>
+            Pallet Details Controller constructor.
+            </summary>
+            <param name="ordesDetailProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.ImportDayPlan(LOC.PMS.Model.FileModel)">
+            <summary>
+            
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.MembershipController">
             <summary>
             Pallet Details Controller.

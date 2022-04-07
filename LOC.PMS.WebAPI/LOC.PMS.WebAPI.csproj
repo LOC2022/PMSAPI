@@ -25,6 +25,10 @@
     <ProjectReference Include="..\LOC.PMS.Infrastructure\LOC.PMS.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UploadedFiles\" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <DocFileItem Remove="LOC.PMS.WebAPI.xml" />
   </ItemGroup>-->
