@@ -81,6 +81,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.MembershipLogin(System.String,System.String)">
+            <summary>
+             Login.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
             <summary>
             Pallet Details Controller.
