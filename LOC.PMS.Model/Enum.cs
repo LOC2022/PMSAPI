@@ -15,7 +15,7 @@ namespace LOC.PMS.Model
         Active = 2,
         InActive = 3,
         OnHold = 4,
-        Repair = 5
+        OnRepair = 5
     }
 
     [Flags]
