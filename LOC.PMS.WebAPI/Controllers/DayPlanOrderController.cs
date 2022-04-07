@@ -41,12 +41,12 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <returns></returns>
         [SwaggerOperation(
             Description = "A.",
-            Tags = new[] { "PostSuccess" },
-            OperationId = "PostSuccess")]
+            Tags = new[] { "ImportDayPlan" },
+            OperationId = "ImportDayPlan")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("ImportDayPlanTest"), MapToApiVersion("1.0")]
+        [HttpPost("ImportDayPlan"), MapToApiVersion("1.0")]
         public async Task<IActionResult> ImportDayPlan([FromForm] FileModel files)
         {
 
