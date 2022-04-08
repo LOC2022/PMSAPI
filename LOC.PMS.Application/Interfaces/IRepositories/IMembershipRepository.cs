@@ -26,6 +26,6 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 
         Task<int> ActivateGroup(string groupName);
 
-
+        Task<IEnumerable<MembershipMasters>> MemebershipLogin(string userName, string password);
     }
 }

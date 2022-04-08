@@ -59,7 +59,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             DapperPlusManager.Entity<GroupRights>().Table("GroupRights").InsertIfNotExists().Identity(i => i.GroupRightsId);
 
-            _context.BulkCopy(groupRightsList,30,true);
+            _context.BulkCopy(groupRightsList, 30, true);
 
             return returnGroupId;
         }
@@ -153,7 +153,22 @@ namespace LOC.PMS.Infrastructure.Repositories
             };
 
             return await _context.ExecuteStoredProcedureAsync<int>("[dbo].[Group_Activate]", sqlParams.ToArray());
-             
+
+        }
+
+        public async Task<IEnumerable<MembershipMasters>> MemebershipLogin(string userName, string password)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@UserName", userName),
+                new SqlParameter("@Password", password)
+
+                };
+
+           var resp = await _context.QueryStoredProcedureAsync<MembershipMasters>("[dbo].[MemebershipLogin_Select]", sqlParams.ToArray());
+
+            return resp;
+                
         }
     }
 }

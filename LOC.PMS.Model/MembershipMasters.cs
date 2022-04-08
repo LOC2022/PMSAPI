@@ -5,11 +5,15 @@ namespace LOC.PMS.Model
 {
     public class MembershipMasters
     {
-        public UserMaster UserMasterDetails { get; set; }
+        public int UserId { get; set; }
 
-        public AddGroupRequest GroupMasterDetails { get; set; }
+        public string UserName { get; set; }
 
-        public FeatureMaster FeatureMasterDetails { get; set; }
+        public int GroupId { get; set; }
+
+        public string GroupName { get; set; }
+
+        public string ActiveFeatures { get; set; }
 
     }
 
@@ -33,7 +37,7 @@ namespace LOC.PMS.Model
 
     public class UserMaster
     {
-        public  int UserId { get; set; }
+        public int UserId { get; set; }
 
         public string UserName { get; set; }
 

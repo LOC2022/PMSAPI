@@ -26,5 +26,7 @@ namespace LOC.PMS.Application.Interfaces
         Task DeactivateGroupById(int groupId);
 
         Task<int> ActivateGroupByName(string groupName);
+
+        Task<IEnumerable<MembershipMasters>> MembershipLogin(string userName, string password);
     }
 }

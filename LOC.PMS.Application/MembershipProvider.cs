@@ -255,5 +255,30 @@ namespace LOC.PMS.Application
 
             return activatedGroupId;
         }
+
+         public async Task<IEnumerable<MembershipMasters>> MembershipLogin(string userName, string password)
+        {
+            try
+            {
+                _logger.ForContext("LoginUser", userName)
+                    .Information($"Login Request for User Name - {userName} - Start");
+
+
+                return await _membershipRepository.MemebershipLogin(userName, password);
+
+                //_logger.ForContext("LoginUser", userName)
+                    //.Information($"Login Request for User Name - {userName} - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("featureId", userName)
+                    .Error(exception,
+                        $"Exception occurred while trying to login Request for User - {userName}.");
+                await Task.FromException(exception);
+            }
+
+            return null;
+
+        }
     }
 }

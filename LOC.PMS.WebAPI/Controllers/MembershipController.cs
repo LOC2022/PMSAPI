@@ -210,5 +210,23 @@ namespace LOC.PMS.WebAPI.Controllers
             await _membershipProvider.ActivateGroupByName(groupName);
             return Ok();
         }
+
+             /// <summary>
+        ///  Login.
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Login",
+            Tags = new[] { "MembershipLogin" },
+            OperationId = "MembershipLogin")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("MembershipLogin"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> MembershipLogin(string UserName, string password)
+        {
+           var response = await _membershipProvider.MembershipLogin(UserName, password);
+            return Ok(response);
+        }
     }
 }
