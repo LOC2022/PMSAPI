@@ -18,6 +18,7 @@ namespace LOC.PMS.WebAPI.Controllers
     public class DayPlanOrderController : ControllerBase
     {
         private readonly IOrdesDetailProvider _ordesDetailProvider;
+        private const string GETALL = "";
 
         /// <summary>
         /// Day Plan Order Controller constructor.
@@ -58,6 +59,44 @@ namespace LOC.PMS.WebAPI.Controllers
 
             string Dest_Path = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles/Processed", DateTime.Now.ToString("ddMMyyyyHHmmss") + "_" + files.FileName);
             System.IO.File.Move(path, Dest_Path);
+            return Ok();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OrderNo"></param>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Get Order Details.",
+            Tags = new[] { "GetOrderDetails" },
+            OperationId = "GetOrderDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetOrderDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetPallets([FromQuery] string OrderNo = GETALL)
+        {
+            var response = await _ordesDetailProvider.GetOrderDetails(OrderNo);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OrderNo"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Cancel Order",
+            Tags = new[] { "Cancel Order" },
+            OperationId = "CancelOrder")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPut("CancelOrder"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> CancelOrder([FromQuery] string OrderNo)
+        {
+            await _ordesDetailProvider.CancelOrder(OrderNo);
             return Ok();
         }
 

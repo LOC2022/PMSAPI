@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -23,6 +23,16 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             _context.BulkCopy(order, order.Count, true);
             CreateOrder();
+            return Task.CompletedTask;
+        }
+
+        public Task CancelOrder(string orderNo)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@orderNo", orderNo)
+            };
+            _context.ExecuteStoredProcedure("[dbo].[Orders_Cancel]", sqlParams.ToArray());
             return Task.CompletedTask;
         }
 
@@ -103,6 +113,10 @@ namespace LOC.PMS.Infrastructure.Repositories
                                         ModifiedDate = DateTime.Now
                                     });
                                 }
+
+                                var str = String.Join(",", PalletList.Select(x => x.PalletId));
+                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ({str})";
+                                _context.ExecuteSql(UpdatePalletQry);
                             }
 
                         }
@@ -113,15 +127,26 @@ namespace LOC.PMS.Infrastructure.Repositories
                 }
 
             }
-            if (OrderList.Count > 0)
-                _context.BulkCopy(OrderList, OrderList.Count, true);
-            if (palletsByOrderTrans.Count > 0)
-                _context.BulkCopy(palletsByOrderTrans, palletsByOrderTrans.Count, true);
 
-            var str = String.Join(",", palletsByOrderTrans.Select(x => x.PalletId));
-            string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ({str})";
-            _context.ExecuteSql(UpdatePalletQry);
+
+            if (palletsByOrderTrans.Count > 0)
+            {
+                _context.BulkCopy(OrderList, OrderList.Count, true);
+                _context.BulkCopy(palletsByOrderTrans, palletsByOrderTrans.Count, true);
+            }
+
+
 
         }
+
+        public async Task<IEnumerable<OrderDetails>> GetOrderDetails(string OrderNo)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@OrderNo", OrderNo)
+            };
+            return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[OrderDetails_Select]", sqlParams.ToArray());
+        }
+
     }
 }

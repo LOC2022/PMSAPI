@@ -22,6 +22,20 @@
             <param name="files"></param>
             <returns></returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.GetPallets(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="OrderNo"></param>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.CancelOrder(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="OrderNo"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.MembershipController">
             <summary>
             Pallet Details Controller.

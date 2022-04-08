@@ -43,6 +43,49 @@ namespace LOC.PMS.Application
             }
         }
 
-       
+        public async Task CancelOrder(string orderNo)
+        {
+            try
+            {
+                _logger.ForContext("Cancel Order", orderNo)
+                    .Information("CancelOrder request - Start");
+
+                await _orderRepository.CancelOrder(orderNo);
+
+                _logger.ForContext("CancelOrder", orderNo)
+                    .Information("Cancel Order request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("CancelOrder", orderNo)
+                    .Error(exception, "Exception occurred during Cancel Order .");
+                await Task.FromException(exception);
+            }
+        }
+
+        public async Task<IEnumerable<OrderDetails>> GetOrderDetails(string OrderNo)
+        {
+            
+            try
+            {
+                _logger.ForContext("Select Order Details", OrderNo)
+                    .Information("Select Order Details request - Start");
+
+             var  response=  await _orderRepository.GetOrderDetails(OrderNo);
+
+                _logger.ForContext("Select Order Details", OrderNo)
+                    .Information("Select Order Details - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("Add Day Plan Data", OrderNo)
+                    .Error(exception, "Exception occurred during Select Order Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
     }
 }
