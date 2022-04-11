@@ -75,7 +75,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetOrderDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetPallets([FromQuery] string OrderNo = GETALL)
+        public async Task<IActionResult> GetOrderDetails([FromQuery] string OrderNo = GETALL)
         {
             var response = await _ordesDetailProvider.GetOrderDetails(OrderNo);
             return Ok(response);
