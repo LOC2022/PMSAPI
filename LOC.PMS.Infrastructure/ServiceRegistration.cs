@@ -22,6 +22,8 @@ namespace LOC.PMS.Infrastructure
             services.AddTransient<IVendorDetailsRepository, VendorDetailsRepository>();
             services.AddTransient<IOrdesDetailProvider, OrderDetailsProvider>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<ITransactionDetailsProvider, TransactionDetailsProvider>();
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
             services.AddTransient<IContext, Context>();
             services.AddFluentValidation();
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
