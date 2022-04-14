@@ -37,8 +37,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("GetOrderDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetOrderDetails([FromQuery] OrderDetails orderDetails)
+        [HttpPost("GetOrderDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetOrderDetails(OrderDetails orderDetails)
         {
             var response = await _transactionDetailsProvider.GetOrderDetails(orderDetails);
             return Ok(response);
@@ -62,6 +62,27 @@ namespace LOC.PMS.WebAPI.Controllers
         {
             var response = await _transactionDetailsProvider.GetDCDetails(OrderNo);
             return Ok(response);
+        }
+
+        //[VechicleDetails_Add]
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vechicleDetails"></param>
+        /// <returns>List of DC's</returns>
+        [SwaggerOperation(
+            Description = "SaveTransportDetails.",
+            Tags = new[] { "SaveTransportDetails" },
+            OperationId = "SaveTransportDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SaveTransportDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> SaveTransportDetails(VechicleDetails vechicleDetails)
+        {
+            await _transactionDetailsProvider.SaveVehicleDetails(vechicleDetails);
+            return Ok();
         }
 
     }
