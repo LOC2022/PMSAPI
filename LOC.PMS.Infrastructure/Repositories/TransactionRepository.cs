@@ -33,9 +33,22 @@ namespace LOC.PMS.Infrastructure.Repositories
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@OrderNo", orderDetails.OrderNo),
-                new SqlParameter("@Stage", orderDetails.OrderNo)
+                new SqlParameter("@Stage", orderDetails.Stage)
             };
             return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[HHTOrderDetails_Select]", sqlParams.ToArray());
+        }
+
+        public async Task SaveVehicleDetails(VechicleDetails vechicleDetails)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@VehicleNo", vechicleDetails.VechicleNo),
+                new SqlParameter("@DriverName", vechicleDetails.DriverName),
+                new SqlParameter("@DriverPhoneNo", vechicleDetails.DriverMobileNo),
+                new SqlParameter("@DCNo", vechicleDetails.DCNo),
+            };
+            await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[VechicleDetails_Add]", sqlParams.ToArray());
+            Task.CompletedTask.Wait();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace LOC.PMS.Application.Interfaces
     {
         Task<IEnumerable<OrderDetails>> GetOrderDetails(OrderDetails orderNo);
         Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo);
+        Task SaveVehicleDetails(VechicleDetails vechicleDetails);
     }
 }

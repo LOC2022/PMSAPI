@@ -70,5 +70,27 @@ namespace LOC.PMS.Application
 
             return null;
         }
+
+        public async Task SaveVehicleDetails(VechicleDetails vechicleDetails)
+        {
+            try
+            {
+                _logger.ForContext("palletPartNo", vechicleDetails)
+                    .Information("Deactivate Pallet request - Start");
+
+                //business logic
+
+                await _transactionRepository.SaveVehicleDetails(vechicleDetails);
+
+                _logger.ForContext("PalletDetailsRequest", vechicleDetails)
+                    .Information("Deactivate Pallet request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletPartNo", vechicleDetails)
+                    .Error(exception, $"Exception occurred during pallet Deactivate operation for pallet no. - {vechicleDetails}");
+                await Task.FromException(exception);
+            }
+        }
     }
 }
