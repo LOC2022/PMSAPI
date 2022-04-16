@@ -47,14 +47,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo)
+        public async Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo, string DCStatus, string UserName)
         {
             try
             {
                 _logger.ForContext("Select Get DC Details", orderNo)
                     .Information("Select  Get DC Details request - Start");
 
-                var response = await _transactionRepository.GetDCDetails(orderNo);
+                var response = await _transactionRepository.GetDCDetails(orderNo, DCStatus, UserName);
 
                 _logger.ForContext("Select  Get DC Details", orderNo)
                     .Information("Select  Get DC Details - End");
@@ -89,6 +89,28 @@ namespace LOC.PMS.Application
             {
                 _logger.ForContext("palletPartNo", vechicleDetails)
                     .Error(exception, $"Exception occurred during pallet Deactivate operation for pallet no. - {vechicleDetails}");
+                await Task.FromException(exception);
+            }
+        }
+
+        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus)
+        {
+            try
+            {
+                _logger.ForContext("palletIds", PalletIds)
+                    .Information("Pallet Scan - Start");
+
+                //business logic
+
+                await _transactionRepository.UpdateScanDetails(PalletIds, ScannedQty, ToStatus);
+
+                _logger.ForContext("PalletDetailsRequest", PalletIds)
+                    .Information("Deactivate Pallet request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletIds", PalletIds)
+                    .Error(exception, $"Exception occurred during pallet scan. - {PalletIds}");
                 await Task.FromException(exception);
             }
         }
