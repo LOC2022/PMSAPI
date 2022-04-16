@@ -204,11 +204,13 @@
             <param name="ToStatus"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SaveTransportDetails(LOC.PMS.Model.VechicleDetails)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SaveTransportAndDCStatusDetails(LOC.PMS.Model.VechicleDetails,System.String,System.String)">
             <summary>
             
             </summary>
             <param name="vechicleDetails"></param>
+            <param name="ToDCStage"></param>
+            <param name="ToPalletStage"></param>
             <returns>List of DC's</returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">

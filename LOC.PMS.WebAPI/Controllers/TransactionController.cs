@@ -92,18 +92,20 @@ namespace LOC.PMS.WebAPI.Controllers
         /// 
         /// </summary>
         /// <param name="vechicleDetails"></param>
+        /// <param name="ToDCStage"></param>
+        /// <param name="ToPalletStage"></param>
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
-            Description = "SaveTransportDetails.",
-            Tags = new[] { "SaveTransportDetails" },
-            OperationId = "SaveTransportDetails")]
+            Description = "Save TransportAndDCStatusDetails.",
+            Tags = new[] { "SaveTransportAndDCStatusDetails" },
+            OperationId = "SaveTransportAndDCStatusDetails")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("SaveTransportDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> SaveTransportDetails(VechicleDetails vechicleDetails)
+        [HttpPost("SaveTransportAndDCStatusDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> SaveTransportAndDCStatusDetails(VechicleDetails vechicleDetails, [FromQuery] string ToDCStage, [FromQuery] string ToPalletStage)
         {
-            await _transactionDetailsProvider.SaveVehicleDetails(vechicleDetails);
+            await _transactionDetailsProvider.SaveVehicleAndUpdateStatus(vechicleDetails, ToDCStage, ToPalletStage);
             return Ok();
         }
 
