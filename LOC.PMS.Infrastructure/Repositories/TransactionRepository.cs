@@ -41,7 +41,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[HHTOrderDetails_Select]", sqlParams.ToArray());
         }
 
-        public async Task SaveVehicleDetails(VechicleDetails vechicleDetails)
+        public async Task SaveVehicleDetailsAndUpdateDCStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
@@ -49,8 +49,10 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@DriverName", vechicleDetails.DriverName),
                 new SqlParameter("@DriverPhoneNo", vechicleDetails.DriverMobileNo),
                 new SqlParameter("@DCNo", vechicleDetails.DCNo),
+                new SqlParameter("@ToDCStage", ToDCStage),
+                new SqlParameter("@ToPalletStage", ToPalletStage)
             };
-            await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[VechicleDetails_Add]", sqlParams.ToArray());
+            await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[UpdateDCAndVechicleDetails]", sqlParams.ToArray());
             Task.CompletedTask.Wait();
         }
 

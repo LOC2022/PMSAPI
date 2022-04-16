@@ -71,24 +71,24 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task SaveVehicleDetails(VechicleDetails vechicleDetails)
+        public async Task SaveVehicleAndUpdateStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage)
         {
             try
             {
-                _logger.ForContext("palletPartNo", vechicleDetails)
-                    .Information("Deactivate Pallet request - Start");
+                _logger.ForContext("saving vechicle details & change DC and pallet", vechicleDetails)
+                    .Information("saving vechicle details - Start");
 
                 //business logic
 
-                await _transactionRepository.SaveVehicleDetails(vechicleDetails);
+                await _transactionRepository.SaveVehicleDetailsAndUpdateDCStatus(vechicleDetails, ToDCStage, ToPalletStage);
 
-                _logger.ForContext("PalletDetailsRequest", vechicleDetails)
-                    .Information("Deactivate Pallet request - End");
+                _logger.ForContext("saving vechicle details", vechicleDetails)
+                    .Information("saving vechicle details & change DC and pallet - End");
             }
             catch (Exception exception)
             {
-                _logger.ForContext("palletPartNo", vechicleDetails)
-                    .Error(exception, $"Exception occurred during pallet Deactivate operation for pallet no. - {vechicleDetails}");
+                _logger.ForContext("vechicleDetails", vechicleDetails)
+                    .Error(exception, $"saving vechicle details & change DC and pallet. - {vechicleDetails}");
                 await Task.FromException(exception);
             }
         }
@@ -105,7 +105,7 @@ namespace LOC.PMS.Application
                 await _transactionRepository.UpdateScanDetails(PalletIds, ScannedQty, ToStatus);
 
                 _logger.ForContext("PalletDetailsRequest", PalletIds)
-                    .Information("Deactivate Pallet request - End");
+                    .Information("Pallet Scan - End");
             }
             catch (Exception exception)
             {
