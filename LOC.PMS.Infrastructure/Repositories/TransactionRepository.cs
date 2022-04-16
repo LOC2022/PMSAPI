@@ -69,5 +69,21 @@ namespace LOC.PMS.Infrastructure.Repositories
           
             Task.CompletedTask.Wait();
         }
+
+        public async Task UpdateScanDetailsForInward(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber)
+        {
+            string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
+            var PalletStatusId = _context.QueryData<int>(sql);
+
+            foreach (var PalletId in PalletIds)
+            {
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={PalletStatusId.First()} WHERE PalletId IN ({PalletId}) AND OrderNo='{OrderNumber}'";
+                _context.ExecuteSql(UpdatePalletQry);
+            }
+
+            //TODO: Split the DC into Repair DC for missing palletId during the scan
+
+            Task.CompletedTask.Wait();
+        }
     }
 }
