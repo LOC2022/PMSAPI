@@ -22,7 +22,7 @@
             <param name="files"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.GetPallets(System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.DayPlanOrderController.GetOrderDetails(System.String)">
             <summary>
             
             </summary>
@@ -169,6 +169,38 @@
              Deactivate Pallet location details.
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.#ctor(LOC.PMS.Application.Interfaces.ITransactionDetailsProvider)">
+            <summary>
+            
+            </summary>
+            <param name="transactionDetailsProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetOrderDetails(LOC.PMS.Model.OrderDetails)">
+            <summary>
+            
+            </summary>
+            <param name="orderDetails"></param>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetails(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="OrderNo"></param>
+            <returns>List of DC's</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SaveTransportDetails(LOC.PMS.Model.VechicleDetails)">
+            <summary>
+            
+            </summary>
+            <param name="vechicleDetails"></param>
+            <returns>List of DC's</returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
