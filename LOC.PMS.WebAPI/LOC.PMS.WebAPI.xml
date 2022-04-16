@@ -170,17 +170,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:LOC.PMS.WebAPI.Controllers.TransactionDetailsController">
-            <summary>
-            Transaction Details Controller.
-            </summary>
-        </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionDetailsController.#ctor(LOC.PMS.Application.Interfaces.ITransactionDetailsProvider)">
-            <summary>
-            transaction Details Controller constructor.
-            </summary>
-            <param name="transactionDetailsProvider"></param>
-        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             
