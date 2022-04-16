@@ -72,6 +72,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@UserName", userMasterRequest.UserName),
                 new SqlParameter("@Password", userMasterRequest.Password),
                 new SqlParameter("@GroupId", userMasterRequest.GroupId),
+                new SqlParameter("@VendorId", userMasterRequest.VendorId),
                 new SqlParameter("@Phone", userMasterRequest.Phone),
                 new SqlParameter("@Email", userMasterRequest.Email),
                 new SqlParameter("@IsActive", userMasterRequest.IsActive),
