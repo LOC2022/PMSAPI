@@ -142,6 +142,44 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderDetails"></param>        
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "UpdateHHTDispatchDetails.",
+            Tags = new[] { "UpdateHHTDispatchDetails" },
+            OperationId = "UpdateHHTDispatchDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("UpdateHHTDispatchDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> UpdateHHTDispatchDetails(List<OrderDetails> orderDetails)
+        {
+            await _transactionDetailsProvider.UpdateHHTDispatchDetails(orderDetails);
+            return Ok();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PalletId"></param>
+        /// <returns>List of DC's</returns>
+        [SwaggerOperation(
+            Description = "GetDCDetailsByPallet.",
+            Tags = new[] { "GetDCDetailsByPallet" },
+            OperationId = "GetDCDetailsByPallet")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDCDetailsByPallet"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId)
+        {
+            var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId);
+            return Ok(response);
+        }
 
 
     }

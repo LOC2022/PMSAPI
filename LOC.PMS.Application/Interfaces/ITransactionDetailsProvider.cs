@@ -13,5 +13,7 @@ namespace LOC.PMS.Application.Interfaces
         Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber);
         Task SaveVehicleAndUpdateStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage);
         Task SaveHHTOrderDetails(List<OrderDetails> orderDetails);
+        Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails);
+        Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId);
     }
 }

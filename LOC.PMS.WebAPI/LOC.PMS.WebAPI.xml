@@ -222,6 +222,20 @@
             <param name="orderDetails"></param>        
             <returns>Save Order</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateHHTDispatchDetails(System.Collections.Generic.List{LOC.PMS.Model.OrderDetails})">
+            <summary>
+            
+            </summary>
+            <param name="orderDetails"></param>        
+            <returns>Save Order</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetailsByPallet(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="PalletId"></param>
+            <returns>List of DC's</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             
