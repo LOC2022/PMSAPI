@@ -40,8 +40,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("GetHHTOrderDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetHHTOrderDetails([FromQuery] OrderDetails orderDetails)
+        [HttpPost("GetHHTOrderDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetHHTOrderDetails(OrderDetails orderDetails)
         {
             var response = await _transactionDetailsProvider.GetHHTOrderDetails(orderDetails);
             return Ok(response);
