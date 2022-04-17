@@ -109,5 +109,26 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderDetails"></param>        
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "Save SaveHHTOrderDetails.",
+            Tags = new[] { "SaveHHTOrderDetails" },
+            OperationId = "SaveHHTOrderDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SaveHHTOrderDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> SaveHHTOrderDetails(List<OrderDetails> orderDetails)
+        {
+            await _transactionDetailsProvider.SaveHHTOrderDetails(orderDetails);
+            return Ok();
+        }
+
+
+
     }
 }

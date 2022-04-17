@@ -41,6 +41,8 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[HHTOrderDetails_Select]", sqlParams.ToArray());
         }
 
+
+
         public async Task SaveVehicleDetailsAndUpdateDCStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
@@ -61,12 +63,12 @@ namespace LOC.PMS.Infrastructure.Repositories
             string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
             var PalletStatusId = _context.QueryData<int>(sql);
 
-            foreach(var PalletId in PalletIds)
+            foreach (var PalletId in PalletIds)
             {
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={PalletStatusId.First()} WHERE PalletId IN ({PalletId})";
                 _context.ExecuteSql(UpdatePalletQry);
             }
-          
+
             Task.CompletedTask.Wait();
         }
 
@@ -84,6 +86,20 @@ namespace LOC.PMS.Infrastructure.Repositories
             //TODO: Split the DC into Repair DC for missing palletId during the scan
 
             Task.CompletedTask.Wait();
+        }
+
+
+        public Task SaveHHTOrderDetails(List<OrderDetails> orderDetails)
+        {
+            string PalletIds = "";
+            if (orderDetails.Count > 0)
+                PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
+
+            string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.Picked} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
+             UpdatePalletQry += $"UPDATE Orders SET OrderStatusId={(int)OrderStatus.InTransit} WHERE  OrderNo='{orderDetails.First().OrderNo}';";
+            _context.ExecuteSql(UpdatePalletQry);
+
+            return Task.CompletedTask;
         }
     }
 }

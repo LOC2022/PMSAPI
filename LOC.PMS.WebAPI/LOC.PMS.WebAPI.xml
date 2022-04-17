@@ -213,6 +213,13 @@
             <param name="ToPalletStage"></param>
             <returns>List of DC's</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SaveHHTOrderDetails(System.Collections.Generic.List{LOC.PMS.Model.OrderDetails})">
+            <summary>
+            
+            </summary>
+            <param name="orderDetails"></param>        
+            <returns>Save Order</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             
