@@ -17,6 +17,8 @@ namespace LOC.PMS.Model
         public string PalletName { get; set; }
         public string PalletStatus { get; set; }
         public int Stage { get; set; }
+        public string UserId { get; set; }
+
     }
 
 
