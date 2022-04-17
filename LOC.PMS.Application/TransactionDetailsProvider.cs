@@ -143,5 +143,53 @@ namespace LOC.PMS.Application
                 await Task.FromException(exception);
             }
         }
+
+        public async Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails)
+        {
+            try
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Information("Pallet Scan - Start");
+                //business logic
+                if (orderDetails.Count > 0)
+                {
+                    await _transactionRepository.UpdateHHTDispatchDetails(orderDetails);
+                }
+
+
+                _logger.ForContext("PalletDetailsRequest", orderDetails)
+                    .Information("Pallet Scan - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Error(exception, $"Exception occurred during pallet scan. - {orderDetails}");
+                await Task.FromException(exception);
+            }
+        }
+
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId)
+        {
+            try
+            {
+                _logger.ForContext("Select Get DC Details", palletId)
+                    .Information("Select  Get DC Details request - Start");
+
+                var response = await _transactionRepository.GetDCDetailsByPallet(palletId);
+
+                _logger.ForContext("Select  Get DC Details", palletId)
+                    .Information("Select  Get DC Details - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDCDetailsByPallet", palletId)
+                    .Error(exception, "Exception occurred during Select Order Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
     }
 }

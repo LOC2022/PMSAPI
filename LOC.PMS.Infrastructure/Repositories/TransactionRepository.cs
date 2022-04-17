@@ -110,5 +110,28 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             return Task.CompletedTask;
         }
+        public Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails)
+        {
+            string PalletIds = "";
+            if (orderDetails.Count > 0)
+                PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
+
+            string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.FixedRead} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
+            _context.ExecuteSql(UpdatePalletQry);
+
+            return Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string PalletId)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@PalletId", PalletId)
+
+            };
+            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_SelectByPallet]", sqlParams.ToArray());
+            //var res= await _context.ExecuteSqlAsync<List<DCDetails>>(@$"select PalletId,'Pending' as Status from [DeliveryChallanTrans] WHERE DCNo in (select TOP 1 DCNo from[dbo].[DeliveryChallanTrans] where PalletId = '{PalletId}' and IsActive = 1 Order by CreatedDate DESC )").Result;
+            //return res;
+        }
     }
 }
