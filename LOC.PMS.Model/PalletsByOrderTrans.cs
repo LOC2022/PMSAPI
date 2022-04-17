@@ -8,7 +8,7 @@ namespace LOC.PMS.Model
     {
         public int OrderPalletTransId { get; set; }
         public string OrderNo { get; set; }
-        public int PalletId { get; set; }
+        public string PalletId { get; set; }
         public int AssignedQty { get; set; }
         public int LocationId { get; set; }
         public PalletStatus PalletStatus { get; set; }

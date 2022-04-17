@@ -12,7 +12,7 @@ namespace LOC.PMS.Model
         public int OrderQty { get; set; }
         public string VendorName { get; set; }
         public string BillToAddress { get; set; }
-        public int PalletId { get; set; }
+        public string PalletId { get; set; }
         public string PalletPartNo { get; set; }
         public string PalletName { get; set; }
         public string PalletStatus { get; set; }
@@ -31,7 +31,7 @@ namespace LOC.PMS.Model
         public int OrderQty { get; set; }
         public string VendorName { get; set; }
         public string BillToAddress { get; set; }
-        public int PalletId { get; set; }
+        public string PalletId { get; set; }
         public string PalletPartNo { get; set; }
         public string PalletName { get; set; }
         public string PalletStatus { get; set; }

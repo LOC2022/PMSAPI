@@ -4,7 +4,7 @@ namespace LOC.PMS.Model
 {
     public class PalletDetails
     {
-        public int PalletId { get; set; }
+        public string PalletId { get; set; }
 
         public string PalletPartNo { get; set; }
 
