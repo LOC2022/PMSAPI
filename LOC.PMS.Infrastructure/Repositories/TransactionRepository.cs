@@ -62,12 +62,24 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
             var PalletStatusId = _context.QueryData<int>(sql);
-
+            var DCNo = DateTime.Now.ToString("ddMMyyyyHHmmss");
             foreach (var PalletId in PalletIds)
             {
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ({PalletId})";
                 _context.ExecuteSql(UpdatePalletQry);
+
+                //TODO: CHange the vendor no to get the user
+                if (ToStatus == "CIPLInwardScan")
+                {
+                    string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+                   ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},12,1,3,GETDATE(),''";
+
+                    _context.ExecuteSql(CreateDCQuery);
+                }
+
             }
+
 
             Task.CompletedTask.Wait();
         }
