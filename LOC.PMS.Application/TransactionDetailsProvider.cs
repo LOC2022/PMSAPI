@@ -119,5 +119,29 @@ namespace LOC.PMS.Application
                 await Task.FromException(exception);
             }
         }
+
+        public async Task SaveHHTOrderDetails(List<OrderDetails> orderDetails)
+        {
+            try
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Information("Pallet Scan - Start");
+                //business logic
+                if (orderDetails.Count > 0)
+                {
+                    await _transactionRepository.SaveHHTOrderDetails(orderDetails);
+                }
+
+
+                _logger.ForContext("PalletDetailsRequest", orderDetails)
+                    .Information("Pallet Scan - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Error(exception, $"Exception occurred during pallet scan. - {orderDetails}");
+                await Task.FromException(exception);
+            }
+        }
     }
 }
