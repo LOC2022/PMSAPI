@@ -66,12 +66,6 @@ namespace LOC.PMS.Infrastructure.Repositories
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ({PalletId})";
                 _context.ExecuteSql(UpdatePalletQry);
             }
-
-            if(ToStatus == "CIPLInwardScan")
-            {
-                //Generate DC
-
-            }
           
             Task.CompletedTask.Wait();
         }
