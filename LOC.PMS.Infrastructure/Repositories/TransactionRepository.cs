@@ -77,9 +77,12 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={PalletStatusId.First()} WHERE PalletId IN ({PalletId}) AND OrderNo='{OrderNumber}'";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ({PalletId}) AND OrderNo='{OrderNumber}'";
                 _context.ExecuteSql(UpdatePalletQry);
             }
+
+            string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus='3' WHERE OrderNo='{OrderNumber}' AND DCStatus='2'";
+            _context.ExecuteSql(UpdateDCQry);
 
             //TODO: Split the DC into Repair DC for missing palletId during the scan
 
