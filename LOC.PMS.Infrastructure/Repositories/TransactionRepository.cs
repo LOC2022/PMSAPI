@@ -96,7 +96,13 @@ namespace LOC.PMS.Infrastructure.Repositories
                 PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
 
             string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.Picked} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
-             UpdatePalletQry += $"UPDATE Orders SET OrderStatusId={(int)OrderStatus.InTransit} WHERE  OrderNo='{orderDetails.First().OrderNo}';";
+            UpdatePalletQry += $"UPDATE Orders SET OrderStatusId={(int)OrderStatus.InTransit} WHERE  OrderNo='{orderDetails.First().OrderNo}';";
+            UpdatePalletQry += @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+           ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
+			select DISTINCT 'DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}',PT.OrderNo,PalletId,O.VendorId,1,1,GETDATE(),'{orderDetails.First().UserId}' from 
+			PalletsByOrderTrans PT  
+			JOIN Orders O on O.OrderNo=PT.OrderNo where PalletId IN ('{PalletIds}') AND PT.OrderNo='{orderDetails.First().OrderNo}';";
+
             _context.ExecuteSql(UpdatePalletQry);
 
             return Task.CompletedTask;
