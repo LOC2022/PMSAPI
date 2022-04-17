@@ -195,7 +195,7 @@
             <param name="OrderNo"></param>
             <returns>List of DC's</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateScanDetails(System.Collections.Generic.List{LOC.PMS.Model.ScannedPalletDetail},System.Int32,System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateScanDetails(System.String,System.Int32,System.String,System.String)">
             <summary>
             Generic Scan Update method
             </summary>
