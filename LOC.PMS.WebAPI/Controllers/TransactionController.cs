@@ -41,7 +41,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetHHTOrderDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetHHTOrderDetails([FromBody] OrderDetails orderDetails)
+        public async Task<IActionResult> GetHHTOrderDetails([FromQuery] OrderDetails orderDetails)
         {
             var response = await _transactionDetailsProvider.GetHHTOrderDetails(orderDetails);
             return Ok(response);
@@ -52,6 +52,8 @@ namespace LOC.PMS.WebAPI.Controllers
         /// 
         /// </summary>
         /// <param name="OrderNo"></param>
+        /// <param name="DCStatus"></param>
+        /// <param name="UserName"></param>
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
             Description = "GetDCDetails.",
@@ -70,7 +72,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <summary>
         /// Generic Scan Update method
         /// </summary>
-        /// <param name="PalletIds"></param>
+        /// <param name="PalletId"></param>
         /// <param name="ScannedQty"></param>
         /// <param name="ToStatus"></param>
         /// <returns></returns>
