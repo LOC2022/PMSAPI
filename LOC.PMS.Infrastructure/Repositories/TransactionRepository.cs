@@ -31,7 +31,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_Select]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<OrderDetails>> GetOrderDetails(OrderDetails orderDetails)
+        public async Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {

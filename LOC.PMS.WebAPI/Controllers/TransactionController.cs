@@ -32,16 +32,16 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="orderDetails"></param>
         /// <returns>List of Orders</returns>
         [SwaggerOperation(
-            Description = "Get Order Details.",
-            Tags = new[] { "GetOrderDetails" },
-            OperationId = "GetOrderDetails")]
+            Description = "Get Order Details for HHT.",
+            Tags = new[] { "GetHHTOrderDetails" },
+            OperationId = "GetHHTOrderDetails")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("GetOrderDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetOrderDetails(OrderDetails orderDetails)
+        [HttpGet("GetHHTOrderDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetHHTOrderDetails([FromBody] OrderDetails orderDetails)
         {
-            var response = await _transactionDetailsProvider.GetOrderDetails(orderDetails);
+            var response = await _transactionDetailsProvider.GetHHTOrderDetails(orderDetails);
             return Ok(response);
         }
 

@@ -8,7 +8,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 {
     public interface ITransactionRepository
     {
-        Task<IEnumerable<OrderDetails>> GetOrderDetails(OrderDetails orderDetails);
+        Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails);
         Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo, string DCStatus, string UserName);
         Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus);
         Task UpdateScanDetailsForInward(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber);

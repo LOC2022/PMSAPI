@@ -23,23 +23,23 @@ namespace LOC.PMS.Application
         }
 
 
-        public async Task<IEnumerable<OrderDetails>> GetOrderDetails(OrderDetails orderDetails)
+        public async Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails)
         {
             try
             {
-                _logger.ForContext("Select Order Details", orderDetails)
-                    .Information("Select Order Details request - Start");
+                _logger.ForContext("Select Order Details for HHT", orderDetails)
+                    .Information("Select Order Details for HHT request - Start");
 
-                var response = await _transactionRepository.GetOrderDetails(orderDetails);
+                var response = await _transactionRepository.GetHHTOrderDetails(orderDetails);
 
-                _logger.ForContext("Select Order Details", orderDetails)
-                    .Information("Select Order Details - End");
+                _logger.ForContext("Select Order Details for HHT", orderDetails)
+                    .Information("Select Order Details for HHT- End");
                 return response;
             }
             catch (Exception exception)
             {
-                _logger.ForContext("GetOrderDetails", orderDetails)
-                    .Error(exception, "Exception occurred during Select Order Details .");
+                _logger.ForContext("GetHHTOrderDetails", orderDetails)
+                    .Error(exception, "Exception occurred during Select Order Details for HHT.");
                 await Task.FromException(exception);
 
             }
