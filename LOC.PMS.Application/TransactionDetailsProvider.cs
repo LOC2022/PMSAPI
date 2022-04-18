@@ -93,7 +93,7 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber)
+        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber, int VendorId)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace LOC.PMS.Application
                 }
                 else
                 {
-                    await _transactionRepository.UpdateScanDetails(PalletIds, ScannedQty, ToStatus);
+                    await _transactionRepository.UpdateScanDetails(PalletIds, ScannedQty, ToStatus, VendorId);
                 }
 
                 _logger.ForContext("PalletDetailsRequest", PalletIds)

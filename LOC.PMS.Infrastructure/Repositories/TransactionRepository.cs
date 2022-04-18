@@ -58,7 +58,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             Task.CompletedTask.Wait();
         }
 
-        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus)
+        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, int VendorId)
         {
             string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
             var PalletStatusId = _context.QueryData<int>(sql);
@@ -73,9 +73,18 @@ namespace LOC.PMS.Infrastructure.Repositories
                 {
                     string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},12,1,3,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},{VendorId},1,3,GETDATE(),''";
 
                     _context.ExecuteSql(CreateDCQuery);
+                }
+                else if(ToStatus == "CiplDisStg")
+                {
+                    string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+                   ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},14,1,5,GETDATE(),''";
+
+                    _context.ExecuteSql(CreateDCQuery);
+
                 }
 
             }

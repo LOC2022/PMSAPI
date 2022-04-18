@@ -197,13 +197,15 @@
             <param name="UserName"></param>
             <returns>List of DC's</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateScanDetails(System.String,System.Int32,System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateScanDetails(System.String,System.Int32,System.String,System.String,System.Int32)">
             <summary>
             Generic Scan Update method
             </summary>
             <param name="PalletId"></param>
             <param name="ScannedQty"></param>
             <param name="ToStatus"></param>
+            <param name="OrderNo"></param>
+            <param name="VendorId"></param>
             <returns></returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SaveTransportAndDCStatusDetails(LOC.PMS.Model.VechicleDetails,System.String,System.String)">

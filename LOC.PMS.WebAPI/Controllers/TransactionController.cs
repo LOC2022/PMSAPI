@@ -75,6 +75,8 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="PalletId"></param>
         /// <param name="ScannedQty"></param>
         /// <param name="ToStatus"></param>
+        /// <param name="OrderNo"></param>
+        /// <param name="VendorId"></param>
         /// <returns></returns>
         [SwaggerOperation(
             Description = "Update Scan details.",
@@ -84,7 +86,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpPost("UpdateScanDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> UpdateScanDetails([FromQuery] string PalletId, int ScannedQty, string ToStatus, [FromQuery] string OrderNo = null)
+        public async Task<IActionResult> UpdateScanDetails([FromQuery] string PalletId, int ScannedQty, string ToStatus, [FromQuery] string OrderNo = null, int VendorId = 0)
         {
             List<string> StrPalletIds = new List<string>();
                     StrPalletIds = PalletId.Split(',').ToList();
@@ -96,7 +98,7 @@ namespace LOC.PMS.WebAPI.Controllers
                 PalletIds.Add(Convert.ToInt32(id));
             }
 
-            await _transactionDetailsProvider.UpdateScanDetails(PalletIds, ScannedQty, ToStatus, OrderNo);
+            await _transactionDetailsProvider.UpdateScanDetails(PalletIds, ScannedQty, ToStatus, OrderNo, VendorId);
             return Ok();
         }
 
