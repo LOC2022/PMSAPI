@@ -10,7 +10,7 @@ namespace LOC.PMS.Application.Interfaces
     {
         Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails);
         Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo, string DCStatus, string UserName);
-        Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber);
+        Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber, int VendorId);
         Task SaveVehicleAndUpdateStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage);
         Task SaveHHTOrderDetails(List<OrderDetails> orderDetails);
     }
