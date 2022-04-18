@@ -65,7 +65,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             var DCNo = DateTime.Now.ToString("ddMMyyyyHHmmss");
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ({PalletId})";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ('{PalletId}')";
                 _context.ExecuteSql(UpdatePalletQry);
 
                 //TODO: CHange the vendor no to get the user
