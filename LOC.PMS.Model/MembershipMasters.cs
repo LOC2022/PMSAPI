@@ -13,6 +13,10 @@ namespace LOC.PMS.Model
 
         public string GroupName { get; set; }
 
+        public int VendorId { get; set; }
+
+        public string VendorName { get; set; }
+
         public string ActiveFeatures { get; set; }
 
     }
