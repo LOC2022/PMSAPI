@@ -104,8 +104,17 @@ namespace LOC.PMS.Infrastructure.Repositories
                 _context.ExecuteSql(UpdatePalletQry);
             }
 
-            string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus='3' WHERE OrderNo='{OrderNumber}' AND DCStatus='2'";
-            _context.ExecuteSql(UpdateDCQry);
+            if(ToStatus == "VendorDispatchScan")
+            {
+                string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus='3' WHERE OrderNo='{OrderNumber}' AND DCStatus='2'";
+                _context.ExecuteSql(UpdateDCQry);
+            }
+            else
+            {
+                string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus='5' WHERE OrderNo='{OrderNumber}' AND DCStatus='4'";
+                _context.ExecuteSql(UpdateDCQry);
+            }
+
 
             //TODO: Split the DC into Repair DC for missing palletId during the scan
 
