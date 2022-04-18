@@ -77,7 +77,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
                     _context.ExecuteSql(CreateDCQuery);
                 }
-                else if(ToStatus == "CiplDisStg")
+                else if(ToStatus == "CIPLDispatchScan")
                 {
                     string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
