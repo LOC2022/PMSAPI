@@ -93,7 +93,7 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber, int VendorId)
+        public async Task UpdateScanDetails(List<string> PalletIds, int ScannedQty, string ToStatus, string OrderNumber, int VendorId)
         {
             try
             {

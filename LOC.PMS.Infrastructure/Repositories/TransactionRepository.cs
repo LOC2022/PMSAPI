@@ -58,14 +58,14 @@ namespace LOC.PMS.Infrastructure.Repositories
             Task.CompletedTask.Wait();
         }
 
-        public async Task UpdateScanDetails(List<int> PalletIds, int ScannedQty, string ToStatus, int VendorId)
+        public async Task UpdateScanDetails(List<string> PalletIds, int ScannedQty, string ToStatus, int VendorId)
         {
             string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
             var PalletStatusId = _context.QueryData<int>(sql);
             var DCNo = DateTime.Now.ToString("ddMMyyyyHHmmss");
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ({PalletId})";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ('{PalletId}')";
                 _context.ExecuteSql(UpdatePalletQry);
 
                 //TODO: CHange the vendor no to get the user
@@ -93,7 +93,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             Task.CompletedTask.Wait();
         }
 
-        public async Task UpdateScanDetailsForInward(List<int> PalletIds, int ScannedQty, string ToStatus, string OrderNumber)
+        public async Task UpdateScanDetailsForInward(List<string> PalletIds, int ScannedQty, string ToStatus, string OrderNumber)
         {
             string sql = @$"select StatusId from PalletStatus where PalletStatus='{ToStatus}'";
             var PalletStatusId = _context.QueryData<int>(sql);

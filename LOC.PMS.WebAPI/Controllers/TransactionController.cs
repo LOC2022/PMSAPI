@@ -91,11 +91,11 @@ namespace LOC.PMS.WebAPI.Controllers
             List<string> StrPalletIds = new List<string>();
                     StrPalletIds = PalletId.Split(',').ToList();
 
-            List<int> PalletIds = new List<int>();
+            List<string> PalletIds = new List<string>();
 
             foreach(var id in StrPalletIds)
             {
-                PalletIds.Add(Convert.ToInt32(id));
+                PalletIds.Add(id);
             }
 
             await _transactionDetailsProvider.UpdateScanDetails(PalletIds, ScannedQty, ToStatus, OrderNo, VendorId);
