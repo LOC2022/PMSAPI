@@ -114,8 +114,8 @@ namespace LOC.PMS.Infrastructure.Repositories
                                     });
                                 }
 
-                                var str = String.Join(",", PalletList.Select(x => x.PalletId));
-                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ({str})";
+                                var str = String.Join("','", PalletList.Select(x => x.PalletId));
+                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ('{str}')";
                                 _context.ExecuteSql(UpdatePalletQry);
                             }
 
