@@ -68,23 +68,26 @@ namespace LOC.PMS.Infrastructure.Repositories
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ('{PalletId}')";
                 _context.ExecuteSql(UpdatePalletQry);
 
-                //TODO: CHange the vendor no to get the user
-                if (ToStatus == "CIPLInwardScan")
+                if (PalletId != "0")
                 {
-                    string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+                    //TODO: CHange the vendor no to get the user
+                    if (ToStatus == "CIPLInwardScan")
+                    {
+                        string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},{VendorId},1,3,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',{VendorId},1,3,GETDATE(),''";
 
-                    _context.ExecuteSql(CreateDCQuery);
-                }
-                else if(ToStatus == "CIPLDispatchScan")
-                {
-                    string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+                        _context.ExecuteSql(CreateDCQuery);
+                    }
+                    else if (ToStatus == "CIPLDispatchScan")
+                    {
+                        string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}',{PalletId},14,1,5,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,1,5,GETDATE(),''";
 
-                    _context.ExecuteSql(CreateDCQuery);
+                        _context.ExecuteSql(CreateDCQuery);
 
+                    }
                 }
 
             }
