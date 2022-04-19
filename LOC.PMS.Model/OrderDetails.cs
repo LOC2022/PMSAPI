@@ -27,6 +27,7 @@ namespace LOC.PMS.Model
         public string OrderNo { get; set; }
         public string DCNo { get; set; }
         public string DCStatus { get; set; }
+        public int DCType { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime ScannedDate { get; set; }
         public int NoOfPartsOrdered { get; set; }

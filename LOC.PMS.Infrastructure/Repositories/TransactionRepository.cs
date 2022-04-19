@@ -75,7 +75,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     {
                         string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',{VendorId},1,3,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',{VendorId},2,3,GETDATE(),''";
 
                         _context.ExecuteSql(CreateDCQuery);
                     }
@@ -83,7 +83,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     {
                         string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,1,5,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,3,5,GETDATE(),''";
 
                         _context.ExecuteSql(CreateDCQuery);
 
