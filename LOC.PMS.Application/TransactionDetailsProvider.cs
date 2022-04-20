@@ -191,5 +191,29 @@ namespace LOC.PMS.Application
 
             return null;
         }
+
+        public async Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo)
+        {
+            try
+            {
+                _logger.ForContext("Select GetPalletPartNo", PalletPartNo)
+                    .Information("Select  GetPalletPartNo request - Start");
+
+                var response = await _transactionRepository.GetPalletPartNo(PalletPartNo);
+
+                _logger.ForContext("Select  Get DC Details", PalletPartNo)
+                    .Information("Select  Get DC Details - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetPalletPartNo", PalletPartNo)
+                    .Error(exception, "Exception occurred during GetPalletPartNo Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
     }
 }
