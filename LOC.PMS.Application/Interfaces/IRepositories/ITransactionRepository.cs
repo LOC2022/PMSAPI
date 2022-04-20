@@ -16,6 +16,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         Task SaveHHTOrderDetails(List<OrderDetails> orderDetails);
         Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails);
         Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId);
+        Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo);
     }
 }
 

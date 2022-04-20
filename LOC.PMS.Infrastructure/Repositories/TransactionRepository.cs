@@ -163,8 +163,19 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             };
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_SelectByPallet]", sqlParams.ToArray());
-            //var res= await _context.ExecuteSqlAsync<List<DCDetails>>(@$"select PalletId,'Pending' as Status from [DeliveryChallanTrans] WHERE DCNo in (select TOP 1 DCNo from[dbo].[DeliveryChallanTrans] where PalletId = '{PalletId}' and IsActive = 1 Order by CreatedDate DESC )").Result;
-            //return res;
+            
         }
+
+        public async Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@PalletPartNo", PalletPartNo)
+
+            };
+            return await _context.QueryStoredProcedureAsync<PalletDetails>("[dbo].[PalletId_Select]", sqlParams.ToArray());
+        }
+
+       
     }
 }

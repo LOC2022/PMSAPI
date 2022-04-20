@@ -238,6 +238,13 @@
             <param name="PalletId"></param>
             <returns>List of DC's</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetPalletPartNo(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="PalletPartNo"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             
