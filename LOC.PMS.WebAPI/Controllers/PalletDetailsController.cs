@@ -25,6 +25,7 @@ namespace LOC.PMS.WebAPI.Controllers
             this._palletDetailsProvider = palletDetailsProvider;
         }
 
+        
         /// <summary>
         /// Add new pallet to the server.
         /// </summary>
@@ -32,13 +33,32 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <returns></returns>
         [SwaggerOperation(
             Description = "Add new pallet to the server.",
-            Tags = new[] { "AddOrModifyPallet" },
-            OperationId = "AddOrModifyPallet")]
+            Tags = new[] { "AddPallet" },
+            OperationId = "AddPallet")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpPost("AddOrModifyPallet"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> AddOrModifyPallet([FromBody] PalletDetails palletDetailsRequest)
+        [HttpPost("AddPallet"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> AddPallet([FromBody] PalletDetails palletDetailsRequest)
+        {
+            var response = await _palletDetailsProvider.AddPalletDetails(palletDetailsRequest);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Add new pallet to the server.
+        /// </summary>
+        /// <param name="palletDetailsRequest"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Modify the existing pallet to the server.",
+            Tags = new[] { "ModifyPalletDetails" },
+            OperationId = "ModifyPalletDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("ModifyPallet"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> ModifyPalletDetails([FromBody] PalletDetails palletDetailsRequest)
         {
             var response = await _palletDetailsProvider.ModifyPalletDetails(palletDetailsRequest);
             return Ok(response);
@@ -76,7 +96,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetPallets"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetPallets([FromQuery] int palletId = GETALL)
+        public async Task<IActionResult> GetPallets([FromQuery] string palletId = "ALL")
         {
             var response = await _palletDetailsProvider.GetPalletDetails(palletId);
             return Ok(response);
@@ -113,7 +133,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpPut("DeactivatePalletByPalletId"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> DeactivatePalletByPalletId([FromQuery] int palletId)
+        public async Task<IActionResult> DeactivatePalletByPalletId([FromQuery] string palletId)
         {
             await _palletDetailsProvider.DeactivatePalletByPalletId(palletId);
             return Ok();

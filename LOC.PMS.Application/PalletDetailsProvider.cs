@@ -19,12 +19,10 @@ namespace LOC.PMS.Application
             _palletRepository = palletRepository;
             _logger = logger;
         }
-
-
-        public async Task<int> ModifyPalletDetails(PalletDetails palletDetailsRequest)
+        
+        public async Task<IEnumerable<PalletDetails>> AddPalletDetails(PalletDetails palletDetailsRequest)
         {
-            var returnPalletPartId = DefaultReturnValue;
-
+            var palletList = new List<PalletDetails>();
             try
             {
                 _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
@@ -32,10 +30,37 @@ namespace LOC.PMS.Application
 
                 //business logic
 
-                returnPalletPartId = await _palletRepository.ModifyPalletDetails(palletDetailsRequest);
+                palletList = (List<PalletDetails>)await _palletRepository.AddPalletDetails(palletDetailsRequest);
 
                 _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
                     .Information("Add Pallet request - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
+                    .Error(exception, "Exception occurred during pallet insert");
+
+                await Task.FromException(exception);
+            }
+
+            return palletList;
+        }
+
+        public async Task<string> ModifyPalletDetails(PalletDetails palletDetailsRequest)
+        {
+            var returnPalletPartId = string.Empty;
+
+            try
+            {
+                _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
+                    .Information("Modify existing Pallet request - Start");
+
+                //business logic
+
+                returnPalletPartId = await _palletRepository.ModifyPalletDetails(palletDetailsRequest);
+
+                _logger.ForContext("PalletDetailsRequest", palletDetailsRequest)
+                    .Information("Modify existing Pallet request - End");
                 return returnPalletPartId;
             }
             catch (Exception exception)
@@ -76,7 +101,7 @@ namespace LOC.PMS.Application
 
         }
 
-        public async Task<IEnumerable<PalletDetails>> GetPalletDetails(int palletId)
+        public async Task<IEnumerable<PalletDetails>> GetPalletDetails(string palletId)
         {
             try
             {
@@ -118,7 +143,7 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task DeactivatePalletByPalletId(int palletId)
+        public async Task DeactivatePalletByPalletId(string palletId)
         {
             try
             {

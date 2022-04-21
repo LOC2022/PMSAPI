@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using Z.Dapper.Plus;
 
 namespace LOC.PMS.Infrastructure.Repositories
 {
@@ -16,11 +17,43 @@ namespace LOC.PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<int> ModifyPalletDetails(PalletDetails palletDetailsRequest)
+        public async Task<IEnumerable<PalletDetails>> AddPalletDetails(PalletDetails palletDetailsRequest)
+        {
+            var palletList = new List<PalletDetails>();
+
+            var util = new Utilities.Utilities();
+
+            for (int i = 1; i <= palletDetailsRequest.palletPartQty; i++)
+            {
+                palletList.Add(new PalletDetails()
+                {
+                    PalletId = "A" + util.CreateUnique16DigitString(),
+                    PalletPartNo = palletDetailsRequest.PalletPartNo,
+                    PalletName = palletDetailsRequest.PalletName,
+                    PalletWeight = palletDetailsRequest.PalletWeight,
+                    Model = palletDetailsRequest.Model,
+                    KitUnit = palletDetailsRequest.KitUnit,
+                    WhereUsed = palletDetailsRequest.WhereUsed,
+                    PalletType = palletDetailsRequest.PalletType,
+                    LocationId = palletDetailsRequest.LocationId,
+                    D2LDays = palletDetailsRequest.D2LDays,
+                    Availability = palletDetailsRequest.Availability,
+                    CreatedBy = palletDetailsRequest.CreatedBy
+                });
+            }
+
+            DapperPlusManager.Entity<PalletDetails>().Table("PalletMaster");
+
+            _context.BulkCopy(palletList, 30, false);
+
+            return await SelectPalletDetails(null);
+        }
+
+        public async Task<string> ModifyPalletDetails(PalletDetails palletDetailsRequest)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletPartId", palletDetailsRequest.PalletId),
+                new SqlParameter("@PalletId", palletDetailsRequest.PalletId),
                 new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletPartNo),
                 new SqlParameter("@PalletName", palletDetailsRequest.PalletName),
                 new SqlParameter("@PalletWeight", palletDetailsRequest.PalletWeight),
@@ -32,10 +65,11 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@D2LDays", palletDetailsRequest.D2LDays),
                 new SqlParameter("@Availability", palletDetailsRequest.Availability),
                 new SqlParameter("@CreatedBy", palletDetailsRequest.CreatedBy),
-                new SqlParameter("ReturnPalletPartId",SqlDbType.Int){Direction = ParameterDirection.ReturnValue}
             };
 
-           return await _context.ExecuteStoredProcedureAsync<int>("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());
+            await _context.ExecuteStoredProcedureAsync("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());
+             
+            return  palletDetailsRequest.PalletId;
         }
 
         public async Task<int> ModifyPalletLocation(LocationMaster palletLocation)
@@ -53,11 +87,11 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         }
 
-        public async Task<IEnumerable<PalletDetails>> SelectPalletDetails(int palletId)
+        public async Task<IEnumerable<PalletDetails>> SelectPalletDetails(string palletId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletId", palletId)
+                new SqlParameter("@PalletId", palletId ?? "ALL")
             };
 
             return await _context.QueryStoredProcedureAsync<PalletDetails>("[dbo].[PalletMaster_Select]", sqlParams.ToArray());
@@ -70,10 +104,10 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@LocationId", locationId)
             };
 
-            return await  _context.QueryStoredProcedureAsync<LocationMaster>("[dbo].[PalletLocationMaster_Select]", sqlParams.ToArray());
+            return await _context.QueryStoredProcedureAsync<LocationMaster>("[dbo].[PalletLocationMaster_Select]", sqlParams.ToArray());
         }
 
-        public Task DeactivatePallets(int palletId)
+        public Task DeactivatePallets(string palletId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {

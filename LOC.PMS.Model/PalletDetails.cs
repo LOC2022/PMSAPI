@@ -26,6 +26,8 @@ namespace LOC.PMS.Model
 
         public PalletAvailability Availability { get; set; }
 
+        public int palletPartQty { get; set; }
+
         public string CreatedBy { get; set; }
 
     }
@@ -33,7 +35,7 @@ namespace LOC.PMS.Model
     public class LocationMaster
     {
         public int LocationId { get; set; }
-        
+
         public string Location { get; set; }
 
         public bool IsActive { get; set; }

@@ -119,6 +119,31 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:LOC.PMS.WebAPI.Controllers.NotificationController">
+            <summary>
+            Pallet Details Controller.
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.#ctor(LOC.PMS.Application.Interfaces.INotificationpProvider)">
+            <summary>
+            Pallet Details Controller constructor.
+            </summary>
+            <param name="notificationProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.SMSNotification(LOC.PMS.Model.SmsNotification)">
+            <summary>
+            Add or Modify User Master.
+            </summary>
+            <param name="smsNotificationRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.EmailNotification(LOC.PMS.Model.EmailNotification)">
+            <summary>
+            Add or Modify Group Master..
+            </summary>
+            <param name="emailNotificationRequest"></param>
+            <returns></returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.PalletDetailsController">
             <summary>
             Pallet Details Controller.
@@ -130,7 +155,14 @@
             </summary>
             <param name="palletDetailsProvider"></param>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddOrModifyPallet(LOC.PMS.Model.PalletDetails)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddPallet(LOC.PMS.Model.PalletDetails)">
+            <summary>
+            Add new pallet to the server.
+            </summary>
+            <param name="palletDetailsRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.ModifyPalletDetails(LOC.PMS.Model.PalletDetails)">
             <summary>
             Add new pallet to the server.
             </summary>
@@ -144,7 +176,7 @@
             <param name="palletLocationDetailsRequest"></param>
             <returns></returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPallets(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.GetPallets(System.String)">
             <summary>
             Get Pallet details for the specified pallet id. If pallet id is not specified then it will return all pallets from pallet master.
             </summary>
@@ -158,7 +190,7 @@
             <param name="locationId"></param>
             <returns>List of PalletDetails</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeactivatePalletByPalletId(System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.DeactivatePalletByPalletId(System.String)">
             <summary>
             Deactivate Pallet details.
             </summary>
