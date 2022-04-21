@@ -170,6 +170,26 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:LOC.PMS.WebAPI.Controllers.ReportsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.#ctor(LOC.PMS.Application.Interfaces.IReportDetailsProvider)">
+            <summary>
+            
+            </summary>
+            <param name="reportDetailsProvider"></param>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetMonthlyPlanReport(System.String,System.String,System.Int32)">
+            <summary>
+            GetMonthlyPlanReport
+            </summary>
+            <param name="FromDate"></param>
+            <param name="ToDate"></param>
+            <param name="VendorId"></param>        
+            <returns>List of Orders</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             
