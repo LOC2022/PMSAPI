@@ -38,12 +38,12 @@
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.MembershipController">
             <summary>
-            Pallet Details Controller.
+            Memebership Controller.
             </summary>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.MembershipController.#ctor(LOC.PMS.Application.Interfaces.IMembershipProvider)">
             <summary>
-            Pallet Details Controller constructor.
+            Memebership Controller constructor.
             </summary>
             <param name="membershipProvider"></param>
         </member>
@@ -121,25 +121,25 @@
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.NotificationController">
             <summary>
-            Pallet Details Controller.
+            Notification Controller.
             </summary>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.#ctor(LOC.PMS.Application.Interfaces.INotificationpProvider)">
             <summary>
-            Pallet Details Controller constructor.
+            Notification Controller constructor.
             </summary>
             <param name="notificationProvider"></param>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.SMSNotification(LOC.PMS.Model.SmsNotification)">
             <summary>
-            Add or Modify User Master.
+            Send SMS notification for the specified recepients.
             </summary>
             <param name="smsNotificationRequest"></param>
             <returns></returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.NotificationController.EmailNotification(LOC.PMS.Model.EmailNotification)">
             <summary>
-            Add or Modify Group Master..
+            Send Email Notification for the specified recepients.
             </summary>
             <param name="emailNotificationRequest"></param>
             <returns></returns>

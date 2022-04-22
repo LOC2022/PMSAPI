@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LOC.PMS.WebAPI.Controllers
 {
     /// <summary>
-    /// Pallet Details Controller.
+    /// Memebership Controller.
     /// </summary>
     [ApiController, ApiVersion("1.0"), Route("api/v{version:apiVersion}/PMSAPI/[controller]")]
     public class MembershipController : ControllerBase
@@ -17,7 +17,7 @@ namespace LOC.PMS.WebAPI.Controllers
         private const int GETALL = 0;
 
         /// <summary>
-        /// Pallet Details Controller constructor.
+        /// Memebership Controller constructor.
         /// </summary>
         /// <param name="membershipProvider"></param>
         public MembershipController(IMembershipProvider membershipProvider)

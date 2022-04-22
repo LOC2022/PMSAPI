@@ -18,10 +18,7 @@ namespace LOC.PMS.Application
         {
             _orderRepository = orderRepository;
             _logger = logger;
-        }
-
-
-       
+        }     
 
         public async Task AddDayPlanData(List<DayPlan> order)
         {
