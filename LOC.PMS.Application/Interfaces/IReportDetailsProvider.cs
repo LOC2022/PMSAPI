@@ -8,6 +8,8 @@ namespace LOC.PMS.Application.Interfaces
 {
     public interface IReportDetailsProvider
     {
-        Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string FromDate, string ToDate, int VendorId);
+        Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId);
+
+        Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId);
     }
 }

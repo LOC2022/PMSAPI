@@ -25,8 +25,6 @@ namespace LOC.PMS.WebAPI.Controllers
             this._reportDetailsProvider = reportDetailsProvider;
         }
 
-
-
         /// <summary>
         /// GetMonthlyPlanReport
         /// </summary>
@@ -48,5 +46,23 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
+         /// <summary>
+        /// GetMonthlyPlanReport
+        /// </summary>
+        /// <param name="PalletId"></param>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "PalletByOrderTransReport",
+            Tags = new[] { "PalletByOrderTransReport" },
+            OperationId = "PalletByOrderTransReport")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("PalletByOrderTransReport"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> PalletByOrderTransReport([FromQuery] string PalletId= GETALL)
+        {
+            var response = await _reportDetailsProvider.GetPalletOrderTransReport(PalletId);
+            return Ok(response);
+        }
     }
 }

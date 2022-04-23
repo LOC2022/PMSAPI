@@ -20,14 +20,14 @@ namespace LOC.PMS.Application
             _reportDetailsRepository = reportDetailsRepository;
             _logger = logger;
         }
-        public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int VendorId)
+        public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)
         {
             try
             {
                 _logger.ForContext("Select DayPlan Details", fromDate)
                     .Information("Select DayPlan Details request - Start");
 
-                var response = await _reportDetailsRepository.GetMonthlyPlanReport(fromDate, toDate, VendorId);
+                var response = await _reportDetailsRepository.GetMonthlyPlanReport(fromDate, toDate, vendorId);
 
                 _logger.ForContext("Select DayPlan Details ", fromDate)
                     .Information("Select DayPlan Details- End");
@@ -37,6 +37,27 @@ namespace LOC.PMS.Application
             {
                 _logger.ForContext("GetMonthlyPlanReport", fromDate)
                     .Error(exception, "Exception occurred during Select DayPlan Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId)
+        {
+              try
+            {
+                _logger.Information("Pallet by order trans details report request - Start");
+
+                var response = await _reportDetailsRepository.GetPalletOrderTransReport(palletId);
+
+                _logger.Information("Pallet by order trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet by order trans report.");
                 await Task.FromException(exception);
 
             }

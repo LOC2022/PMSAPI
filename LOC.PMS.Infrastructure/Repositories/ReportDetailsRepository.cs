@@ -20,18 +20,26 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string FromDate,string ToDate,int VendorId)
+        public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@FromDate", FromDate),
-                new SqlParameter("@ToDate", ToDate),
-                new SqlParameter("@VendorId", VendorId)
+                new SqlParameter("@FromDate", fromDate),
+                new SqlParameter("@ToDate", toDate),
+                new SqlParameter("@VendorId", vendorId)
 
             };
-            return await _context.QueryStoredProcedureAsync<DayPlan>("[dbo].[MonthlyPlan_Select]", sqlParams.ToArray());
+            return await _context.QueryStoredProcedureAsync<DayPlan>("[dbo].[Report_MonthlyPlan]", sqlParams.ToArray());
         }
 
-        
+        public async Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@PalletId", palletId),
+            };
+
+            return await _context.QueryStoredProcedureAsync<PalletsByOrderTransReport>("[dbo].[Report_PalletsByOrderTransDetails]", sqlParams.ToArray());
+        }
     }
 }

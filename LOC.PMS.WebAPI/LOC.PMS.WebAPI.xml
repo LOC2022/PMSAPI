@@ -222,6 +222,13 @@
             <param name="VendorId"></param>        
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.PalletByOrderTransReport(System.String)">
+            <summary>
+            GetMonthlyPlanReport
+            </summary>
+            <param name="PalletId"></param>
+            <returns>List of Orders</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             
