@@ -168,14 +168,14 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId, int DCStatus)
         {
             try
             {
                 _logger.ForContext("Select Get DC Details", palletId)
                     .Information("Select  Get DC Details request - Start");
 
-                var response = await _transactionRepository.GetDCDetailsByPallet(palletId);
+                var response = await _transactionRepository.GetDCDetailsByPallet(palletId,DCStatus);
 
                 _logger.ForContext("Select  Get DC Details", palletId)
                     .Information("Select  Get DC Details - End");
@@ -214,6 +214,30 @@ namespace LOC.PMS.Application
             }
 
             return null;
+        }
+
+        public async Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails)
+        {
+            try
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Information("Pallet Scan - Start");
+                //business logic
+                if (orderDetails.Count > 0)
+                {
+                    await _transactionRepository.UpdateHHTInwardDetails(orderDetails);
+                }
+
+
+                _logger.ForContext("PalletDetailsRequest", orderDetails)
+                    .Information("Pallet Scan - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletIds", orderDetails)
+                    .Error(exception, $"Exception occurred during pallet scan. - {orderDetails}");
+                await Task.FromException(exception);
+            }
         }
     }
 }

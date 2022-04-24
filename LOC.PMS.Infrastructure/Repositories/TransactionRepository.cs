@@ -155,11 +155,12 @@ namespace LOC.PMS.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string PalletId)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string PalletId, int DCStatus)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
-                new SqlParameter("@PalletId", PalletId)
+                new SqlParameter("@PalletId", PalletId),
+                new SqlParameter("@DCStatus", DCStatus)
 
             };
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_SelectByPallet]", sqlParams.ToArray());
@@ -176,6 +177,27 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<PalletDetails>("[dbo].[PalletId_Select]", sqlParams.ToArray());
         }
 
-       
+        public Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails)
+        {
+            string PalletIds = "";
+            if (orderDetails.Count > 0)
+                PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
+
+            if(orderDetails.FirstOrDefault().Status.ToString() == "INWARD")
+            {
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
+                _context.ExecuteSql(UpdatePalletQry);
+            }
+            else if(orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
+            {
+                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability={(int)PalletAvailability.Ideal} WHERE PalletId IN ('{PalletIds}') ;";
+                _context.ExecuteSql(UpdatePalletQry);
+            }            
+
+            return Task.CompletedTask;
+        }
+
+
+
     }
 }
