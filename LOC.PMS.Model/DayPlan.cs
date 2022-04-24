@@ -34,6 +34,8 @@ namespace LOC.PMS.Model
 
         public int NonD2LDays { get; set; }
 
+        public int Status { get; set; }
+
         public static DayPlan FromCsv(string csvLine)
         {
             string[] lines = csvLine.Split(',');
