@@ -89,11 +89,11 @@ namespace LOC.PMS.WebAPI.Controllers
         public async Task<IActionResult> UpdateScanDetails([FromQuery] string PalletId, int ScannedQty, string ToStatus, [FromQuery] string OrderNo = null, int VendorId = 0)
         {
             List<string> StrPalletIds = new List<string>();
-                    StrPalletIds = PalletId.Split(',').ToList();
+            StrPalletIds = PalletId.Split(',').ToList();
 
             List<string> PalletIds = new List<string>();
 
-            foreach(var id in StrPalletIds)
+            foreach (var id in StrPalletIds)
             {
                 PalletIds.Add(id);
             }
@@ -168,6 +168,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// 
         /// </summary>
         /// <param name="PalletId"></param>
+        /// <param name="DCStatus"></param>
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
             Description = "GetDCDetailsByPallet.",
@@ -177,9 +178,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetDCDetailsByPallet"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId)
+        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId = "", [FromQuery] int DCStatus = 0)
         {
-            var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId);
+            var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId, DCStatus);
             return Ok(response);
         }
 
@@ -196,12 +197,31 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetPalletPartNo"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetPalletPartNo([FromQuery] string PalletPartNo="")
+        public async Task<IActionResult> GetPalletPartNo([FromQuery] string PalletPartNo = "")
         {
             var response = await _transactionDetailsProvider.GetPalletPartNo(PalletPartNo);
             return Ok(response);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderDetails"></param>        
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "UpdateHHTDispatchDetails.",
+            Tags = new[] { "UpdateHHTDispatchDetails" },
+            OperationId = "UpdateHHTDispatchDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("UpdateHHTDispatchDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> UpdateHHTInwardDetails(List<OrderDetails> orderDetails)
+        {
+            await _transactionDetailsProvider.UpdateHHTInwardDetails(orderDetails);
+            return Ok();
+        }
 
 
 

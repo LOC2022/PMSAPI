@@ -15,8 +15,9 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         Task SaveVehicleDetailsAndUpdateDCStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage);
         Task SaveHHTOrderDetails(List<OrderDetails> orderDetails);
         Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails);
-        Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId);
+        Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId, int DCStatus);
         Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo);
+        Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails);
     }
 }
 
