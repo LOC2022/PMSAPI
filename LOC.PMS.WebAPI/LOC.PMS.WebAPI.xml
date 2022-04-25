@@ -305,6 +305,13 @@
             <param name="PalletPartNo"></param>
             <returns></returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateHHTInwardDetails(System.Collections.Generic.List{LOC.PMS.Model.OrderDetails})">
+            <summary>
+            
+            </summary>
+            <param name="orderDetails"></param>        
+            <returns>Save Order</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             

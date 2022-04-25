@@ -168,14 +168,14 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId, int DCStatus)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId, int DCStatus, string DCNo)
         {
             try
             {
                 _logger.ForContext("Select Get DC Details", palletId)
                     .Information("Select  Get DC Details request - Start");
 
-                var response = await _transactionRepository.GetDCDetailsByPallet(palletId,DCStatus);
+                var response = await _transactionRepository.GetDCDetailsByPallet(palletId, DCStatus, DCNo);
 
                 _logger.ForContext("Select  Get DC Details", palletId)
                     .Information("Select  Get DC Details - End");
