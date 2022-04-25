@@ -107,7 +107,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 _context.ExecuteSql(UpdatePalletQry);
             }
 
-            if(ToStatus == "VendorDispatchScan")
+            if (ToStatus == "VendorDispatchScan")
             {
                 string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus='3' WHERE OrderNo='{OrderNumber}' AND DCStatus='2'";
                 _context.ExecuteSql(UpdateDCQry);
@@ -155,16 +155,17 @@ namespace LOC.PMS.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string PalletId, int DCStatus)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string PalletId, int DCStatus, string DCNo)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@PalletId", PalletId),
-                new SqlParameter("@DCStatus", DCStatus)
+                new SqlParameter("@DCStatus", DCStatus),
+                new SqlParameter("@DCNo", DCNo)
 
             };
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_SelectByPallet]", sqlParams.ToArray());
-            
+
         }
 
         public async Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo)
@@ -183,16 +184,16 @@ namespace LOC.PMS.Infrastructure.Repositories
             if (orderDetails.Count > 0)
                 PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
 
-            if(orderDetails.FirstOrDefault().Status.ToString() == "INWARD")
+            if (orderDetails.FirstOrDefault().Status.ToString() == "INWARD")
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=8;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
                 _context.ExecuteSql(UpdatePalletQry);
             }
-            else if(orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
+            else if (orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
             {
                 string UpdatePalletQry = $"UPDATE PalletMaster SET Availability={(int)PalletAvailability.Ideal} WHERE PalletId IN ('{PalletIds}') ;";
                 _context.ExecuteSql(UpdatePalletQry);
-            }            
+            }
 
             return Task.CompletedTask;
         }

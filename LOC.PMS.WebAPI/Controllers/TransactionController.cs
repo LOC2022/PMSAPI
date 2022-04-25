@@ -169,6 +169,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// </summary>
         /// <param name="PalletId"></param>
         /// <param name="DCStatus"></param>
+        /// <param name="DCNo"></param>
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
             Description = "GetDCDetailsByPallet.",
@@ -178,9 +179,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetDCDetailsByPallet"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId = "", [FromQuery] int DCStatus = 0)
+        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId = "", [FromQuery] int DCStatus = 0, [FromQuery] string DCNo="")
         {
-            var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId, DCStatus);
+            var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId, DCStatus, DCNo);
             return Ok(response);
         }
 
