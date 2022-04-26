@@ -17,5 +17,6 @@ namespace LOC.PMS.Application.Interfaces
         Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId,int DCStatus, string dCNo);
         Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo);
         Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails);
+        Task<IEnumerable<DCDetails>> GetPalletForPutAway();
     }
 }
