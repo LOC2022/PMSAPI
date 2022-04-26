@@ -65,7 +65,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             var DCNo = DateTime.Now.ToString("ddMMyyyyHHmmss");
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ('{PalletId}')";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}')";
                 _context.ExecuteSql(UpdatePalletQry);
 
                 if (PalletId != "0")
@@ -103,7 +103,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}' WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
                 _context.ExecuteSql(UpdatePalletQry);
             }
 
