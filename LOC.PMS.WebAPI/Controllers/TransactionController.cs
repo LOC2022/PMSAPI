@@ -224,6 +224,27 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        //GetPalletForPutAway
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        
+        /// <returns>List of DC's</returns>
+        [SwaggerOperation(
+            Description = "GetPalletForPutAway.",
+            Tags = new[] { "GetPalletForPutAway" },
+            OperationId = "GetPalletForPutAway")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetPalletForPutAway"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetPalletForPutAway()
+        {
+            var response = await _transactionDetailsProvider.GetPalletForPutAway();
+            return Ok(response);
+        }
 
 
     }

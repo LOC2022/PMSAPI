@@ -290,12 +290,13 @@
             <param name="orderDetails"></param>        
             <returns>Save Order</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetailsByPallet(System.String,System.Int32)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetailsByPallet(System.String,System.Int32,System.String)">
             <summary>
             
             </summary>
             <param name="PalletId"></param>
             <param name="DCStatus"></param>
+            <param name="DCNo"></param>
             <returns>List of DC's</returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetPalletPartNo(System.String)">
@@ -311,6 +312,12 @@
             </summary>
             <param name="orderDetails"></param>        
             <returns>Save Order</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetPalletForPutAway">
+            <summary>
+            
+            </summary>
+            <returns>List of DC's</returns>
         </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>

@@ -186,16 +186,28 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             if (orderDetails.FirstOrDefault().Status.ToString() == "INWARD")
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=8;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=7;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
+                //string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=8;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
                 _context.ExecuteSql(UpdatePalletQry);
             }
             else if (orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
             {
-                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability={(int)PalletAvailability.Ideal} WHERE PalletId IN ('{PalletIds}') ;";
+                string PalletUpdate = "";
+                foreach(var data in orderDetails)
+                {
+                    PalletUpdate += $"UPDATE PalletMaster SET Availability={(int)PalletAvailability.Ideal},LocationId={data.Location} where PalletId='{data.PalletId}'; ";
+                }
+                string UpdatePalletQry = $"UPDATE [DeliveryChallanTrans] SET DCStatus=8 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}' ;";
+                _context.ExecuteSql(PalletUpdate);
                 _context.ExecuteSql(UpdatePalletQry);
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task<IEnumerable<DCDetails>> GetPalletForPutAway()
+        {           
+            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[PalletsForPutAway_Select]");
         }
 
 

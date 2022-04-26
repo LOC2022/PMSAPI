@@ -19,6 +19,7 @@ namespace LOC.PMS.Model
         public int Stage { get; set; }
         public string UserId { get; set; }
         public string Status { get; set; }
+        public string Location { get; set; }
 
     }
 
