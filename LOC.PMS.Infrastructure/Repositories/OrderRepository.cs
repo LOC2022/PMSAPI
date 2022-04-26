@@ -128,10 +128,11 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             }
 
-
+            var sum = OrderList.ToList().Select(c => c.OrderQty).Sum();
+            OrderList.FirstOrDefault().OrderQty = sum;
             if (palletsByOrderTrans.Count > 0)
             {
-                _context.BulkCopy(OrderList, OrderList.Count, true);
+                _context.BulkCopy(OrderList.FirstOrDefault(), 1, true);
                 _context.BulkCopy(palletsByOrderTrans, palletsByOrderTrans.Count, true);
             }
 
