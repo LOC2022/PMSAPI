@@ -20,6 +20,55 @@ namespace LOC.PMS.Application
             _reportDetailsRepository = reportDetailsRepository;
             _logger = logger;
         }
+
+        public async Task<IEnumerable<DCDetails>> GetDCDetails(string dCNumber)
+        {
+            try
+            {
+                _logger.ForContext("Select DCDetails ", dCNumber)
+                    .Information("Select DCDetails request - Start");
+
+                var response = await _reportDetailsRepository.GetDCDetail(dCNumber);
+
+                _logger.ForContext("Select DCDetails  ", dCNumber)
+                    .Information("Select DCDetails - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDCDetailsReport", dCNumber)
+                    .Error(exception, "Exception occurred during Select DCDetails .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate)
+        {
+            try
+            {
+                _logger.ForContext("Select DCDetails ", fromDate)
+                    .Information("Select DCDetails request - Start");
+
+                var response = await _reportDetailsRepository.GetDCDetailsReport(fromDate, toDate);
+
+                _logger.ForContext("Select DCDetails  ", fromDate)
+                    .Information("Select DCDetails - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDCDetailsReport", fromDate)
+                    .Error(exception, "Exception occurred during Select DCDetails .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)
         {
             try

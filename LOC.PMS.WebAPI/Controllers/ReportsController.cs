@@ -46,7 +46,28 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
-         /// <summary>
+        /// <summary>
+        /// GetDCDetailsReport
+        /// </summary>
+        /// <param name="FromDate"></param>
+        /// <param name="ToDate"></param>
+        /// <param name="DCNumber"></param>        
+        /// <returns>List of DCs</returns>
+        [SwaggerOperation(
+            Description = "GetDCDetailsReport",
+            Tags = new[] { "GetDCDetailsReport" },
+            OperationId = "GetDCDetailsReport")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDCDetailsReport"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetDCDetailsReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL, [FromQuery] string DCNumber = null)
+        {
+            var response = DCNumber != null? await _reportDetailsProvider.GetDCDetails(DCNumber) : await _reportDetailsProvider.GetDCDetailsReport(FromDate, ToDate);
+            return Ok(response);
+        }
+
+        /// <summary>
         /// GetMonthlyPlanReport
         /// </summary>
         /// <param name="PalletId"></param>
