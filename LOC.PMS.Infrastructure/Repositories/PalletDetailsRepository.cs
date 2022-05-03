@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Braintree;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
 
@@ -21,15 +20,13 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         public async Task<IEnumerable<PalletDetails>> AddPalletDetails(PalletDetails palletDetailsRequest)
         {
-            var palletList = new List<PalletDetailsDataReader>();
- 
-            var customerDr = new DataReaderAdapter<Customer>(customers);
+            var palletList = new List<PalletDetails>();
 
             var util = new Utilities.Utilities();
 
             for (int i = 1; i <= palletDetailsRequest.palletPartQty; i++)
             {
-                palletList.Add(new PalletDetailsDataReader()
+                palletList.Add(new PalletDetails()
                 {
                     PalletId = "A" + util.CreateUnique16DigitString(),
                     PalletPartNo = palletDetailsRequest.PalletPartNo,
@@ -45,11 +42,11 @@ namespace LOC.PMS.Infrastructure.Repositories
                     CreatedDate = DateTime.Now,
                     CreatedBy = palletDetailsRequest.CreatedBy
                 });
-            }
+            }     
+            
+            var ColList = new List<string> { "PalletId", "PalletPartNo", "PalletName", "PalletWeight", "Model", "KitUnit", "WhereUsed", "PalletType", "LocationId", "D2LDays", "Availability", "WriteCount", "CreatedDate", "CreatedBy" };
 
-            //var palletQueryList = palletList.Select(s => new { s.PalletId, s.PalletPartNo, s.PalletName, s.PalletWeight, s.Model, s.KitUnit, s.WhereUsed, s.PalletType, s.LocationId, s.D2LDays, s.Availability, s.WriteCount, s.CreatedDate, s.CreatedBy }).ToList();
-
-            _context.BulkCopy(palletList, 30, "PalletMaster");
+            _context.BulkCopy(palletList, ColList, 30, "PalletMaster");
 
             return await SelectPalletDetails(null);
         }

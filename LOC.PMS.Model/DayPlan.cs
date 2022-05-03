@@ -14,6 +14,8 @@ namespace LOC.PMS.Model
 
         public string PalletPartName { get; set; }
 
+        public string Description { get; set; }
+
         public string Date { get; set; }
 
         public int Qty { get; set; }
@@ -42,6 +44,7 @@ namespace LOC.PMS.Model
             DayPlan palletDetailsRequest = new DayPlan();
             palletDetailsRequest.PalletPartNo = lines[2];
             palletDetailsRequest.PalletPartName = lines[3];
+            palletDetailsRequest.Description = lines[3];
             palletDetailsRequest.Qty = Convert.ToInt32(lines[5]);
             palletDetailsRequest.RequiredQty = Convert.ToInt32(lines[5]);
             palletDetailsRequest.Model = lines[1];

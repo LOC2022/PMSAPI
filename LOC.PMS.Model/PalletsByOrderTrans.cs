@@ -13,5 +13,7 @@ namespace LOC.PMS.Model
         public int LocationId { get; set; }
         public PalletStatus PalletStatus { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public string ModifiedBy { get; set; }
+
     }
 }

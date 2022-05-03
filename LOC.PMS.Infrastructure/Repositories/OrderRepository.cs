@@ -21,7 +21,17 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         public Task AddDayPlanData(List<DayPlan> order)
         {
-            _context.BulkCopy(order, order.Count, "Orders");
+            var ColList = new List<string>
+            {
+                "PalletPartNo",
+                "RequiredQty",
+                "Description",
+                "Model",
+                "OrderDate",
+                "VendorId",
+                "CreatedDate"
+            };
+            _context.BulkCopy(order, ColList, order.Count, "DayPlan");
             CreateOrder();
             return Task.CompletedTask;
         }
@@ -110,7 +120,8 @@ namespace LOC.PMS.Infrastructure.Repositories
                                         AssignedQty = d1.Qty,
                                         LocationId = d2.LocationId,
                                         PalletStatus = PalletStatus.Assigned,
-                                        ModifiedDate = DateTime.Now
+                                        ModifiedDate = DateTime.Now,
+                                        ModifiedBy = null
                                     });
                                 }
 
@@ -128,13 +139,22 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             }
 
-            var sum = OrderList.Select(c => c.OrderQty).Sum();
-            OrderList.FirstOrDefault().OrderQty = sum;
-            if (palletsByOrderTrans.Count > 0)
+            if(OrderList.Count > 0)
             {
-                _context.BulkCopy(OrderList, 1, "Orders");
-                _context.BulkCopy(palletsByOrderTrans, palletsByOrderTrans.Count, "PalletsByOrderTrans");
-            }
+                var sum = OrderList.Select(c => c.OrderQty).Sum();
+                OrderList.FirstOrDefault().OrderQty = sum;
+                if (palletsByOrderTrans.Count > 0)
+                {
+                    var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
+                    _context.BulkCopy(OrderList, ColList, 1, "Orders");
+
+                    ColList = new List<string> {
+                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
+                };
+                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+                }
+            }     
+            
 
 
 

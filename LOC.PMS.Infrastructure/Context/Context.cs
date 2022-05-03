@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
@@ -789,30 +791,30 @@ namespace LOC.PMS.Infrastructure
 
         #region BulkOperation
 
-        public async void BulkCopy<T>(IEnumerable<T> list, IEnumerable<T> dlist, int batchSize, string tableName)
+        public async void BulkCopy<T>(IEnumerable<T> list, List<string> ColList, int batchSize, string tableName)
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                DataTable dtInsertRows;
 
-                //connection.bulk (options =>
-                //{
-                //    options.InsertIfNotExists = insertIfNotExists;
-                //    options.BatchSize = batchSize;
-                //}).BulkInsert(list);
                 await connection.OpenAsync();
 
                 using (var bulkCopy = new SqlBulkCopy(this.connectionString))
                 {
+                    PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                    foreach (PropertyInfo prop in Props)
+                    {
+                        var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
 
-                    //for (int i = 0; i <= list.AsList().Count; i++)
-                    //{
-                    //    if (list[i] = dlist[i])
-                    //    {
-                    //        bulkCopy.ColumnMappings.Add(col, dlist);
+                        foreach (var col in ColList)
+                        {
+                            if (prop.Name == col)
+                            {
+                                bulkCopy.ColumnMappings.Add(prop.Name, col);
 
-                    //    }
-                    //}
+                            }
+                        }
+
+                    }
                     bulkCopy.BulkCopyTimeout = 120;
                     bulkCopy.BatchSize = batchSize;
                     bulkCopy.DestinationTableName = tableName;

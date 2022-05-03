@@ -57,7 +57,15 @@ namespace LOC.PMS.Infrastructure.Repositories
                 });
             }
 
-            _context.BulkCopy(groupRightsList, 30, "GroupRights");
+            var ColList = new List<string> {
+            "GroupId",
+            "FeatureId",
+            "IsEnabled",
+            "ModifiedDate",
+            "ModifiedBy",
+            };
+
+            _context.BulkCopy(groupRightsList, ColList, 30, "GroupRights");
 
             return returnGroupId;
         }
@@ -164,10 +172,10 @@ namespace LOC.PMS.Infrastructure.Repositories
 
                 };
 
-           var resp = await _context.QueryStoredProcedureAsync<MembershipMasters>("[dbo].[MemebershipLogin_Select]", sqlParams.ToArray());
+            var resp = await _context.QueryStoredProcedureAsync<MembershipMasters>("[dbo].[MemebershipLogin_Select]", sqlParams.ToArray());
 
             return resp;
-                
+
         }
     }
 }
