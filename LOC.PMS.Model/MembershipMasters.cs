@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LOC.PMS.Model
@@ -84,6 +85,8 @@ namespace LOC.PMS.Model
         public int FeatureId { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
 
         public string ModifiedBy { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LOC.PMS.Model
 {
@@ -27,6 +28,10 @@ namespace LOC.PMS.Model
         public PalletAvailability Availability { get; set; }
 
         public int palletPartQty { get; set; }
+
+        public int WriteCount { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
         public string CreatedBy { get; set; }
 

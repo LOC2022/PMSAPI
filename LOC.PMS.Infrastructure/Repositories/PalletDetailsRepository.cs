@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
+using Braintree;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
-using Z.Dapper.Plus;
 
 namespace LOC.PMS.Infrastructure.Repositories
 {
@@ -19,13 +21,15 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         public async Task<IEnumerable<PalletDetails>> AddPalletDetails(PalletDetails palletDetailsRequest)
         {
-            var palletList = new List<PalletDetails>();
+            var palletList = new List<PalletDetailsDataReader>();
+ 
+            var customerDr = new DataReaderAdapter<Customer>(customers);
 
             var util = new Utilities.Utilities();
 
             for (int i = 1; i <= palletDetailsRequest.palletPartQty; i++)
             {
-                palletList.Add(new PalletDetails()
+                palletList.Add(new PalletDetailsDataReader()
                 {
                     PalletId = "A" + util.CreateUnique16DigitString(),
                     PalletPartNo = palletDetailsRequest.PalletPartNo,
@@ -38,13 +42,14 @@ namespace LOC.PMS.Infrastructure.Repositories
                     LocationId = palletDetailsRequest.LocationId,
                     D2LDays = palletDetailsRequest.D2LDays,
                     Availability = palletDetailsRequest.Availability,
+                    CreatedDate = DateTime.Now,
                     CreatedBy = palletDetailsRequest.CreatedBy
                 });
             }
 
-            DapperPlusManager.Entity<PalletDetails>().Table("PalletMaster");
+            //var palletQueryList = palletList.Select(s => new { s.PalletId, s.PalletPartNo, s.PalletName, s.PalletWeight, s.Model, s.KitUnit, s.WhereUsed, s.PalletType, s.LocationId, s.D2LDays, s.Availability, s.WriteCount, s.CreatedDate, s.CreatedBy }).ToList();
 
-            _context.BulkCopy(palletList, 30, false);
+            _context.BulkCopy(palletList, 30, "PalletMaster");
 
             return await SelectPalletDetails(null);
         }
@@ -68,8 +73,8 @@ namespace LOC.PMS.Infrastructure.Repositories
             };
 
             await _context.ExecuteStoredProcedureAsync("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());
-             
-            return  palletDetailsRequest.PalletId;
+
+            return palletDetailsRequest.PalletId;
         }
 
         public async Task<int> ModifyPalletLocation(LocationMaster palletLocation)

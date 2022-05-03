@@ -602,16 +602,21 @@ public interface IContext
         where T2 : class, new()
         where T3 : class, new()
         where T4 : class, new();
+    
+    
+    void BulkCopy<T>(IEnumerable<T> list, int batchSize, string tableName);
 
-    /// <summary>
-    ///     ''' Execute the store procedure as BulkInsert() 
-    ///     ''' </summary>
-    ///     ''' <param name="list">list of Entity or model</param>    
-    ///     ''' <param name="batchSize">batch size for insert</param>
-    ///     ''' <param name="insertIfNotExists">insert record if not exists</param>
-    ///     ''' <returns>Task(Of Tuple(Of IEnumerable(Of T1), IEnumerable(Of T2), IEnumerable(Of T3), IEnumerable(Of T4)))</returns>
-    ///     ''' <remarks> throw ArgumentNullException if name=storeProcedureName is empty.</remarks>
-    void BulkCopy<T>(T list, int batchSize, bool insertIfNotExists = true);
+    ///// <summary>
+    /////     ''' Execute the store procedure as BulkInsert() 
+    /////     ''' </summary>
+    /////     ''' <param name="list">list of Entity or model</param>    
+    /////     ''' <param name="batchSize">batch size for insert</param>
+    /////     ''' <param name="insertIfNotExists">insert record if not exists</param>
+    /////     ''' <returns>Task(Of Tuple(Of IEnumerable(Of T1), IEnumerable(Of T2), IEnumerable(Of T3), IEnumerable(Of T4)))</returns>
+    /////     ''' <remarks> throw ArgumentNullException if name=storeProcedureName is empty.</remarks>
+    //void BulkCopy<T>(T list, int batchSize, bool insertIfNotExists = true);
+
+
 }
 
 public interface ICommandsWithParams

@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
-using Z.Dapper.Plus;
 
 namespace LOC.PMS.Infrastructure.Repositories
 {
@@ -53,13 +52,12 @@ namespace LOC.PMS.Infrastructure.Repositories
                     GroupId = returnGroupId,
                     FeatureId = feature.FeatureId,
                     IsEnabled = feature.IsEnabled,
+                    ModifiedDate = DateTime.Now,
                     ModifiedBy = addGroupRequest.ModifiedBy
                 });
             }
 
-            DapperPlusManager.Entity<GroupRights>().Table("GroupRights").InsertIfNotExists().Identity(i => i.GroupRightsId);
-
-            _context.BulkCopy(groupRightsList, 30, true);
+            _context.BulkCopy(groupRightsList, 30, "GroupRights");
 
             return returnGroupId;
         }

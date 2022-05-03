@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Z.Dapper.Plus;
-using Z.BulkOperations;
+//using Z.Dapper.Plus;
+//using Z.BulkOperations;
 
 namespace LOC.PMS.Infrastructure
 {
@@ -789,49 +789,75 @@ namespace LOC.PMS.Infrastructure
 
         #region BulkOperation
 
-        public void BulkCopy<T>(T list, int batchSize, bool insertIfNotExists = true)
+        public async void BulkCopy<T>(IEnumerable<T> list, IEnumerable<T> dlist, int batchSize, string tableName)
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                connection.UseBulkOptions(options =>
+                DataTable dtInsertRows;
+
+                //connection.bulk (options =>
+                //{
+                //    options.InsertIfNotExists = insertIfNotExists;
+                //    options.BatchSize = batchSize;
+                //}).BulkInsert(list);
+                await connection.OpenAsync();
+
+                using (var bulkCopy = new SqlBulkCopy(this.connectionString))
                 {
-                    options.InsertIfNotExists = insertIfNotExists;
-                    options.BatchSize = batchSize;
-                }).BulkInsert(list);
-            }	
+
+                    //for (int i = 0; i <= list.AsList().Count; i++)
+                    //{
+                    //    if (list[i] = dlist[i])
+                    //    {
+                    //        bulkCopy.ColumnMappings.Add(col, dlist);
+
+                    //    }
+                    //}
+                    bulkCopy.BulkCopyTimeout = 120;
+                    bulkCopy.BatchSize = batchSize;
+                    bulkCopy.DestinationTableName = tableName;
+                    bulkCopy.EnableStreaming = true;
+
+                    using (var dataReader = list.GetDataReader())
+                    {
+                        await bulkCopy.WriteToServerAsync(dataReader);
+                    }
+                }
+
+            }
         }
 
         #endregion
 
-    private ParameterConversionResult translateToConvertResult(params IDbDataParameter[] parameters)
-    {
-        var convertResults = new ParameterConversionResult();
-        if (parameters.Length > 0)
+        private ParameterConversionResult translateToConvertResult(params IDbDataParameter[] parameters)
         {
-            foreach (var parameter in parameters)
+            var convertResults = new ParameterConversionResult();
+            if (parameters.Length > 0)
             {
-                if (parameter.Direction == ParameterDirection.Output | parameter.Direction == ParameterDirection.ReturnValue)
-                    convertResults.ReturnParameterNames.Add(parameter.ParameterName);
+                foreach (var parameter in parameters)
+                {
+                    if (parameter.Direction == ParameterDirection.Output | parameter.Direction == ParameterDirection.ReturnValue)
+                        convertResults.ReturnParameterNames.Add(parameter.ParameterName);
 
-                convertResults.DynamicParameters.Add(parameter.ParameterName, parameter.Value, parameter.DbType, parameter.Direction, parameter.Size);
+                    convertResults.DynamicParameters.Add(parameter.ParameterName, parameter.Value, parameter.DbType, parameter.Direction, parameter.Size);
+                }
             }
+
+            return convertResults;
         }
 
-        return convertResults;
-    }
-
-    private class ParameterConversionResult
-    {
-        public ParameterConversionResult()
+        private class ParameterConversionResult
         {
-            this.DynamicParameters = new DynamicParameters();
-            this.ReturnParameterNames = new List<string>();
+            public ParameterConversionResult()
+            {
+                this.DynamicParameters = new DynamicParameters();
+                this.ReturnParameterNames = new List<string>();
+            }
+
+            public DynamicParameters DynamicParameters { get; set; }
+            public List<string> ReturnParameterNames { get; set; }
+
         }
 
-        public DynamicParameters DynamicParameters { get; set; }
-        public List<string> ReturnParameterNames { get; set; }
-
     }
-
-}
 }

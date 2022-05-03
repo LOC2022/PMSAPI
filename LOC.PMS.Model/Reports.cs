@@ -6,8 +6,6 @@ namespace LOC.PMS.Model
 {
     public class PalletsByOrderTransReport
     {
-        public string OrderNo { get; set; }
-
         public string PalletId { get; set; }
 
         public string PalletPartNo { get; set; }
