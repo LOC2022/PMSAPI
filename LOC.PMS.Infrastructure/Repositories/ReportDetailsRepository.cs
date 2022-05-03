@@ -21,7 +21,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<DayPlan>> GetDayPlanReport(string fromDate, string toDate)
+        public async Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
@@ -30,7 +30,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             };
 
-            return await _context.QueryStoredProcedureAsync<DayPlan>("[dbo].[Report_DayPlanSelect_ByDate]", sqlParams.ToArray());
+            return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[Report_DayPlanSelect_ByDate]", sqlParams.ToArray());
         }
 
         public async Task<IEnumerable<DCDetails>> GetDCDetail(string dCNumber)

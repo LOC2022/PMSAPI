@@ -21,7 +21,7 @@ namespace LOC.PMS.Application
             _logger = logger;
         }
 
-        public async Task<IEnumerable<DayPlan>> GetDayPlanReport(string fromDate, string toDate)
+        public async Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate)
         {
             try
             {

@@ -12,7 +12,7 @@ namespace LOC.PMS.Application.Interfaces
 
         Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate);
 
-        Task<IEnumerable<DayPlan>> GetDayPlanReport(string fromDate, string toDate);
+        Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate);
 
         Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId);
 

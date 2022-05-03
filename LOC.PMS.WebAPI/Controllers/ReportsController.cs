@@ -84,7 +84,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpGet("GetDayPlanReport"), MapToApiVersion("1.0")]
         public async Task<IActionResult> GetDayPlanReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL)
         {
-            var response =  await _reportDetailsProvider.GetDCDetailsReport(FromDate, ToDate);
+            var response =  await _reportDetailsProvider.GetDayPlanReport(FromDate, ToDate);
             return Ok(response);
         }
 
