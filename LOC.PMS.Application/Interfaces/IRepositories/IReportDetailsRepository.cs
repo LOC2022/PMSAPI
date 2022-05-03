@@ -12,7 +12,10 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 
         Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate);
 
+        Task<IEnumerable<DayPlan>> GetDayPlanReport(string fromDate, string toDate);
+
         Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId);
+
         Task<IEnumerable<DCDetails>> GetDCDetail(string dCNumber);
     }
 }

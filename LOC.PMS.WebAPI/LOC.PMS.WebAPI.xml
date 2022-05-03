@@ -229,7 +229,15 @@
             <param name="FromDate"></param>
             <param name="ToDate"></param>
             <param name="DCNumber"></param>        
-            <returns>List of Orders</returns>
+            <returns>List of DCs</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDayPlanReport(System.String,System.String)">
+            <summary>
+            GetDayPlanReport
+            </summary>
+            <param name="FromDate"></param>
+            <param name="ToDate"></param>      
+            <returns>List of Dayplan reports</returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.PalletByOrderTransReport(System.String)">
             <summary>

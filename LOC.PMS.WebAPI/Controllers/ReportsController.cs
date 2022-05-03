@@ -67,6 +67,27 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
+
+        /// <summary>
+        /// GetDayPlanReport
+        /// </summary>
+        /// <param name="FromDate"></param>
+        /// <param name="ToDate"></param>      
+        /// <returns>List of Dayplan reports</returns>
+        [SwaggerOperation(
+            Description = "GetDayPlanReport",
+            Tags = new[] { "GetDayPlanReport" },
+            OperationId = "GetDayPlanReport")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDayPlanReport"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetDayPlanReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL)
+        {
+            var response =  await _reportDetailsProvider.GetDCDetailsReport(FromDate, ToDate);
+            return Ok(response);
+        }
+
         /// <summary>
         /// GetMonthlyPlanReport
         /// </summary>

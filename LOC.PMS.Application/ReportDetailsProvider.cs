@@ -21,6 +21,30 @@ namespace LOC.PMS.Application
             _logger = logger;
         }
 
+        public async Task<IEnumerable<DayPlan>> GetDayPlanReport(string fromDate, string toDate)
+        {
+            try
+            {
+                _logger.ForContext("Select GetDayPlanReport ", fromDate)
+                    .Information("Select GetDayPlanReport request - Start");
+
+                var response = await _reportDetailsRepository.GetDayPlanReport(fromDate, toDate);
+
+                _logger.ForContext("Select GetDayPlanReport", fromDate)
+                    .Information("Select GetDayPlanReport - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDayPlanReport", fromDate)
+                    .Error(exception, "Exception occurred during Select GetDayPlanReport .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task<IEnumerable<DCDetails>> GetDCDetails(string dCNumber)
         {
             try
