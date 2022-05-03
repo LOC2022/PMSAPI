@@ -38,7 +38,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     PalletType = palletDetailsRequest.PalletType,
                     LocationId = palletDetailsRequest.LocationId,
                     D2LDays = palletDetailsRequest.D2LDays,
-                    Availability = palletDetailsRequest.Availability,
+                    Availability = PalletAvailability.Ideal,
                     CreatedDate = DateTime.Now,
                     CreatedBy = palletDetailsRequest.CreatedBy
                 });
