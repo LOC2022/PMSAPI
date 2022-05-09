@@ -263,5 +263,30 @@ namespace LOC.PMS.Application
 
             return null;
         }
+
+        //UpdatePalletWriteCount
+
+        public async Task UpdatePalletWriteCount(string PalletId)
+        {
+            try
+            {
+                _logger.ForContext("palletIds", PalletId)
+                    .Information("Pallet Scan - Start");
+                //business logic
+
+                await _transactionRepository.UpdatePalletWriteCount(PalletId);
+
+
+
+                _logger.ForContext("PalletDetailsRequest", PalletId)
+                    .Information("Pallet Scan - End");
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("palletIds", PalletId)
+                    .Error(exception, $"Exception occurred during pallet scan. - {PalletId}");
+                await Task.FromException(exception);
+            }
+        }
     }
 }

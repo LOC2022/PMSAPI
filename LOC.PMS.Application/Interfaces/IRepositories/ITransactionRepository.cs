@@ -19,6 +19,8 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo);
         Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails);
         Task<IEnumerable<DCDetails>> GetPalletForPutAway();
+
+        Task UpdatePalletWriteCount(string PalletId);
     }
 }
 

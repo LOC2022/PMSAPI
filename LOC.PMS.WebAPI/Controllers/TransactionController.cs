@@ -179,7 +179,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetDCDetailsByPallet"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId = "", [FromQuery] int DCStatus = 0, [FromQuery] string DCNo="")
+        public async Task<IActionResult> GetDCDetailsByPallet([FromQuery] string PalletId = "", [FromQuery] int DCStatus = 0, [FromQuery] string DCNo = "")
         {
             var response = await _transactionDetailsProvider.GetDCDetailsByPallet(PalletId, DCStatus, DCNo);
             return Ok(response);
@@ -230,7 +230,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-        
+
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
             Description = "GetPalletForPutAway.",
@@ -245,7 +245,26 @@ namespace LOC.PMS.WebAPI.Controllers
             var response = await _transactionDetailsProvider.GetPalletForPutAway();
             return Ok(response);
         }
+        //UpdatePalletWriteCount
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PalletId"></param>        
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "UpdatePalletWriteCount.",
+            Tags = new[] { "UpdatePalletWriteCount" },
+            OperationId = "UpdatePalletWriteCount")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("UpdatePalletWriteCount"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> UpdatePalletWriteCount([FromQuery] string PalletId)
+        {
+            await _transactionDetailsProvider.UpdatePalletWriteCount(PalletId);
+            return Ok();
+        }
 
     }
 }

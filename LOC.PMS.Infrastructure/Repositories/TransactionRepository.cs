@@ -193,7 +193,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             else if (orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
             {
                 string PalletUpdate = "";
-                foreach(var data in orderDetails)
+                foreach (var data in orderDetails)
                 {
                     PalletUpdate += $"UPDATE PalletMaster SET Availability={(int)PalletAvailability.Ideal},LocationId={data.Location} where PalletId='{data.PalletId}'; ";
                 }
@@ -206,10 +206,16 @@ namespace LOC.PMS.Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<DCDetails>> GetPalletForPutAway()
-        {           
+        {
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[PalletsForPutAway_Select]");
         }
 
+        public Task UpdatePalletWriteCount(string PalletId)
+        {
+            string UpdatePalletQry = $"update [dbo].[PalletMaster] set [WriteCount]=[WriteCount]+1 where PalletId='{PalletId}'";
+            _context.ExecuteSql(UpdatePalletQry);
+            return Task.CompletedTask;
+        }
 
 
     }
