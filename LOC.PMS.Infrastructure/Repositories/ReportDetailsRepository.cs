@@ -1,6 +1,7 @@
 ﻿using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using LOC.PMS.Model.Report;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,29 @@ namespace LOC.PMS.Infrastructure.Repositories
             };
 
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[Report_DCSelect_ByDate]", sqlParams.ToArray());
+        }
+
+        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId)
+        {
+
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@UserId", UserId),
+
+            };
+
+            return await _context.QueryStoredProcedureAsync<InwardReport>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
+        }
+
+        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@DCNumber", dCNumber),
+
+            };
+
+            return await _context.QueryStoredProcedureAsync<InwardReportDetails>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
         }
 
         public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)

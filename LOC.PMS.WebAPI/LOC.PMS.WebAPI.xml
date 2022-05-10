@@ -246,6 +246,14 @@
             <param name="PalletId"></param>
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetVendorInwardDetails(System.Int32,System.String)">
+            <summary>
+            GetDayPlanReport
+            </summary>
+            <param name="UserId"></param>
+            <param name="DCNumber"></param>      
+            <returns>List of Inward DC details</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             

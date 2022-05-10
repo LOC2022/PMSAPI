@@ -1,6 +1,7 @@
 ﻿using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using LOC.PMS.Model.Report;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,54 @@ namespace LOC.PMS.Application
             {
                 _logger.ForContext("GetDCDetailsReport", fromDate)
                     .Error(exception, "Exception occurred during Select DCDetails .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId)
+        {
+            try
+            {
+                _logger.ForContext("Select InwardReport ", UserId)
+                    .Information("Select InwardReport request - Start");
+
+                var response = await _reportDetailsRepository.GetInwardReport(UserId);
+
+                _logger.ForContext("Select InwardReport  ", UserId)
+                    .Information("Select InwardReport - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetInwardReport", UserId)
+                    .Error(exception, "Exception occurred during Select GetInwardReport .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber)
+        {
+            try
+            {
+                _logger.ForContext("Select InwardReportDetails ", dCNumber)
+                    .Information("Select InwardReportDetails request - Start");
+
+                var response = await _reportDetailsRepository.GetInwardReportByDCNumber(dCNumber);
+
+                _logger.ForContext("Select InwardReportDetails  ", dCNumber)
+                    .Information("Select InwardReportDetails - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("InwardReportDetails", dCNumber)
+                    .Error(exception, "Exception occurred during Select InwardReportDetails .");
                 await Task.FromException(exception);
 
             }

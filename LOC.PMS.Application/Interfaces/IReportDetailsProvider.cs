@@ -1,4 +1,5 @@
 ﻿using LOC.PMS.Model;
+using LOC.PMS.Model.Report;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,9 @@ namespace LOC.PMS.Application.Interfaces
         Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId);
 
         Task<IEnumerable<DCDetails>> GetDCDetails(string dCNumber);
+
+        Task<IEnumerable<InwardReport>> GetInwardReport(int UserId);
+
+        Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber);
     }
 }

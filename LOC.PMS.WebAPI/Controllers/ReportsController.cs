@@ -106,5 +106,34 @@ namespace LOC.PMS.WebAPI.Controllers
             var response = await _reportDetailsProvider.GetPalletOrderTransReport(PalletId);
             return Ok(response);
         }
+
+
+        /// <summary>
+        /// GetDayPlanReport
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="DCNumber"></param>      
+        /// <returns>List of Inward DC details</returns>
+        [SwaggerOperation(
+            Description = "GetVendorInwardDetails",
+            Tags = new[] { "GetVendorInwardDetails" },
+            OperationId = "GetVendorInwardDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetVendorInwardDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetVendorInwardDetails([FromQuery] int UserId = DefaultValue, [FromQuery] string DCNumber = GETALL)
+        {
+            if (DCNumber == GETALL)
+            {
+                var response = await _reportDetailsProvider.GetInwardReport(UserId);
+                return Ok(response);
+            }
+            else
+            {
+                var response = await _reportDetailsProvider.GetInwardReportByDCNumber(DCNumber);
+                return Ok(response);
+            }
+        }
     }
 }
