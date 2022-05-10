@@ -344,6 +344,13 @@
             </summary>
             <returns>List of DC's</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdatePalletWriteCount(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="PalletId"></param>        
+            <returns>Save Order</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             

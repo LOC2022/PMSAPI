@@ -342,3 +342,4 @@ healthchecksdb
 /LOC.PMS.WebAPI/Properties/ServiceDependencies/ace-pms-api/profile.arm.json
 /LOC.PMS.WebAPI/Properties/ServiceDependencies
 /LOC.PMS.WebAPI/.config/dotnet-tools.json
+/LOC.PMS.WebAPI/UploadedFiles

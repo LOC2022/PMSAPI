@@ -14,9 +14,10 @@ namespace LOC.PMS.Application.Interfaces
         Task SaveVehicleAndUpdateStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage);
         Task SaveHHTOrderDetails(List<OrderDetails> orderDetails);
         Task UpdateHHTDispatchDetails(List<OrderDetails> orderDetails);
-        Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId,int DCStatus, string dCNo);
+        Task<IEnumerable<DCDetails>> GetDCDetailsByPallet(string palletId, int DCStatus, string dCNo);
         Task<IEnumerable<PalletDetails>> GetPalletPartNo(string PalletPartNo);
         Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails);
         Task<IEnumerable<DCDetails>> GetPalletForPutAway();
+        Task UpdatePalletWriteCount(string PalletId);
     }
 }
