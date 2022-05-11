@@ -142,6 +142,30 @@ namespace LOC.PMS.Application
             return null;
         }
 
+        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber)
+        {
+            try
+            {
+                _logger.ForContext("Select InwardReportByPartNumber ", partNumber)
+                    .Information("Select InwardReportByPartNumber request - Start");
+
+                var response = await _reportDetailsRepository.GetInwardReportByPartNumber(UserId, partNumber);
+
+                _logger.ForContext("Select InwardReportByPartNumber  ", partNumber)
+                    .Information("Select InwardReportByPartNumber - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("InwardReportByPartNumber", partNumber)
+                    .Error(exception, "Exception occurred during Select GetInwardReport .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)
         {
             try
@@ -168,11 +192,32 @@ namespace LOC.PMS.Application
 
         public async Task<IEnumerable<PalletsByOrderTransReport>> GetPalletOrderTransReport(string palletId)
         {
-              try
+            try
             {
                 _logger.Information("Pallet by order trans details report request - Start");
 
                 var response = await _reportDetailsRepository.GetPalletOrderTransReport(palletId);
+
+                _logger.Information("Pallet by order trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet by order trans report.");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<PalletReportSelection>> GetPalletReportSelection(int UserId, string PalletStatus, string ModelNo)
+        {
+            try
+            {
+                _logger.Information("Pallet by order trans details report request - Start");
+
+                var response = await _reportDetailsRepository.GetPalletReportSelection(UserId, PalletStatus, ModelNo);
 
                 _logger.Information("Pallet by order trans details report request - End");
                 return response;

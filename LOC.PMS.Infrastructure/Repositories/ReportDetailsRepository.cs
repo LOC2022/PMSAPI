@@ -80,6 +80,19 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<InwardReportDetails>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
         }
 
+        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber)
+        {
+
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@UserId", UserId),
+                 new SqlParameter("@PartNo", partNumber)
+
+            };
+
+            return await _context.QueryStoredProcedureAsync<InwardReport>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
+        }
+
         public async Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
@@ -100,6 +113,19 @@ namespace LOC.PMS.Infrastructure.Repositories
             };
 
             return await _context.QueryStoredProcedureAsync<PalletsByOrderTransReport>("[dbo].[Report_PalletsByOrderTransDetails]", sqlParams.ToArray());
+        }
+
+        public async Task<IEnumerable<PalletReportSelection>> GetPalletReportSelection(int UserId, string PalletStatus, string ModelNo)
+        {
+
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@UserId", UserId),
+                new SqlParameter("@PalletStatus", PalletStatus),
+                new SqlParameter("@ModelNo", ModelNo)
+            };
+
+            return await _context.QueryStoredProcedureAsync<PalletReportSelection>("[dbo].[Report_Pallet_Dropdown_Selection]", sqlParams.ToArray());
         }
     }
 }

@@ -109,10 +109,11 @@ namespace LOC.PMS.WebAPI.Controllers
 
 
         /// <summary>
-        /// GetDayPlanReport
+        /// GetVendorInwardDetails
         /// </summary>
         /// <param name="UserId"></param>
-        /// <param name="DCNumber"></param>      
+        /// <param name="DCNumber"></param>    
+        /// <param name="PartNumber"></param> 
         /// <returns>List of Inward DC details</returns>
         [SwaggerOperation(
             Description = "GetVendorInwardDetails",
@@ -122,9 +123,14 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetVendorInwardDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetVendorInwardDetails([FromQuery] int UserId = DefaultValue, [FromQuery] string DCNumber = GETALL)
+        public async Task<IActionResult> GetVendorInwardDetails([FromQuery] int UserId = DefaultValue, [FromQuery] string DCNumber = GETALL, [FromQuery] string PartNumber = GETALL)
         {
-            if (DCNumber == GETALL)
+            if (PartNumber != GETALL)
+            {
+                var response = await _reportDetailsProvider.GetInwardReportByPartNumber(UserId, PartNumber);
+                return Ok(response);
+            }
+            else if (DCNumber == GETALL)
             {
                 var response = await _reportDetailsProvider.GetInwardReport(UserId);
                 return Ok(response);
@@ -134,6 +140,28 @@ namespace LOC.PMS.WebAPI.Controllers
                 var response = await _reportDetailsProvider.GetInwardReportByDCNumber(DCNumber);
                 return Ok(response);
             }
+        }
+
+
+        /// <summary>
+        /// GetPalletDropDownSelection
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="PalletStatus"></param>    
+        /// <param name="ModelNo"></param> 
+        /// <returns>Selection details</returns>
+        [SwaggerOperation(
+            Description = "GetPalletDropDownSelection",
+            Tags = new[] { "GetPalletDropDownSelection" },
+            OperationId = "GetPalletDropDownSelection")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetPalletDropDownSelection"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetPalletDropDownSelection([FromQuery] int UserId = DefaultValue, [FromQuery] string PalletStatus = GETALL, [FromQuery] string ModelNo = GETALL)
+        {
+                var response = await _reportDetailsProvider.GetPalletReportSelection(UserId, PalletStatus, ModelNo);
+                return Ok(response);
         }
     }
 }
