@@ -67,6 +67,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@D2LDays", palletDetailsRequest.D2LDays),
                 new SqlParameter("@Availability", palletDetailsRequest.Availability),
                 new SqlParameter("@CreatedBy", palletDetailsRequest.CreatedBy),
+                new SqlParameter("@WriteCount", palletDetailsRequest.WriteCount)
             };
 
             await _context.ExecuteStoredProcedureAsync("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());
