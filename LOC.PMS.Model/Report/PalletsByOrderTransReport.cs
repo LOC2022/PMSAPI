@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LOC.PMS.Model
+namespace LOC.PMS.Model.Report
 {
     public class PalletsByOrderTransReport
     {

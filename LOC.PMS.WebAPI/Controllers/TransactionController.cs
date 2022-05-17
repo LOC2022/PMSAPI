@@ -211,9 +211,9 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="orderDetails"></param>        
         /// <returns>Save Order</returns>
         [SwaggerOperation(
-            Description = "UpdateHHTDispatchDetails.",
-            Tags = new[] { "UpdateHHTDispatchDetails" },
-            OperationId = "UpdateHHTDispatchDetails")]
+            Description = "UpdateHHTInwardDetails.",
+            Tags = new[] { "UpdateHHTInwardDetails" },
+            OperationId = "UpdateHHTInwardDetails")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]

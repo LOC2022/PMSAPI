@@ -211,6 +211,27 @@ namespace LOC.PMS.Application
             return null;
         }
 
+        public async Task<IEnumerable<PalletsPartTransReport>> GetPalletPartTransReport(int userId, string palletPartNo)
+        {
+              try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = await _reportDetailsRepository.GetPalletPartTransReport(userId, palletPartNo);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task<IEnumerable<PalletReportSelection>> GetPalletReportSelection(int UserId, string PalletStatus, string ModelNo)
         {
             try

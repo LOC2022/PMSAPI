@@ -246,6 +246,14 @@
             <param name="PalletId"></param>
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.PalletPartTransReport(System.Int32,System.String)">
+            <summary>
+            PalletPartDetails
+            </summary>
+            <param name="UserId"></param>
+            <param name="PalletPartNo"></param>
+            <returns>List of Orders</returns>
+        </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetVendorInwardDetails(System.Int32,System.String,System.String)">
             <summary>
             GetVendorInwardDetails

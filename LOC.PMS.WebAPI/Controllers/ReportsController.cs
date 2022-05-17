@@ -107,6 +107,26 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// PalletPartDetails
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="PalletPartNo"></param>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "PalletPartTransReport",
+            Tags = new[] { "PalletPartTransReport" },
+            OperationId = "PalletPartTransReport")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("PalletPartTransReport"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> PalletPartTransReport([FromQuery] int UserId = DefaultValue, [FromQuery] string PalletPartNo= GETALL)
+        {
+            var response = await _reportDetailsProvider.GetPalletPartTransReport(UserId, PalletPartNo);
+            return Ok(response);
+        }
+
 
         /// <summary>
         /// GetVendorInwardDetails
