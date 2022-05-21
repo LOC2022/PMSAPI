@@ -40,7 +40,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetMonthlyPlanReport"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetMonthlyPlanReport([FromQuery] string FromDate= GETALL, [FromQuery] string ToDate= GETALL, [FromQuery] int VendorId= DefaultValue)
+        public async Task<IActionResult> GetMonthlyPlanReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL, [FromQuery] int VendorId = DefaultValue)
         {
             var response = await _reportDetailsProvider.GetMonthlyPlanReport(FromDate, ToDate, VendorId);
             return Ok(response);
@@ -63,7 +63,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpGet("GetDCDetailsReport"), MapToApiVersion("1.0")]
         public async Task<IActionResult> GetDCDetailsReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL, [FromQuery] string DCNumber = null)
         {
-            var response = DCNumber != null? await _reportDetailsProvider.GetDCDetails(DCNumber) : await _reportDetailsProvider.GetDCDetailsReport(FromDate, ToDate);
+            var response = DCNumber != null ? await _reportDetailsProvider.GetDCDetails(DCNumber) : await _reportDetailsProvider.GetDCDetailsReport(FromDate, ToDate);
             return Ok(response);
         }
 
@@ -84,7 +84,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpGet("GetDayPlanReport"), MapToApiVersion("1.0")]
         public async Task<IActionResult> GetDayPlanReport([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL)
         {
-            var response =  await _reportDetailsProvider.GetDayPlanReport(FromDate, ToDate);
+            var response = await _reportDetailsProvider.GetDayPlanReport(FromDate, ToDate);
             return Ok(response);
         }
 
@@ -101,7 +101,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("PalletByOrderTransReport"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> PalletByOrderTransReport([FromQuery] string PalletId= GETALL)
+        public async Task<IActionResult> PalletByOrderTransReport([FromQuery] string PalletId = GETALL)
         {
             var response = await _reportDetailsProvider.GetPalletOrderTransReport(PalletId);
             return Ok(response);
@@ -121,7 +121,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("PalletPartTransReport"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> PalletPartTransReport([FromQuery] int UserId = DefaultValue, [FromQuery] string PalletPartNo= GETALL)
+        public async Task<IActionResult> PalletPartTransReport([FromQuery] int UserId = DefaultValue, [FromQuery] string PalletPartNo = GETALL)
         {
             var response = await _reportDetailsProvider.GetPalletPartTransReport(UserId, PalletPartNo);
             return Ok(response);
@@ -164,6 +164,26 @@ namespace LOC.PMS.WebAPI.Controllers
 
 
         /// <summary>
+        /// WareHouseTransitAndStockDetails
+        /// </summary>   
+        /// <param name="status"></param> 
+        /// <returns>List of WareHouseTransitAndStockDetails</returns>
+        [SwaggerOperation(
+            Description = "WareHouseTransitAndStockDetails",
+            Tags = new[] { "WareHouseTransitAndStockDetails" },
+            OperationId = "WareHouseTransitAndStockDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("WareHouseTransitAndStockDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> WareHouseTransitAndStockDetails([FromQuery] string status)
+        {
+            var response = await _reportDetailsProvider.WareHouseTransitAndStockDetails(status);
+            return Ok(response);
+        }
+
+
+        /// <summary>
         /// GetPalletDropDownSelection
         /// </summary>
         /// <param name="UserId"></param>
@@ -180,8 +200,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpGet("GetPalletDropDownSelection"), MapToApiVersion("1.0")]
         public async Task<IActionResult> GetPalletDropDownSelection([FromQuery] int UserId = DefaultValue, [FromQuery] string PalletStatus = GETALL, [FromQuery] string ModelNo = GETALL)
         {
-                var response = await _reportDetailsProvider.GetPalletReportSelection(UserId, PalletStatus, ModelNo);
-                return Ok(response);
+            var response = await _reportDetailsProvider.GetPalletReportSelection(UserId, PalletStatus, ModelNo);
+            return Ok(response);
         }
     }
 }

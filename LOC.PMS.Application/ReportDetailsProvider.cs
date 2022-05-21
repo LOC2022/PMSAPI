@@ -252,5 +252,27 @@ namespace LOC.PMS.Application
 
             return null;
         }
+
+        public async Task<IEnumerable<WareHouseTransitAndStock>> WareHouseTransitAndStockDetails(string Status)
+        {
+
+            try
+            {
+                _logger.Information("WareHouseTransitDetails report request - Start");
+
+                var response = await _reportDetailsRepository.WareHouseTransitAndStockDetails(Status);
+
+                _logger.Information("WareHouseTransitDetails report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling WareHouseTransitDetails report.");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
     }
 }

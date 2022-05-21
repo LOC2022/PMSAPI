@@ -263,6 +263,13 @@
             <param name="PartNumber"></param> 
             <returns>List of Inward DC details</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.WareHouseTransitAndStockDetails(System.String)">
+            <summary>
+            WareHouseTransitAndStockDetails
+            </summary>   
+            <param name="status"></param> 
+            <returns>List of WareHouseTransitAndStockDetails</returns>
+        </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPalletDropDownSelection(System.Int32,System.String,System.String)">
             <summary>
             GetPalletDropDownSelection
