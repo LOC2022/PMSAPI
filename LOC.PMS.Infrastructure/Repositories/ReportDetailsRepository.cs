@@ -142,14 +142,26 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<PalletReportSelection>("[dbo].[Report_Pallet_Dropdown_Selection]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<WareHouseTransitAndStock>> WareHouseTransitAndStockDetails(string Status)
+        public async Task<IEnumerable<WareHouseStock>> WareHouseStockDetails(string Status)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@Status", Status)
             };
 
-            return await _context.QueryStoredProcedureAsync<WareHouseTransitAndStock>("[dbo].[Report_AdminTransitandStock]", sqlParams.ToArray());
+            return await _context.QueryStoredProcedureAsync<WareHouseStock>("[dbo].[Report_AdminStock]", sqlParams.ToArray());
+        }
+
+        public async Task<IEnumerable<InwardReport>> WareHouseTransitDetails(string Status, string DCNUmber, string PalletPartNo)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@PalletStatus", Status),
+                new SqlParameter("@DCNumber", DCNUmber),
+                new SqlParameter("@PartNo", PalletPartNo)
+            };
+
+            return await _context.QueryStoredProcedureAsync<InwardReport>("[dbo].[Report_AdminInwardDispatchDetails]", sqlParams.ToArray());
         }
     }
 }

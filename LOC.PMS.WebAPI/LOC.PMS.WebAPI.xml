@@ -264,12 +264,21 @@
             <param name="PalletStatus"></param> 
             <returns>List of Inward DC details</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.WareHouseTransitAndStockDetails(System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.WareHouseStockDetails(System.String)">
             <summary>
             WareHouseTransitAndStockDetails
             </summary>   
             <param name="status"></param> 
-            <returns>List of WareHouseTransitAndStockDetails</returns>
+            <returns>List of WareHouseStockDetails</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.WareHouseTransitDetails(System.String,System.String,System.String)">
+            <summary>
+            WareHouseTransitDetails
+            </summary>   
+            <param name="status"></param> 
+            <param name="DCNumber"></param> 
+            <param name="PartNumber"></param> 
+            <returns>List of WareHouseTransitDetails</returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPalletDropDownSelection(System.Int32,System.String,System.String)">
             <summary>

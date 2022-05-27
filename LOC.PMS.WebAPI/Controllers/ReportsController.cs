@@ -168,18 +168,40 @@ namespace LOC.PMS.WebAPI.Controllers
         /// WareHouseTransitAndStockDetails
         /// </summary>   
         /// <param name="status"></param> 
-        /// <returns>List of WareHouseTransitAndStockDetails</returns>
+        /// <returns>List of WareHouseStockDetails</returns>
         [SwaggerOperation(
-            Description = "WareHouseTransitAndStockDetails",
-            Tags = new[] { "WareHouseTransitAndStockDetails" },
-            OperationId = "WareHouseTransitAndStockDetails")]
+            Description = "WareHouseStockDetails",
+            Tags = new[] { "WareHouseStockDetails" },
+            OperationId = "WareHouseStockDetails")]
         [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
-        [HttpGet("WareHouseTransitAndStockDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> WareHouseTransitAndStockDetails([FromQuery] string status)
+        [HttpGet("WareHouseStockDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> WareHouseStockDetails([FromQuery] string status)
         {
-            var response = await _reportDetailsProvider.WareHouseTransitAndStockDetails(status);
+            var response = await _reportDetailsProvider.WareHouseStockDetails(status);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// WareHouseTransitDetails
+        /// </summary>   
+        /// <param name="status"></param> 
+        /// <param name="DCNumber"></param> 
+        /// <param name="PartNumber"></param> 
+        /// <returns>List of WareHouseTransitDetails</returns>
+        [SwaggerOperation(
+            Description = "WareHouseTransitDetails",
+            Tags = new[] { "WareHouseTransitDetails" },
+            OperationId = "WareHouseTransitDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("WareHouseTransitDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> WareHouseTransitDetails([FromQuery] string status, [FromQuery] string DCNumber = GETALL, [FromQuery] string PartNumber = GETALL)
+        {
+            var response = await _reportDetailsProvider.WareHouseTransitDetails(status, DCNumber, PartNumber);
             return Ok(response);
         }
 

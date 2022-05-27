@@ -6,6 +6,8 @@
 
         public string CreatedDate { get; set; }
 
+        public string PalletPartNo { get; set; }
+
         public int Qty { get; set; }
 
         public string Status { get; set; }

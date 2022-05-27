@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LOC.PMS.Model.Report
 {
-    public class WareHouseTransitAndStock
+    public class WareHouseStock
     {
         public string PalletPartNo { get; set; }
 

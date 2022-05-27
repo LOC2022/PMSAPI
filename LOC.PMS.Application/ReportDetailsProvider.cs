@@ -253,14 +253,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<WareHouseTransitAndStock>> WareHouseTransitAndStockDetails(string Status)
+        public async Task<IEnumerable<WareHouseStock>> WareHouseStockDetails(string Status)
         {
 
             try
             {
                 _logger.Information("WareHouseTransitDetails report request - Start");
 
-                var response = await _reportDetailsRepository.WareHouseTransitAndStockDetails(Status);
+                var response = await _reportDetailsRepository.WareHouseStockDetails(Status);
 
                 _logger.Information("WareHouseTransitDetails report request - End");
                 return response;
@@ -268,6 +268,30 @@ namespace LOC.PMS.Application
             catch (Exception exception)
             {
                 _logger.Error(exception, "Exception occurred while pulling WareHouseTransitDetails report.");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<InwardReport>> WareHouseTransitDetails(string Status, string DCNUmber, string PalletPartNo)
+        {
+            try
+            {
+                _logger.ForContext("Select WareHouseTransitDetails ", Status)
+                    .Information("Select WareHouseTransitDetails request - Start");
+
+                var response = await _reportDetailsRepository.WareHouseTransitDetails(Status, DCNUmber, PalletPartNo);
+
+                _logger.ForContext("Select WareHouseTransitDetails  ", Status)
+                    .Information("Select WareHouseTransitDetails - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("WareHouseTransitDetails", Status)
+                    .Error(exception, "Exception occurred during Select WareHouseTransitDetails .");
                 await Task.FromException(exception);
 
             }

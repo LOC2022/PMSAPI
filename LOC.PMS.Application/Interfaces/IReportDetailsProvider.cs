@@ -27,7 +27,9 @@ namespace LOC.PMS.Application.Interfaces
 
         Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber, int PalletStatus);
 
-        Task<IEnumerable<WareHouseTransitAndStock>> WareHouseTransitAndStockDetails(string Status);
+        Task<IEnumerable<WareHouseStock>> WareHouseStockDetails(string Status);
+
+        Task<IEnumerable<InwardReport>> WareHouseTransitDetails(string Status, string DCNUmber, string PalletPartNo);
 
         Task<IEnumerable<PalletReportSelection>> GetPalletReportSelection(int UserId, string PalletStatus, string ModelNo);
     }
