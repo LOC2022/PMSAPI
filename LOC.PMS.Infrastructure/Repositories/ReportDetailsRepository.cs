@@ -57,36 +57,38 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[Report_DCSelect_ByDate]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId)
+        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId, int PalletStatus)
         {
 
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@UserId", UserId),
-
+                new SqlParameter("@PalletStatus", PalletStatus)
             };
 
             return await _context.QueryStoredProcedureAsync<InwardReport>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber)
+        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber, int PalletStatus)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@DCNumber", dCNumber),
+                 new SqlParameter("@PalletStatus", PalletStatus)
 
             };
 
             return await _context.QueryStoredProcedureAsync<InwardReportDetails>("[dbo].[Report_VendorInwardDetails]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber)
+        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber, int PalletStatus)
         {
 
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@UserId", UserId),
-                 new SqlParameter("@PartNo", partNumber)
+                new SqlParameter("@PartNo", partNumber),
+                new SqlParameter("@PalletStatus", PalletStatus)
 
             };
 

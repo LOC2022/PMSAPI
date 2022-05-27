@@ -21,11 +21,11 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 
         Task<IEnumerable<DCDetails>> GetDCDetail(string dCNumber);
 
-        Task<IEnumerable<InwardReport>> GetInwardReport(int UserId);
+        Task<IEnumerable<InwardReport>> GetInwardReport(int UserId, int PalletStatus);
 
-        Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber);
+        Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber, int PalletStatus);
 
-        Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber);
+        Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber, int PalletStatus);
 
         Task<IEnumerable<WareHouseTransitAndStock>> WareHouseTransitAndStockDetails(string Status);
 

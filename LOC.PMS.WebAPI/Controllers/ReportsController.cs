@@ -134,6 +134,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="UserId"></param>
         /// <param name="DCNumber"></param>    
         /// <param name="PartNumber"></param> 
+        /// <param name="PalletStatus"></param> 
         /// <returns>List of Inward DC details</returns>
         [SwaggerOperation(
             Description = "GetVendorInwardDetails",
@@ -143,21 +144,21 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetVendorInwardDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetVendorInwardDetails([FromQuery] int UserId = DefaultValue, [FromQuery] string DCNumber = GETALL, [FromQuery] string PartNumber = GETALL)
+        public async Task<IActionResult> GetVendorInwardDetails([FromQuery] int UserId = DefaultValue, [FromQuery] string DCNumber = GETALL, [FromQuery] string PartNumber = GETALL, int PalletStatus = DefaultValue)
         {
             if (PartNumber != GETALL)
             {
-                var response = await _reportDetailsProvider.GetInwardReportByPartNumber(UserId, PartNumber);
+                var response = await _reportDetailsProvider.GetInwardReportByPartNumber(UserId, PartNumber, PalletStatus);
                 return Ok(response);
             }
             else if (DCNumber == GETALL)
             {
-                var response = await _reportDetailsProvider.GetInwardReport(UserId);
+                var response = await _reportDetailsProvider.GetInwardReport(UserId, PalletStatus);
                 return Ok(response);
             }
             else
             {
-                var response = await _reportDetailsProvider.GetInwardReportByDCNumber(DCNumber);
+                var response = await _reportDetailsProvider.GetInwardReportByDCNumber(DCNumber, PalletStatus);
                 return Ok(response);
             }
         }

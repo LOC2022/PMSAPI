@@ -94,14 +94,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId)
+        public async Task<IEnumerable<InwardReport>> GetInwardReport(int UserId, int PalletStatus)
         {
             try
             {
                 _logger.ForContext("Select InwardReport ", UserId)
                     .Information("Select InwardReport request - Start");
 
-                var response = await _reportDetailsRepository.GetInwardReport(UserId);
+                var response = await _reportDetailsRepository.GetInwardReport(UserId, PalletStatus);
 
                 _logger.ForContext("Select InwardReport  ", UserId)
                     .Information("Select InwardReport - End");
@@ -118,14 +118,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber)
+        public async Task<IEnumerable<InwardReportDetails>> GetInwardReportByDCNumber(string dCNumber, int PalletStatus)
         {
             try
             {
                 _logger.ForContext("Select InwardReportDetails ", dCNumber)
                     .Information("Select InwardReportDetails request - Start");
 
-                var response = await _reportDetailsRepository.GetInwardReportByDCNumber(dCNumber);
+                var response = await _reportDetailsRepository.GetInwardReportByDCNumber(dCNumber, PalletStatus);
 
                 _logger.ForContext("Select InwardReportDetails  ", dCNumber)
                     .Information("Select InwardReportDetails - End");
@@ -142,14 +142,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber)
+        public async Task<IEnumerable<InwardReport>> GetInwardReportByPartNumber(int UserId, string partNumber, int PalletStatus)
         {
             try
             {
                 _logger.ForContext("Select InwardReportByPartNumber ", partNumber)
                     .Information("Select InwardReportByPartNumber request - Start");
 
-                var response = await _reportDetailsRepository.GetInwardReportByPartNumber(UserId, partNumber);
+                var response = await _reportDetailsRepository.GetInwardReportByPartNumber(UserId, partNumber, PalletStatus);
 
                 _logger.ForContext("Select InwardReportByPartNumber  ", partNumber)
                     .Information("Select InwardReportByPartNumber - End");

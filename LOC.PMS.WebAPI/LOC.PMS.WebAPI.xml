@@ -254,13 +254,14 @@
             <param name="PalletPartNo"></param>
             <returns>List of Orders</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetVendorInwardDetails(System.Int32,System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetVendorInwardDetails(System.Int32,System.String,System.String,System.Int32)">
             <summary>
             GetVendorInwardDetails
             </summary>
             <param name="UserId"></param>
             <param name="DCNumber"></param>    
             <param name="PartNumber"></param> 
+            <param name="PalletStatus"></param> 
             <returns>List of Inward DC details</returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.WareHouseTransitAndStockDetails(System.String)">
