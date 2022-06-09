@@ -139,22 +139,25 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             }
 
-            if(OrderList.Count > 0)
+            if (OrderList.Count > 0)
             {
                 var sum = OrderList.Select(c => c.OrderQty).Sum();
                 OrderList.FirstOrDefault().OrderQty = sum;
                 if (palletsByOrderTrans.Count > 0)
                 {
+                    var Or = new List<Orders>();
+                    Or.Add(OrderList.First());
+
                     var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
-                    _context.BulkCopy(OrderList, ColList, 1, "Orders");
+                    _context.BulkCopy(Or, ColList, 1, "Orders");
 
                     ColList = new List<string> {
                 "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
                 };
                     _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
                 }
-            }     
-            
+            }
+
 
 
 
