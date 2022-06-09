@@ -1,5 +1,7 @@
 ﻿using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -78,6 +80,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',{VendorId},2,3,GETDATE(),''";
 
                         _context.ExecuteSql(CreateDCQuery);
+                        SendMailToVendor($"DC{DCNo}");
                     }
                     else if (ToStatus == "CIPLDispatchScan")
                     {
@@ -86,6 +89,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,3,5,GETDATE(),''";
 
                         _context.ExecuteSql(CreateDCQuery);
+                        SendMailToVendor($"DC{DCNo}");
 
                     }
                 }
@@ -140,6 +144,8 @@ namespace LOC.PMS.Infrastructure.Repositories
 			JOIN Orders O on O.OrderNo=PT.OrderNo where PalletId IN ('{PalletIds}') AND PT.OrderNo='{orderDetails.First().OrderNo}';";
 
             _context.ExecuteSql(UpdatePalletQry);
+
+            SendMailToTMS(orderDetails[0].OrderNo);
 
             return Task.CompletedTask;
         }
@@ -217,6 +223,136 @@ namespace LOC.PMS.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
+        public async void SendMailToTMS(string Order)
+        {
+            if (!string.IsNullOrEmpty(Order))
+            {
 
+
+                string VendorQry = @$"select DISTINCT O.OrderNo,O.OrderQty,VM.VendorName,PO.PalletId
+                                from Orders O
+                                Join VendorMaster VM on VM.VendorId=O.VendorId
+                                join PalletsByOrderTrans PO on Po.OrderNo=O.OrderNo where O.OrderNo='{Order}'";
+                var dt = _context.QueryData<MailModel>(VendorQry).ToList();
+                string HtmlContent = "Please Find the below Order Details \n";
+                HtmlContent += " <table class='table table-bordered' style='border-collapse: collapse;border: 1px solid #ddd;'><thead><tr><td style='border: 1px solid #ddd; padding: 15px;'>Order No</td><td style='border: 1px solid #ddd; padding: 15px;'>Order Qty</td><td style='border: 1px solid #ddd; padding: 15px;'>Vendor Name</td><td style='border: 1px solid #ddd; padding: 15px;'>Pallet Id</td></tr><thead><tbody>";
+                foreach (var data in dt)
+                {
+                    HtmlContent += $"<tr><td style='border: 1px solid #ddd; padding: 15px;'>{data.OrderNo}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.OrderQty}</td><td style='border: 1px solid #ddd;'>{data.VendorName}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.PalletId}</td></tr>";
+                }
+                HtmlContent += "</tbody></table>";
+
+
+                string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                string fromEmail = "victor@theacedigi.com";
+
+                var client = new SendGridClient(apiKey);
+                var msg = new SendGridMessage()
+                {
+                    From = new EmailAddress(fromEmail, "Ace Digital"),
+                    Subject = "",
+                    HtmlContent = HtmlContent
+                };
+
+                var toEmailList = new List<EmailAddress>();
+
+
+                toEmailList.Add(new EmailAddress("viswanathan_hemachandran @cat.com"));
+                toEmailList.Add(new EmailAddress("s_arun_prasath @cat.com"));
+                toEmailList.Add(new EmailAddress("GTOCITRL @cat.com"));
+                toEmailList.Add(new EmailAddress("Raju_Rajendran @cat.com"));
+                toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja @cat.com"));
+                toEmailList.Add(new EmailAddress("B_Babu @cat.com"));
+                toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh @cat.com"));
+                toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam @cat.com"));
+                toEmailList.Add(new EmailAddress("Eswaran_Vignesh @cat.com"));
+                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+
+
+
+                var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "Order Details ", "", HtmlContent);
+
+                var result = await client.SendEmailAsync(message);
+
+
+            }
+
+        }
+
+        public async void SendMailToVendor(string DCNo)
+        {
+            if (!string.IsNullOrEmpty(DCNo))
+            {
+
+                string Email = "";
+                string VendorQry = @$"select DISTINCT O.DCNo OrderNo,O.VendorId,VM.VendorName,PO.PalletId,VM.Email
+                                from DeliveryChallanTrans O
+                                Join VendorMaster VM on VM.VendorId=O.VendorId
+                                join PalletsByOrderTrans PO on Po.OrderNo=O.OrderNo where O.DCNo='{DCNo}'";
+                var dt = _context.QueryData<MailModel>(VendorQry).ToList();
+                string HtmlContent = "Please Find the below DC Details \n";
+
+                if (dt.Count > 0)
+                {
+                    HtmlContent += " <table class='table table-bordered' style='border-collapse: collapse;border: 1px solid #ddd;'><thead><tr><td style='border: 1px solid #ddd; padding: 15px;'>DC No</td><td style='border: 1px solid #ddd; padding: 15px;'>Vendor Name</td><td style='border: 1px solid #ddd; padding: 15px;'>Pallet Id</td></tr><thead><tbody>";
+                    foreach (var data in dt)
+                    {
+                        HtmlContent += $"<tr><td style='border: 1px solid #ddd; padding: 15px;'>{data.OrderNo}</td><td style='border: 1px solid #ddd;'>{data.VendorName}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.PalletId}</td></tr>";
+                    }
+                    HtmlContent += "</tbody></table>";
+
+
+                    Email = dt.FirstOrDefault().Email;
+
+
+                    string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                    string fromEmail = "victor@theacedigi.com";
+
+                    var client = new SendGridClient(apiKey);
+                    var msg = new SendGridMessage()
+                    {
+                        From = new EmailAddress(fromEmail, "Ace Digital"),
+                        Subject = "",
+                        HtmlContent = HtmlContent
+                    };
+
+                    var toEmailList = new List<EmailAddress>();
+
+
+                    toEmailList.Add(new EmailAddress(string.IsNullOrEmpty(Email) ? "muthazagan123@gmail.com" : Email));
+                    toEmailList.Add(new EmailAddress("viswanathan_hemachandran @cat.com"));
+                    toEmailList.Add(new EmailAddress("s_arun_prasath @cat.com"));
+                    toEmailList.Add(new EmailAddress("GTOCITRL @cat.com"));
+                    toEmailList.Add(new EmailAddress("Raju_Rajendran @cat.com"));
+                    toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja @cat.com"));
+                    toEmailList.Add(new EmailAddress("B_Babu @cat.com"));
+                    toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh @cat.com"));
+                    toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam @cat.com"));
+                    toEmailList.Add(new EmailAddress("Eswaran_Vignesh @cat.com"));
+                    toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+
+
+
+                    var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "DC Details ", "", HtmlContent);
+
+                    var result = await client.SendEmailAsync(message);
+                }
+
+
+
+            }
+        }
+
+
+        public class MailModel
+        {
+            public string Email { get; set; }
+            public string OrderNo { get; set; }
+            public string OrderQty { get; set; }
+            public string VendorName { get; set; }
+            public string VendorId { get; set; }
+            public string PalletId { get; set; }
+
+        }
     }
 }
