@@ -60,6 +60,11 @@ namespace LOC.PMS.Application
             }
         }
 
+        public async Task CreateOrder()
+        {
+            await _orderRepository.CreateOrder();
+        }
+
         public async Task<IEnumerable<OrderDetails>> GetOrderDetails(string OrderNo)
         {
             

@@ -11,5 +11,6 @@ namespace LOC.PMS.Application.Interfaces
         Task AddDayPlanData(List<DayPlan> order);
         Task<IEnumerable<OrderDetails>> GetOrderDetails(string palletId);
         Task CancelOrder(string orderNo);
+        Task CreateOrder();
     }
 }

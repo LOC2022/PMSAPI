@@ -100,5 +100,20 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        
+        [SwaggerOperation(
+            Description = "Create Order",
+            Tags = new[] { "Create Order" },
+            OperationId = "Create")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("CreateOrder"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> CreateOrder()
+        {
+            await _ordesDetailProvider.CreateOrder();
+            return Ok();
+        }
+
     }
 }

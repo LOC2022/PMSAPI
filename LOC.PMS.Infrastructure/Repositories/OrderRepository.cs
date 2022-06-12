@@ -172,5 +172,10 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[OrderDetails_Select]", sqlParams.ToArray());
         }
 
+        Task IOrderRepository.CreateOrder()
+        {
+            CreateOrder();
+            return Task.CompletedTask;  
+        }
     }
 }
