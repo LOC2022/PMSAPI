@@ -267,6 +267,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
                 toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+                toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com"));
 
 
 

@@ -163,5 +163,28 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             return await _context.QueryStoredProcedureAsync<InwardReport>("[dbo].[Report_AdminInwardDispatchDetails]", sqlParams.ToArray());
         }
+
+        public async Task<IEnumerable<MonthlyPlan>> GetDateWiseOrder(string fromDate, string toDate)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@FromDate", fromDate),
+                new SqlParameter("@ToDate", toDate),
+
+            };
+
+            return await _context.QueryStoredProcedureAsync<MonthlyPlan>("[dbo].[Report_DateWiseOrder]", sqlParams.ToArray());
+        }
+
+        public async Task<IEnumerable<OrderDetailsByDate>> GetOrderDetailsByDate(string Date)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@OrderDate", Date)
+            };
+            return await _context.QueryStoredProcedureAsync<OrderDetailsByDate>("[dbo].[Report_OrderDetailsByDate]", sqlParams.ToArray());
+        }
+
+
     }
 }

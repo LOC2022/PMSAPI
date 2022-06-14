@@ -22,6 +22,30 @@ namespace LOC.PMS.Application
             _logger = logger;
         }
 
+        public async Task<IEnumerable<MonthlyPlan>> GetDateWiseOrder(string fromDate, string toDate)
+        {
+            try
+            {
+                _logger.ForContext("Select GetDayPlanReport ", fromDate)
+                    .Information("Select GetDayPlanReport request - Start");
+
+                var response = await _reportDetailsRepository.GetDateWiseOrder(fromDate, toDate);
+
+                _logger.ForContext("Select GetDayPlanReport", fromDate)
+                    .Information("Select GetDayPlanReport - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDayPlanReport", fromDate)
+                    .Error(exception, "Exception occurred during Select GetDayPlanReport .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate)
         {
             try
@@ -182,6 +206,32 @@ namespace LOC.PMS.Application
             catch (Exception exception)
             {
                 _logger.ForContext("GetMonthlyPlanReport", fromDate)
+                    .Error(exception, "Exception occurred during Select DayPlan Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
+       
+
+        public async Task<IEnumerable<OrderDetailsByDate>> GetOrderDetailsByDate(string OrderDate)
+        {
+            try
+            {
+                _logger.ForContext("Select DayPlan Details", OrderDate)
+                    .Information("Select DayPlan Details request - Start");
+
+                var response = await _reportDetailsRepository.GetOrderDetailsByDate(OrderDate);
+
+                _logger.ForContext("Select DayPlan Details ", OrderDate)
+                    .Information("Select DayPlan Details- End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetMonthlyPlanReport", OrderDate)
                     .Error(exception, "Exception occurred during Select DayPlan Details .");
                 await Task.FromException(exception);
 

@@ -43,4 +43,32 @@ namespace LOC.PMS.Model
         public string Status { get; set; }
 
     }
+
+    public class MonthlyPlan
+    {
+        public string OrderDate { get; set; }
+        public int Supplier { get; set; }
+        public int PalletQty { get; set; }
+    }
+
+
+    public class OrderDetailsByDate
+    {
+        public string OrderNo { get; set; }
+        public string OrderDate { get; set; }
+        public int NoOfPartsOrdered { get; set; }
+        public int OrderQty { get; set; }
+        public string VendorName { get; set; }
+        public string BillToAddress { get; set; }
+        public string PalletId { get; set; }
+        public string PalletPartNo { get; set; }
+        public string PalletName { get; set; }
+        public string PalletStatus { get; set; }
+        public int Stage { get; set; }
+        public string UserId { get; set; }
+        public string Status { get; set; }
+        public string Location { get; set; }
+
+    }
+
 }
