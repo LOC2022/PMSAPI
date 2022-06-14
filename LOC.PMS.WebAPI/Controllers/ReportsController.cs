@@ -226,5 +226,45 @@ namespace LOC.PMS.WebAPI.Controllers
             var response = await _reportDetailsProvider.GetPalletReportSelection(UserId, PalletStatus, ModelNo);
             return Ok(response);
         }
+
+        /// <summary>
+        /// GetDayPlanReport
+        /// </summary>
+        /// <param name="FromDate"></param>
+        /// <param name="ToDate"></param>      
+        /// <returns>List of Dayplan reports</returns>
+        [SwaggerOperation(
+            Description = "GetDateWiseOrder",
+            Tags = new[] { "GetDateWiseOrder" },
+            OperationId = "GetDateWiseOrder")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDateWiseOrder"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetDateWiseOrder([FromQuery] string FromDate = GETALL, [FromQuery] string ToDate = GETALL)
+        {
+            var response = await _reportDetailsProvider.GetDateWiseOrder(FromDate, ToDate);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OrderDate"></param>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Get Order Details.",
+            Tags = new[] { "GetOrderDetailsByDate" },
+            OperationId = "GetOrderDetailsByDate")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetOrderDetailsByDate"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetOrderDetailsByDate([FromQuery] string OrderDate = GETALL)
+        {
+            var response = await _reportDetailsProvider.GetOrderDetailsByDate(OrderDate);
+            return Ok(response);
+        }
     }
 }

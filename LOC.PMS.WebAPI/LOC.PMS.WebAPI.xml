@@ -289,6 +289,21 @@
             <param name="ModelNo"></param> 
             <returns>Selection details</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDateWiseOrder(System.String,System.String)">
+            <summary>
+            GetDayPlanReport
+            </summary>
+            <param name="FromDate"></param>
+            <param name="ToDate"></param>      
+            <returns>List of Dayplan reports</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetOrderDetailsByDate(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="OrderDate"></param>
+            <returns>List of Orders</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             
