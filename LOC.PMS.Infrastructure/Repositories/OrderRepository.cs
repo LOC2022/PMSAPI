@@ -213,7 +213,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     HtmlContent = HtmlContent
                 };
 
-                var toEmailList = new List<EmailAddress>();
+                var toEmailList = new List<EmailAddress>(); 
 
 
                 
