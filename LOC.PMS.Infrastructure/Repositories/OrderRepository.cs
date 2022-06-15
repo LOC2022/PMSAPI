@@ -178,6 +178,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         Task IOrderRepository.CreateOrder()
         {
+            
             CreateOrder();
             return Task.CompletedTask;
         }
@@ -216,13 +217,13 @@ namespace LOC.PMS.Infrastructure.Repositories
 
 
                 
-                toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-                toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-                toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-                toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-                toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-                toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+                //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
+                //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
+                //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
+                //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
+                //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
+                //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
+                //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com"));
 
