@@ -19,5 +19,6 @@ namespace LOC.PMS.Application.Interfaces
         Task UpdateHHTInwardDetails(List<OrderDetails> orderDetails);
         Task<IEnumerable<DCDetails>> GetPalletForPutAway();
         Task UpdatePalletWriteCount(string PalletId);
+        Task<string> SwapPallets(string oldPalletId, string newPalletId, string OrderNo);
     }
 }

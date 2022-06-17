@@ -266,5 +266,29 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="OldPalletId"></param>
+        /// <param name="NewPalletId"></param>        
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "SwapPallets.",
+            Tags = new[] { "SwapPallets" },
+            OperationId = "SwapPallets")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SwapPallets"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> SwapPallets([FromQuery] string OldPalletId, [FromQuery] string NewPalletId, [FromQuery] string OrderNo)
+        {
+            var res = await _transactionDetailsProvider.SwapPallets(OldPalletId, NewPalletId, OrderNo);
+            return Ok(res);
+        }
+
+
+
     }
+
+
 }

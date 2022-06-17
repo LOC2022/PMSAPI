@@ -21,6 +21,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         Task<IEnumerable<DCDetails>> GetPalletForPutAway();
 
         Task UpdatePalletWriteCount(string PalletId);
+        Task<string> SwapPallets(string oldPalletId, string newPalletId, string OrderNo);
     }
 }
 
