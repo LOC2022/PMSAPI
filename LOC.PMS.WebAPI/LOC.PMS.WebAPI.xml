@@ -401,6 +401,14 @@
             <param name="PalletId"></param>        
             <returns>Save Order</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.SwapPallets(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="OldPalletId"></param>
+            <param name="NewPalletId"></param>        
+            <returns>Save Order</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             

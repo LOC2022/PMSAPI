@@ -288,5 +288,29 @@ namespace LOC.PMS.Application
                 await Task.FromException(exception);
             }
         }
+
+        public async Task<string> SwapPallets(string oldPalletId, string newPalletId, string OrderNo)
+        {
+            try
+            {
+                _logger.ForContext("Select Get DC Details", "")
+                    .Information("Select  Get DC Details request - Start");
+
+                var response = await _transactionRepository.SwapPallets(oldPalletId, newPalletId,OrderNo);
+
+                _logger.ForContext("Select  Get DC Details", "")
+                    .Information("Select  Get DC Details - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetDCDetailsByPallet", "")
+                    .Error(exception, "Exception occurred during Select Order Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
     }
 }

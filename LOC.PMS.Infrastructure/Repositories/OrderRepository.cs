@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
@@ -157,7 +158,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
                 };
                     _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
-
+                    Thread.Sleep(5000);
                     SendMailToTMS(OrderList.First().OrderNo);
                 }
             }
@@ -178,8 +179,9 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         Task IOrderRepository.CreateOrder()
         {
-            
+
             CreateOrder();
+            //SendMailToTMS("ORD16062022011136121");
             return Task.CompletedTask;
         }
         public async void SendMailToTMS(string Order)
@@ -213,10 +215,10 @@ namespace LOC.PMS.Infrastructure.Repositories
                     HtmlContent = HtmlContent
                 };
 
-                var toEmailList = new List<EmailAddress>(); 
+                var toEmailList = new List<EmailAddress>();
+                var test = new EmailAddress(fromEmail, "Ace Digital");
 
 
-                
                 //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
                 //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
                 //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
@@ -224,15 +226,12 @@ namespace LOC.PMS.Infrastructure.Repositories
                 //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
                 //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
                 //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
-                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
-
-                toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com"));
-
-                
+                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
+                toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
 
 
 
-                 var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "Order Details ", "", HtmlContent);
+                var message = MailHelper.CreateSingleEmailToMultipleRecipients(test, toEmailList, "Order Details " + Order, "", HtmlContent);
 
                 var result = await client.SendEmailAsync(message);
 

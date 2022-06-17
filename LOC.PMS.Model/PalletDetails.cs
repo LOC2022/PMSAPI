@@ -34,6 +34,8 @@ namespace LOC.PMS.Model
         public DateTime CreatedDate { get; set; }
 
         public string CreatedBy { get; set; }
+        public string Dimensions { get; set; }
+        public string Price { get; set; }
 
     }
 

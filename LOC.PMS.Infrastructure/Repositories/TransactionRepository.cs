@@ -344,6 +344,25 @@ namespace LOC.PMS.Infrastructure.Repositories
             }
         }
 
+        public async Task<string> SwapPallets(string oldPalletId, string newPalletId, string OrderNo)
+        {
+            string qry = $"select COUNT(PalletId) from PalletMaster where PalletId='{newPalletId}' and Availability=1";
+            var count = _context.QueryData<int>(qry).FirstOrDefault();
+            if (count == 0)
+            {
+                return "Pallet Not Available";
+            }
+            else
+            {
+                var SwapQry = @$"Update PalletsByOrderTrans set PalletId='{newPalletId}' where PalletId='{oldPalletId}' and OrderNo='{OrderNo}';
+                                Update PalletMaster SET Availability=1 where PalletId='{oldPalletId}';
+                                Update PalletMaster SET Availability=2 where PalletId='{newPalletId}';";
+
+                _context.ExecuteSql(SwapQry);
+            }
+            return "Updated SuccessFully";
+
+        }
 
         public class MailModel
         {
