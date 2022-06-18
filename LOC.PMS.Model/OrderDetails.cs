@@ -41,6 +41,14 @@ namespace LOC.PMS.Model
         public string PalletName { get; set; }
         public string PalletStatus { get; set; }
         public string Status { get; set; }
+        public string Dimensions { get; set; }
+        public string Rate { get; set; }
+        public string VehicleNo { get; set; }
+        public string DriverName { get; set; }
+        public string DriverPhoneNo { get; set; }
+        public string ReferenceNo { get; set; }
+        public string GSTNo { get; set; }
+        
 
     }
 

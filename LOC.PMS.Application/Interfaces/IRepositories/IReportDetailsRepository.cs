@@ -11,7 +11,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
     {
         Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId);
 
-        Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate);
+        Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate,string UserId);
 
         Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate);
 

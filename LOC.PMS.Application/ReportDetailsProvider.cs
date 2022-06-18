@@ -94,14 +94,14 @@ namespace LOC.PMS.Application
             return null;
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate, string UserId)
         {
             try
             {
                 _logger.ForContext("Select DCDetails ", fromDate)
                     .Information("Select DCDetails request - Start");
 
-                var response = await _reportDetailsRepository.GetDCDetailsReport(fromDate, toDate);
+                var response = await _reportDetailsRepository.GetDCDetailsReport(fromDate, toDate, UserId);
 
                 _logger.ForContext("Select DCDetails  ", fromDate)
                     .Information("Select DCDetails - End");
@@ -214,7 +214,7 @@ namespace LOC.PMS.Application
             return null;
         }
 
-       
+
 
         public async Task<IEnumerable<OrderDetailsByDate>> GetOrderDetailsByDate(string OrderDate)
         {
@@ -263,7 +263,7 @@ namespace LOC.PMS.Application
 
         public async Task<IEnumerable<PalletsPartTransReport>> GetPalletPartTransReport(int userId, string palletPartNo)
         {
-              try
+            try
             {
                 _logger.Information("Pallet part trans details report request - Start");
 
