@@ -54,7 +54,8 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@DriverPhoneNo", vechicleDetails.DriverMobileNo),
                 new SqlParameter("@DCNo", vechicleDetails.DCNo),
                 new SqlParameter("@ToDCStage", ToDCStage),
-                new SqlParameter("@ToPalletStage", ToPalletStage)
+                new SqlParameter("@ToPalletStage", ToPalletStage),
+                new SqlParameter("@RefNo", vechicleDetails.ReferenceNo)
             };
             await _context.QueryStoredProcedureAsync<OrderDetails>("[dbo].[UpdateDCAndVechicleDetails]", sqlParams.ToArray());
             Task.CompletedTask.Wait();

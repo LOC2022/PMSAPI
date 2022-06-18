@@ -14,5 +14,6 @@ namespace LOC.PMS.Model
         public OrderStatus OrderStatusId { get; set; }
         public DateTime OrderCreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        public DateTime OrderDate { get; set; }
     }
 }

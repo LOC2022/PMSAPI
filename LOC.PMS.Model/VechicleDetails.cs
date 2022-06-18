@@ -10,5 +10,6 @@ namespace LOC.PMS.Model
         public string DriverName { get; set; }
         public string DriverMobileNo { get; set; }
         public string DCNo { get; set; }
+        public string ReferenceNo { get; set; }
     }
 }
