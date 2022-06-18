@@ -45,12 +45,13 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[Report_DCSelect_ByDCNumber]", sqlParams.ToArray());
         }
 
-        public async Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate)
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate, string UserId)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate),
+                new SqlParameter("@UserId", UserId=="18"?"":UserId)
 
             };
 

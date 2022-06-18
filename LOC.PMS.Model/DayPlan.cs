@@ -38,6 +38,12 @@ namespace LOC.PMS.Model
 
         public int Status { get; set; }
 
+
+        public int OrderQty { get; set; }
+        public int Shortage { get; set; }
+
+        public string OrderNo { get; set; }
+
         public static DayPlan FromCsv(string csvLine)
         {
             string[] lines = csvLine.Split(',');

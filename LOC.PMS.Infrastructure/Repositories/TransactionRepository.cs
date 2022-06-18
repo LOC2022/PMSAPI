@@ -236,7 +236,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                                 join PalletsByOrderTrans PO on Po.OrderNo=O.OrderNo where O.OrderNo='{Order}'";
                 var dt = _context.QueryData<MailModel>(VendorQry).ToList();
                 string HtmlContent = "Please Find the below Order Details \n";
-                HtmlContent += " <table class='table table-bordered' style='border-collapse: collapse;border: 1px solid #ddd;'><thead><tr><td style='border: 1px solid #ddd; padding: 15px;'>Order No</td><td style='border: 1px solid #ddd; padding: 15px;'>Order Qty</td><td style='border: 1px solid #ddd; padding: 15px;'>Vendor Name</td><td style='border: 1px solid #ddd; padding: 15px;'>Pallet Id</td></tr><thead><tbody>";
+                HtmlContent += "    ";
                 foreach (var data in dt)
                 {
                     HtmlContent += $"<tr><td style='border: 1px solid #ddd; padding: 15px;'>{data.OrderNo}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.OrderQty}</td><td style='border: 1px solid #ddd;'>{data.VendorName}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.PalletId}</td></tr>";

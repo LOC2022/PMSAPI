@@ -180,8 +180,9 @@ namespace LOC.PMS.Infrastructure.Repositories
         Task IOrderRepository.CreateOrder()
         {
 
-            CreateOrder();
+            //CreateOrder();
             //SendMailToTMS("ORD16062022011136121");
+            AssignPalletForDayOrder();
             return Task.CompletedTask;
         }
         public async void SendMailToTMS(string Order)
@@ -261,97 +262,42 @@ namespace LOC.PMS.Infrastructure.Repositories
                     OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
                 else
                     OrderDate = d.OrderDate;
-                if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
-                {
 
-                    var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
+
+                var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
                 string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
                             where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
                             Group by PalletPartNo,Description,VendorId,OrderDate ";
                 var Data = _context.QueryData<DayPlan>(sql);
 
-                    foreach (var d1 in Data)
-                    {
-                        var PalletSize = 1;
-                        string strPalletWeight = @$"select top 1 KitUnit from PalletMaster where PalletPartNo='{d1.PalletPartNo}'";
-                        PalletSize = _context.QueryData<int>(strPalletWeight).FirstOrDefault();
-                        if (PalletSize != 0)
-                        {
-                            var ReqPallet = (int)(d1.Qty);
-                            var Pallets = @"SELECT TOP  " + ReqPallet + @$"[PalletId]
-                              ,[PalletPartNo]
-                              ,[PalletName]
-                              ,[PalletWeight]
-                              ,[Model]
-                              ,[KitUnit]
-                              ,[WhereUsed]
-                              ,[PalletType]
-                              ,[LocationId]
-                          FROM[PalletMaster] Where PalletPartNo = '{d1.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
-
-                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
 
 
-                            OrderList.Add(new Orders()
-                            {
-                                OrderNo = OrderId,
-                                VendorId = d.VendorId,
-                                NoOfPartsOrdered = int.Parse(d.ReqPart),
-                                OrderQty = d.Qty,
-                                OrderTypeId = 1,
-                                OrderStatusId = OrderStatus.Open,
-                                OrderCreatedDate = DateTime.Now,
-                                OrderDate = d.OrderDate,
-                            });
+                OrderList.Add(new Orders()
+                {
+                    OrderNo = OrderId,
+                    VendorId = d.VendorId,
+                    NoOfPartsOrdered = int.Parse(d.ReqPart),
+                    OrderQty = d.Qty,
+                    OrderTypeId = 1,
+                    OrderStatusId = OrderStatus.Open,
+                    OrderCreatedDate = DateTime.Now,
+                    OrderDate = d.OrderDate,
+                });
 
-                            if (PalletList.Count > 0)
-                            {
-                                foreach (var d2 in PalletList)
-                                {
-                                    palletsByOrderTrans.Add(new PalletsByOrderTrans()
-                                    {
-                                        OrderNo = OrderId,
-                                        PalletId = d2.PalletId,
-                                        AssignedQty = d1.Qty,
-                                        LocationId = d2.LocationId,
-                                        PalletStatus = PalletStatus.Assigned,
-                                        ModifiedDate = DateTime.Now,
-                                        ModifiedBy = null
-                                    });
-                                }
-
-                                var str = String.Join("','", PalletList.Select(x => x.PalletId));
-                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ('{str}')";
-                                _context.ExecuteSql(UpdatePalletQry);
-                            }
-
-                        }
-                        string UpdateQry = $"UPDATE DayPlan SET IsActive=0,OrderNo='{OrderId}' WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
-                        _context.ExecuteSql(UpdateQry);
-                    }
-                }
-
-
-
-
+                string UpdateQry = $"UPDATE DayPlan SET IsActive=0,OrderNo='{OrderId}' WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
+                _context.ExecuteSql(UpdateQry);
             }
+
+
+
+
+
 
             if (OrderList.Count > 0)
             {
-                var or = new List<Orders>();
-                or.Add(OrderList.First());
 
-                var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
-                _context.BulkCopy(or, ColList, 1, "Orders");
-
-                if (palletsByOrderTrans.Count > 0)
-                {
-
-                    ColList = new List<string> {
-                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
-                };
-                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
-                }
+                var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate", "OrderDate" };
+                _context.BulkCopy(OrderList, ColList, 1, "Orders");
 
                 OrderList = new List<Orders>();
                 palletsByOrderTrans = new List<PalletsByOrderTrans>();
@@ -362,7 +308,156 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         }
 
-       
+        public void AssignPalletForDayOrder()
+        {
+            string VendorQry = @"select distinct OrderDate,OrderNo,OrderQty,ISNULL(Shortage,0) Shortage from Orders O								
+								where o.palletassignedflag=1
+								order by ISNULL(Shortage,0) desc";
+            var dt = _context.QueryData<DayPlan>(VendorQry);
+
+            foreach (var d in dt)
+            {
+                List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
+
+                DateTime OrderDate;
+                if (d.D2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+                else if (d.NonD2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+                else
+                    OrderDate = d.OrderDate.AddDays(-6);
+
+                if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
+                {
+
+                    if (d.Shortage == 0)
+                    {
+                        string qryPalletPart = $"select PalletPartNo,RequiredQty from DayPlan where OrderNo='{d.OrderNo}'";
+
+                        var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
+
+                        foreach (var pallet in palletPartData)
+                        {
+                            var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
+                                      ,[PalletPartNo]                                     
+                                      ,[LocationId]
+                                  FROM[PalletMaster] Where PalletPartNo = '{pallet.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
+
+                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
+
+                            foreach (var pl in PalletList)
+                            {
+                                palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                                {
+                                    OrderNo = d.OrderNo,
+                                    PalletId = pl.PalletId,
+                                    AssignedQty = 1,
+                                    LocationId = pl.LocationId,
+                                    PalletStatus = PalletStatus.Assigned,
+                                    ModifiedDate = DateTime.Now,
+                                    ModifiedBy = "ADMIN"
+                                });
+                            }
+                        }
+
+                        if (palletsByOrderTrans.Count > 0)
+                        {
+
+                            var ColList = new List<string> {
+                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
+                };
+                            _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+
+                            if (d.OrderQty == palletsByOrderTrans.Count)
+                            {
+
+                                _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                            else
+                            {
+                                _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string qryPalletPart = @$"
+                            WITH
+                            A(PalletPart, Qty)
+                            as
+                            (
+                            select PalletPartNo, Count(PalletId)AssignedQty from PalletMaster where PalletId In(
+                            select PalletId from PalletsByOrderTrans where OrderNo = '{d.OrderNo}'
+                            )
+                            group by PalletPartNo
+                            ) 
+                            select B.PalletPartNo,RequiredQty - Qty as RequiredQty from A
+                              join (select PalletPartNo,RequiredQty from DayPlan WHERE OrderNo = '{d.OrderNo}') B on A.PalletPart = B.PalletPartNo
+                            where RequiredQty-Qty > 0
+                            ";
+
+                        var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
+
+                        foreach (var pallet in palletPartData)
+                        {
+                            var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
+                                      ,[PalletPartNo]                                     
+                                      ,[LocationId]
+                                  FROM[PalletMaster] Where PalletPartNo = '{pallet.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
+
+                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
+
+                            foreach (var pl in PalletList)
+                            {
+                                palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                                {
+                                    OrderNo = d.OrderNo,
+                                    PalletId = pl.PalletId,
+                                    AssignedQty = 1,
+                                    LocationId = pl.LocationId,
+                                    PalletStatus = PalletStatus.Assigned,
+                                    ModifiedDate = DateTime.Now,
+                                    ModifiedBy = "ADMIN"
+                                });
+                            }
+                        }
+
+                        if (palletsByOrderTrans.Count > 0)
+                        {
+
+                            var ColList = new List<string> {
+                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
+                };
+                            _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+
+
+
+                            int qty = _context.QueryData<int>($"select COUNT(*) from PalletsByOrderTrans where OrderNo='{d.OrderNo}'").FirstOrDefault();
+
+                            if (d.OrderQty == qty)
+                            {
+
+                                _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(Shortage-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                            else
+                            {
+                                _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                        }
+                    }
+
+
+
+
+                }
+            }
+        }
+
+
 
         public class MailModel
         {
