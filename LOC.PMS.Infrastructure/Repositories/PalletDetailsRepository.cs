@@ -40,11 +40,15 @@ namespace LOC.PMS.Infrastructure.Repositories
                     D2LDays = palletDetailsRequest.D2LDays,
                     Availability = PalletAvailability.Ideal,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = palletDetailsRequest.CreatedBy
+                    CreatedBy = palletDetailsRequest.CreatedBy,
+                    Dimensions=palletDetailsRequest.Dimensions,
+                    Rate=palletDetailsRequest.Rate,
+                    Assy=palletDetailsRequest.Assy
+
                 });
             }     
             
-            var ColList = new List<string> { "PalletId", "PalletPartNo", "PalletName", "PalletWeight", "Model", "KitUnit", "WhereUsed", "PalletType", "LocationId", "D2LDays", "Availability", "WriteCount", "CreatedDate", "CreatedBy" };
+            var ColList = new List<string> { "PalletId", "PalletPartNo", "PalletName", "PalletWeight", "Model", "KitUnit", "WhereUsed", "PalletType", "LocationId", "D2LDays", "Availability", "WriteCount", "CreatedDate", "CreatedBy", "Dimensions", "Rate", "Assy" };
 
             _context.BulkCopy(palletList, ColList, 30, "PalletMaster");
 

@@ -35,7 +35,8 @@ namespace LOC.PMS.Model
 
         public string CreatedBy { get; set; }
         public string Dimensions { get; set; }
-        public string Price { get; set; }
+        public string Rate { get; set; }
+        public string Assy { get; set; }
 
     }
 

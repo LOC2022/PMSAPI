@@ -49,124 +49,124 @@ namespace LOC.PMS.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public void CreateOrder()
-        {
-            string VendorQry = @"select DISTINCT DP.VendorId,DP.OrderDate,COUNT(distinct DP.PalletPartNo) ReqPart,PM.D2LDays,VM.NonD2LDays from [dbo].[DayPlan] DP
-                                LEFT JOIN PalletMaster PM on DP.PalletPartNo=PM.PalletPartNo
-                                LEFT JOIN VendorMaster VM on VM.VendorId=DP.VendorId
-                                where DP.IsActive = 1
-                                GROUP BY DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays";
+        //public void CreateOrder()
+        //{
+        //    string VendorQry = @"select DISTINCT DP.VendorId,DP.OrderDate,COUNT(distinct DP.PalletPartNo) ReqPart,PM.D2LDays,VM.NonD2LDays from [dbo].[DayPlan] DP
+        //                        LEFT JOIN PalletMaster PM on DP.PalletPartNo=PM.PalletPartNo
+        //                        LEFT JOIN VendorMaster VM on VM.VendorId=DP.VendorId
+        //                        where DP.IsActive = 1
+        //                        GROUP BY DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays";
 
-            var dt = _context.QueryData<DayPlan>(VendorQry);
-            List<Orders> OrderList = new List<Orders>();
-            List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
+        //    var dt = _context.QueryData<DayPlan>(VendorQry);
+        //    List<Orders> OrderList = new List<Orders>();
+        //    List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
 
-            foreach (var d in dt)
-            {
-                DateTime OrderDate;
-                if (d.D2LDays != 0)
-                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
-                else if (d.NonD2LDays != 0)
-                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
-                else
-                    OrderDate = d.OrderDate;
+        //    foreach (var d in dt)
+        //    {
+        //        DateTime OrderDate;
+        //        if (d.D2LDays != 0)
+        //            OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+        //        else if (d.NonD2LDays != 0)
+        //            OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+        //        else
+        //            OrderDate = d.OrderDate;
 
-                if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
-                {
-                    var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
-                    string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
-                            where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
-                            Group by PalletPartNo,Description,VendorId,OrderDate ";
-                    var Data = _context.QueryData<DayPlan>(sql);
+        //        if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
+        //        {
+        //            var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
+        //            string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
+        //                    where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
+        //                    Group by PalletPartNo,Description,VendorId,OrderDate ";
+        //            var Data = _context.QueryData<DayPlan>(sql);
 
-                    foreach (var d1 in Data)
-                    {
-                        var PalletSize = 1;
-                        string strPalletWeight = @$"select top 1 KitUnit from PalletMaster where PalletPartNo='{d1.PalletPartNo}'";
-                        PalletSize = _context.QueryData<int>(strPalletWeight).FirstOrDefault();
-                        if (PalletSize != 0)
-                        {
-                            var ReqPallet = (int)(d1.Qty / PalletSize);
-                            var Pallets = @"SELECT TOP  " + ReqPallet + @$"[PalletId]
-                                  ,[PalletPartNo]
-                                  ,[PalletName]
-                                  ,[PalletWeight]
-                                  ,[Model]
-                                  ,[KitUnit]
-                                  ,[WhereUsed]
-                                  ,[PalletType]
-                                  ,[LocationId]
-                              FROM[PalletMaster] Where PalletPartNo = '{d1.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
+        //            foreach (var d1 in Data)
+        //            {
+        //                var PalletSize = 1;
+        //                string strPalletWeight = @$"select top 1 KitUnit from PalletMaster where PalletPartNo='{d1.PalletPartNo}'";
+        //                PalletSize = _context.QueryData<int>(strPalletWeight).FirstOrDefault();
+        //                if (PalletSize != 0)
+        //                {
+        //                    var ReqPallet = (int)(d1.Qty / PalletSize);
+        //                    var Pallets = @"SELECT TOP  " + ReqPallet + @$"[PalletId]
+        //                          ,[PalletPartNo]
+        //                          ,[PalletName]
+        //                          ,[PalletWeight]
+        //                          ,[Model]
+        //                          ,[KitUnit]
+        //                          ,[WhereUsed]
+        //                          ,[PalletType]
+        //                          ,[LocationId]
+        //                      FROM[PalletMaster] Where PalletPartNo = '{d1.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
 
-                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
-
-
-                            OrderList.Add(new Orders()
-                            {
-                                OrderNo = OrderId,
-                                VendorId = d1.VendorId,
-                                NoOfPartsOrdered = int.Parse(d.ReqPart),
-                                OrderQty = d1.Qty,
-                                OrderTypeId = 1,
-                                OrderStatusId = OrderStatus.Open,
-                                OrderCreatedDate = DateTime.Now
-                            });
-
-                            if (PalletList.Count > 0)
-                            {
-                                foreach (var d2 in PalletList)
-                                {
-                                    palletsByOrderTrans.Add(new PalletsByOrderTrans()
-                                    {
-                                        OrderNo = OrderId,
-                                        PalletId = d2.PalletId,
-                                        AssignedQty = d1.Qty,
-                                        LocationId = d2.LocationId,
-                                        PalletStatus = PalletStatus.Assigned,
-                                        ModifiedDate = DateTime.Now,
-                                        ModifiedBy = null
-                                    });
-                                }
-
-                                var str = String.Join("','", PalletList.Select(x => x.PalletId));
-                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ('{str}')";
-                                _context.ExecuteSql(UpdatePalletQry);
-                            }
-
-                        }
-                    }
-
-                    string UpdateQry = $"UPDATE DayPlan SET IsActive=0 WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
-                    _context.ExecuteSql(UpdateQry);
-                }
-
-            }
-
-            if (OrderList.Count > 0)
-            {
-                var sum = OrderList.Select(c => c.OrderQty).Sum();
-                OrderList.FirstOrDefault().OrderQty = sum;
-                if (palletsByOrderTrans.Count > 0)
-                {
-                    var Or = new List<Orders>();
-                    Or.Add(OrderList.First());
-
-                    var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
-                    _context.BulkCopy(Or, ColList, 1, "Orders");
-
-                    ColList = new List<string> {
-                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
-                };
-                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
-                    Thread.Sleep(5000);
-                    SendMailToTMS(OrderList.First().OrderNo);
-                }
-            }
+        //                    var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
 
 
+        //                    OrderList.Add(new Orders()
+        //                    {
+        //                        OrderNo = OrderId,
+        //                        VendorId = d1.VendorId,
+        //                        NoOfPartsOrdered = int.Parse(d.ReqPart),
+        //                        OrderQty = d1.Qty,
+        //                        OrderTypeId = 1,
+        //                        OrderStatusId = OrderStatus.Open,
+        //                        OrderCreatedDate = DateTime.Now
+        //                    });
+
+        //                    if (PalletList.Count > 0)
+        //                    {
+        //                        foreach (var d2 in PalletList)
+        //                        {
+        //                            palletsByOrderTrans.Add(new PalletsByOrderTrans()
+        //                            {
+        //                                OrderNo = OrderId,
+        //                                PalletId = d2.PalletId,
+        //                                AssignedQty = d1.Qty,
+        //                                LocationId = d2.LocationId,
+        //                                PalletStatus = PalletStatus.Assigned,
+        //                                ModifiedDate = DateTime.Now,
+        //                                ModifiedBy = null
+        //                            });
+        //                        }
+
+        //                        var str = String.Join("','", PalletList.Select(x => x.PalletId));
+        //                        string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ('{str}')";
+        //                        _context.ExecuteSql(UpdatePalletQry);
+        //                    }
+
+        //                }
+        //            }
+
+        //            string UpdateQry = $"UPDATE DayPlan SET IsActive=0 WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
+        //            _context.ExecuteSql(UpdateQry);
+        //        }
+
+        //    }
+
+        //    if (OrderList.Count > 0)
+        //    {
+        //        var sum = OrderList.Select(c => c.OrderQty).Sum();
+        //        OrderList.FirstOrDefault().OrderQty = sum;
+        //        if (palletsByOrderTrans.Count > 0)
+        //        {
+        //            var Or = new List<Orders>();
+        //            Or.Add(OrderList.First());
+
+        //            var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
+        //            _context.BulkCopy(Or, ColList, 1, "Orders");
+
+        //            ColList = new List<string> {
+        //        "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
+        //        };
+        //            _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+        //            Thread.Sleep(5000);
+        //            SendMailToTMS(OrderList.First().OrderNo);
+        //        }
+        //    }
 
 
-        }
+
+
+        //}
 
         public async Task<IEnumerable<OrderDetails>> GetOrderDetails(string OrderNo)
         {
@@ -239,6 +239,130 @@ namespace LOC.PMS.Infrastructure.Repositories
             }
 
         }
+
+        public void CreateOrder()
+        {
+            string VendorQry = @"select DISTINCT SUM(RequiredQty) Qty,COUNT(distinct DP.PalletPartNo) ReqPart, DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId from [dbo].[DayPlan] DP
+                                LEFT JOIN (select distinct PalletPartNo,D2LDays from  PalletMaster) PM on DP.PalletPartNo=PM.PalletPartNo
+                                LEFT JOIN VendorMaster VM on VM.VendorId=DP.VendorId
+                                where DP.IsActive = 1
+                                GROUP BY DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId";
+
+            var dt = _context.QueryData<DayPlan>(VendorQry);
+            List<Orders> OrderList = new List<Orders>();
+            List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
+
+            foreach (var d in dt)
+            {
+                DateTime OrderDate;
+                if (d.D2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+                else if (d.NonD2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+                else
+                    OrderDate = d.OrderDate;
+                if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
+                {
+
+                    var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
+                string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
+                            where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
+                            Group by PalletPartNo,Description,VendorId,OrderDate ";
+                var Data = _context.QueryData<DayPlan>(sql);
+
+                    foreach (var d1 in Data)
+                    {
+                        var PalletSize = 1;
+                        string strPalletWeight = @$"select top 1 KitUnit from PalletMaster where PalletPartNo='{d1.PalletPartNo}'";
+                        PalletSize = _context.QueryData<int>(strPalletWeight).FirstOrDefault();
+                        if (PalletSize != 0)
+                        {
+                            var ReqPallet = (int)(d1.Qty);
+                            var Pallets = @"SELECT TOP  " + ReqPallet + @$"[PalletId]
+                              ,[PalletPartNo]
+                              ,[PalletName]
+                              ,[PalletWeight]
+                              ,[Model]
+                              ,[KitUnit]
+                              ,[WhereUsed]
+                              ,[PalletType]
+                              ,[LocationId]
+                          FROM[PalletMaster] Where PalletPartNo = '{d1.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
+
+                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
+
+
+                            OrderList.Add(new Orders()
+                            {
+                                OrderNo = OrderId,
+                                VendorId = d.VendorId,
+                                NoOfPartsOrdered = int.Parse(d.ReqPart),
+                                OrderQty = d.Qty,
+                                OrderTypeId = 1,
+                                OrderStatusId = OrderStatus.Open,
+                                OrderCreatedDate = DateTime.Now,
+                                OrderDate = d.OrderDate,
+                            });
+
+                            if (PalletList.Count > 0)
+                            {
+                                foreach (var d2 in PalletList)
+                                {
+                                    palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                                    {
+                                        OrderNo = OrderId,
+                                        PalletId = d2.PalletId,
+                                        AssignedQty = d1.Qty,
+                                        LocationId = d2.LocationId,
+                                        PalletStatus = PalletStatus.Assigned,
+                                        ModifiedDate = DateTime.Now,
+                                        ModifiedBy = null
+                                    });
+                                }
+
+                                var str = String.Join("','", PalletList.Select(x => x.PalletId));
+                                string UpdatePalletQry = $"UPDATE PalletMaster SET Availability=2 WHERE Availability = 1 and PalletId IN ('{str}')";
+                                _context.ExecuteSql(UpdatePalletQry);
+                            }
+
+                        }
+                        string UpdateQry = $"UPDATE DayPlan SET IsActive=0,OrderNo='{OrderId}' WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
+                        _context.ExecuteSql(UpdateQry);
+                    }
+                }
+
+
+
+
+            }
+
+            if (OrderList.Count > 0)
+            {
+                var or = new List<Orders>();
+                or.Add(OrderList.First());
+
+                var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate" };
+                _context.BulkCopy(or, ColList, 1, "Orders");
+
+                if (palletsByOrderTrans.Count > 0)
+                {
+
+                    ColList = new List<string> {
+                "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
+                };
+                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+                }
+
+                OrderList = new List<Orders>();
+                palletsByOrderTrans = new List<PalletsByOrderTrans>();
+            }
+
+
+
+
+        }
+
+       
 
         public class MailModel
         {
