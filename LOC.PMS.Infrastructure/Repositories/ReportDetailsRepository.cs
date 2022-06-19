@@ -51,7 +51,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             {
                 new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate),
-                new SqlParameter("@UserId", UserId=="18"?"":UserId)
+                new SqlParameter("@UserId", UserId=="13"?"":UserId)
 
             };
 
