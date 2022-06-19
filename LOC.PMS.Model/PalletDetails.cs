@@ -37,6 +37,7 @@ namespace LOC.PMS.Model
         public string Dimensions { get; set; }
         public string Rate { get; set; }
         public string Assy { get; set; }
+        public string PalletStatus { get; set; }
 
     }
 

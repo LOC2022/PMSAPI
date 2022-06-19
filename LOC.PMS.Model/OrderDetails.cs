@@ -64,6 +64,7 @@ namespace LOC.PMS.Model
     {
         public string OrderNo { get; set; }
         public string OrderDate { get; set; }
+        public string DispatchDate { get; set; }
         public int NoOfPartsOrdered { get; set; }
         public int OrderQty { get; set; }
         public string VendorName { get; set; }
