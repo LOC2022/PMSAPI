@@ -48,6 +48,7 @@ namespace LOC.PMS.Model
         public string DriverPhoneNo { get; set; }
         public string ReferenceNo { get; set; }
         public string GSTNo { get; set; }
+        public string CreatedBy { get; set; }
         
 
     }
@@ -77,6 +78,7 @@ namespace LOC.PMS.Model
         public string UserId { get; set; }
         public string Status { get; set; }
         public string Location { get; set; }
+        public string Shortage { get; set; }
 
     }
 
