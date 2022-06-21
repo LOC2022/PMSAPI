@@ -49,7 +49,7 @@ namespace LOC.PMS.Model
         public string ReferenceNo { get; set; }
         public string GSTNo { get; set; }
         public string CreatedBy { get; set; }
-        
+
 
     }
 
@@ -81,5 +81,40 @@ namespace LOC.PMS.Model
         public string Shortage { get; set; }
 
     }
+
+    public class DBPalletCount
+    {
+        public string OnSite { get; set; }
+        public string Maintenance { get; set; }
+        public string InTransit { get; set; }
+    }
+
+    public class DBTransitCount
+    {
+        public string CiplToAce { get; set; }
+        public string AceToSupplier { get; set; }
+        public string SupplierToCipl { get; set; }
+    }
+
+    public class DBOnSite
+    {
+        public string Cipl { get; set; }
+        public string Ace { get; set; }
+        public string Supplier { get; set; }
+    }
+
+    public class DBPalletPart
+    {
+        public string PalletPartNo { get; set; }
+        public string Count { get; set; }
+    }
+
+    public class DBPalletPartDetails
+    {
+        public string PalletPartNo { get; set; }
+        public string PalletId { get; set; }
+        public string Model { get; set; }
+    }
+
 
 }

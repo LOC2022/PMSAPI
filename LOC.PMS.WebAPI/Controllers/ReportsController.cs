@@ -2,6 +2,7 @@
 using LOC.PMS.Model;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LOC.PMS.WebAPI.Controllers
@@ -266,5 +267,216 @@ namespace LOC.PMS.WebAPI.Controllers
             var response = await _reportDetailsProvider.GetOrderDetailsByDate(OrderDate);
             return Ok(response);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Get Pallet Details.",
+            Tags = new[] { "GetDBPalletCount" },
+            OperationId = "GetDBPalletCount")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDBPalletCount"), MapToApiVersion("1.0")]
+        public IActionResult GetDBPalletCount([FromQuery] string UserId = GETALL)
+        {
+            var dbCount = new DBPalletCount()
+            {
+                InTransit = "40",
+                OnSite = "100",
+                Maintenance = "20"
+            };
+            return Ok(dbCount);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Get Pallet Details.",
+            Tags = new[] { "GetDBPalletCount" },
+            OperationId = "GetDBPalletCount")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDBPalletCountByType"), MapToApiVersion("1.0")]
+        public IActionResult GetDBPalletCountByType([FromQuery] string DBType = GETALL, [FromQuery] string UserId = GETALL)
+        {
+
+            if (DBType == "InTransit")
+            {
+                var InTransitCount = new DBTransitCount()
+                {
+                    AceToSupplier = "10",
+                    CiplToAce = "100",
+                    SupplierToCipl = "55",
+
+                };
+                return Ok(InTransitCount);
+
+            }
+            if (DBType == "OnSite")
+            {
+                var onsite = new DBOnSite()
+                {
+                    Ace = "100",
+                    Cipl = "30",
+                    Supplier = "200"
+                };
+
+                return Ok(onsite);
+            }
+
+            if (DBType == "Maintenance")
+            {
+                var lstppl = new List<DBPalletPart>();
+                var dbp = new DBPalletPart()
+                {
+                    PalletPartNo = "WK2212155815D",
+                    Count = "5"
+                };
+                lstppl.Add(dbp);
+
+                lstppl.Add(new DBPalletPart
+                {
+                    PalletPartNo = "WK2212155795D",
+                    Count = "8"
+
+                });
+
+                return Ok(lstppl);
+            }
+
+
+            return Ok("");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetDBInTransit.",
+            Tags = new[] { "GetDBInTransit" },
+            OperationId = "GetDBInTransit")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDBInTransit"), MapToApiVersion("1.0")]
+        public IActionResult GetDBInTransit([FromQuery] string Type = GETALL, [FromQuery] string UserId = GETALL)
+        {
+
+            if (Type == "A-S")
+            {
+                var lstppl = new List<DBPalletPart>();
+                var dbp = new DBPalletPart()
+                {
+                    PalletPartNo = "WK2212155808D",
+                    Count = "2"
+                };
+                lstppl.Add(dbp);
+
+                lstppl.Add(new DBPalletPart
+                {
+                    PalletPartNo = "WK2212167643",
+                    Count = "6"
+
+                });
+
+                return Ok(lstppl);
+
+            }
+            if (Type == "S-C")
+            {
+                var lstppl = new List<DBPalletPart>();
+                var dbp = new DBPalletPart()
+                {
+                    PalletPartNo = "WK2212167643",
+                    Count = "5"
+                };
+                lstppl.Add(dbp);
+
+                lstppl.Add(new DBPalletPart
+                {
+                    PalletPartNo = "WK2212155815D",
+                    Count = "9"
+
+                });
+
+                return Ok(lstppl);
+            }
+
+            if (Type == "C-A")
+            {
+                var lstppl = new List<DBPalletPart>();
+                var dbp = new DBPalletPart()
+                {
+                    PalletPartNo = "WK2212160125D",
+                    Count = "1"
+                };
+                lstppl.Add(dbp);
+
+                lstppl.Add(new DBPalletPart
+                {
+                    PalletPartNo = "WK2212166631",
+                    Count = "3"
+
+                });
+
+                return Ok(lstppl);
+            }
+
+
+            return Ok("");
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetPalletDetailsByPart.",
+            Tags = new[] { "GetPalletDetailsByPart" },
+            OperationId = "GetPalletDetailsByPart")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetPalletDetailsByPart"), MapToApiVersion("1.0")]
+        public IActionResult GetPalletDetailsByPart([FromQuery] string PalletPartNo = GETALL, [FromQuery] string UserId = GETALL)
+        {
+            var db = new DBPalletPartDetails()
+            {
+                PalletId = "A236755303247564",
+                PalletPartNo = PalletPartNo,
+                Model = "777"
+
+
+            };
+            var db1 = new DBPalletPartDetails()
+            {
+                PalletId = "A236755303247564",
+                PalletPartNo = PalletPartNo,
+                Model = "777"
+
+
+            };
+            List<DBPalletPartDetails> lst = new List<DBPalletPartDetails>();
+            lst.Add(db);
+            lst.Add(db1);
+
+
+            return Ok(lst);
+        }
+
+
     }
 }
