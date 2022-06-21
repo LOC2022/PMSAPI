@@ -304,6 +304,30 @@
             <param name="OrderDate"></param>
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDBPalletCount(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDBPalletCountByType(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDBInTransit(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPalletDetailsByPart(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             
