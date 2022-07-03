@@ -82,6 +82,8 @@ namespace LOC.PMS.Infrastructure.Repositories
 
                         _context.ExecuteSql(CreateDCQuery);
                         SendMailToVendor($"DC{DCNo}");
+                        string qryMaster = $"UPDATE PalletMaster set LocationId={VendorId} where PalletId IN ('{PalletId}')";
+                        _context.ExecuteSql(qryMaster);
                     }
                     else if (ToStatus == "CIPLDispatchScan")
                     {
@@ -91,6 +93,9 @@ namespace LOC.PMS.Infrastructure.Repositories
 
                         _context.ExecuteSql(CreateDCQuery);
                         SendMailToVendor($"DC{DCNo}");
+
+                        string qryMaster = $"UPDATE PalletMaster set LocationId=14 where PalletId IN ('{PalletId}')";
+                        _context.ExecuteSql(qryMaster);
 
                     }
                 }
@@ -196,6 +201,10 @@ namespace LOC.PMS.Infrastructure.Repositories
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=7;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
                 //string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=8;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
                 _context.ExecuteSql(UpdatePalletQry);
+
+                string qryMaster = $"UPDATE PalletMaster set LocationId=13 where PalletId IN ('{PalletIds}')";
+                _context.ExecuteSql(qryMaster);
+
             }
             else if (orderDetails.FirstOrDefault().Status.ToString() == "PUTAWAY")
             {
