@@ -15,7 +15,7 @@
       "launchUrl": "swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SENDGRID_API_KEY": "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",
+        "SENDGRID_API_KEY": "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",
         "TWILIO_AUTH_TOKEN": "n2sacbMfy7PWr5tEfELX7JaFTwokxDyk",
         "TWILIO_ACCOUNT_SID": "SKced81051d6f39aff7eda1633bd14e35b"
       }
@@ -27,7 +27,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SENDGRID_API_KEY": "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",
+        "SENDGRID_API_KEY": "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",
         "TWILIO_AUTH_TOKEN": "n2sacbMfy7PWr5tEfELX7JaFTwokxDyk",
         "TWILIO_ACCOUNT_SID": "SKced81051d6f39aff7eda1633bd14e35b"
       }
