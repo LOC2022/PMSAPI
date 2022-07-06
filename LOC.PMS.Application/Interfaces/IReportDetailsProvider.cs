@@ -11,7 +11,7 @@ namespace LOC.PMS.Application.Interfaces
     {
         Task<IEnumerable<DayPlan>> GetMonthlyPlanReport(string fromDate, string toDate, int vendorId);
 
-        Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate,string UserId);
+        Task<IEnumerable<DCDetails>> GetDCDetailsReport(string fromDate, string toDate, string UserId);
 
         Task<IEnumerable<OrderDetails>> GetDayPlanReport(string fromDate, string toDate);
 
@@ -34,5 +34,17 @@ namespace LOC.PMS.Application.Interfaces
         Task<IEnumerable<PalletReportSelection>> GetPalletReportSelection(int UserId, string PalletStatus, string ModelNo);
         Task<IEnumerable<MonthlyPlan>> GetDateWiseOrder(string fromDate, string toDate);
         Task<IEnumerable<OrderDetailsByDate>> GetOrderDetailsByDate(string OrderDate);
+        DBPalletCount GetDBPalletCount(string userId);
+        DBOnSite GetDBPalletCountByTypeOnSite(string userId);
+
+        DBTransitCount GetDBPalletCountByTypeInTransit(string userId);
+
+        List<DBPalletPart> GetDBPalletCountByTypeMaintenance(string userId);
+        List<DBPalletPart> GetDBInTransit_AS(string userId);
+        List<DBPalletPart> GetDBInTransit_SC(string userId);
+        List<DBPalletPart> GetDBInTransit_CA(string userId);
+
+        List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status, string PalletPartNo);
+
     }
 }

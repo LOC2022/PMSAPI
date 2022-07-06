@@ -322,7 +322,7 @@
             </summary>
             <returns>List of Orders</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPalletDetailsByPart(System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPalletDetailsByPart(System.String,System.String,System.String)">
             <summary>
             
             </summary>
