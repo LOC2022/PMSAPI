@@ -70,6 +70,70 @@ namespace LOC.PMS.Application
             return null;
         }
 
+        public DBPalletCount GetDBPalletCount(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBPalletCount(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+
+            return null;
+        }
+
+        public DBOnSite GetDBPalletCountByTypeOnSite(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBPalletCountByTypeOnSite(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+
+        }
+
+        public DBTransitCount GetDBPalletCountByTypeInTransit(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBPalletCountByTypeInTransit(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+
+        }
+
         public async Task<IEnumerable<DCDetails>> GetDCDetails(string dCNumber)
         {
             try
@@ -347,6 +411,106 @@ namespace LOC.PMS.Application
             }
 
             return null;
+        }
+
+        public List<DBPalletPart> GetDBPalletCountByTypeMaintenance(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBPalletCountByTypeMaintenance(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DBPalletPart> GetDBInTransit_AS(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBInTransit_AS(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DBPalletPart> GetDBInTransit_SC(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBInTransit_SC(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DBPalletPart> GetDBInTransit_CA(string userId)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetDBInTransit_CA(userId);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status, string PalletPartNo)
+        {
+            try
+            {
+                _logger.Information("Pallet part trans details report request - Start");
+
+                var response = _reportDetailsRepository.GetPalletDetailsByPart(userId, status, PalletPartNo);
+
+                _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
         }
     }
 }

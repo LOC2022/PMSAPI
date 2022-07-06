@@ -395,7 +395,7 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
         
             </div>
             <div class='col-3'>
-                <label class='' >" + dt.FirstOrDefault().VendorName+ @"</label>
+                <label class='' >" + dt.FirstOrDefault().VendorName + @"</label>
             
                 </div>
 </div>
@@ -431,10 +431,10 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
             <tbody>";
                 //HtmlContent += " <table class='table table-bordered' style='border-collapse: collapse;border: 1px solid #ddd;'><thead><tr><td style='border: 1px solid #ddd; padding: 15px;'>Order No</td><td style='border: 1px solid #ddd; padding: 15px;'>Order Qty</td><td style='border: 1px solid #ddd; padding: 15px;'>Vendor Name</td><td style='border: 1px solid #ddd; padding: 15px;'>Pallet Id</td></tr><thead><tbody>";
                 foreach (var data in dt)
-{
-    HtmlContent += $"<tr><td>{data.OrderNo}</td><td>{data.PalletPartNo}</td><td>{data.Qty}</td><td >{data.Dimensions}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.PalletWeight}</td></tr>";
-}
-HtmlContent += @"</tbody>
+                {
+                    HtmlContent += $"<tr><td>{data.OrderNo}</td><td>{data.PalletPartNo}</td><td>{data.Qty}</td><td >{data.Dimensions}</td><td style='border: 1px solid #ddd; padding: 15px;'>{data.PalletWeight}</td></tr>";
+                }
+                HtmlContent += @"</tbody>
                                 </table>
                             </div>
 
@@ -443,36 +443,36 @@ HtmlContent += @"</tbody>
                             </html>";
 
 
-string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-string fromEmail = "victor@theacedigi.com";
+                string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                string fromEmail = "victor@theacedigi.com";
 
-var client = new SendGridClient(apiKey);
-var msg = new SendGridMessage()
-{
-    From = new EmailAddress(fromEmail, "Ace Digital"),
-    Subject = "",
-    HtmlContent = HtmlContent
-};
+                var client = new SendGridClient(apiKey);
+                var msg = new SendGridMessage()
+                {
+                    From = new EmailAddress(fromEmail, "Ace Digital"),
+                    Subject = "",
+                    HtmlContent = HtmlContent
+                };
 
-var toEmailList = new List<EmailAddress>();
-var test = new EmailAddress(fromEmail, "Ace Digital");
-
-
-//toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-//toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-//toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-//toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-//toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-//toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-//toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
-toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
-//toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
+                var toEmailList = new List<EmailAddress>();
+                var test = new EmailAddress(fromEmail, "Ace Digital");
 
 
+                toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
+                toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
+                toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
+                toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
+                toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
+                toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
+                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
+                toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
 
-var message = MailHelper.CreateSingleEmailToMultipleRecipients(test, toEmailList, "Order Details " + Order, "", HtmlContent);
 
-var result = await client.SendEmailAsync(message);
+
+                var message = MailHelper.CreateSingleEmailToMultipleRecipients(test, toEmailList, "Order Details " + Order, "", HtmlContent);
+
+                var result = await client.SendEmailAsync(message);
 
 
             }
@@ -480,150 +480,150 @@ var result = await client.SendEmailAsync(message);
         }
 
         public void CreateOrder()
-{
-    string VendorQry = @"select DISTINCT SUM(RequiredQty) Qty,COUNT(distinct DP.PalletPartNo) ReqPart, DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId from [dbo].[DayPlan] DP
+        {
+            string VendorQry = @"select DISTINCT SUM(RequiredQty) Qty,COUNT(distinct DP.PalletPartNo) ReqPart, DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId from [dbo].[DayPlan] DP
                                 LEFT JOIN (select distinct PalletPartNo,D2LDays from  PalletMaster) PM on DP.PalletPartNo=PM.PalletPartNo
                                 LEFT JOIN VendorMaster VM on VM.VendorId=DP.VendorId
                                 where DP.IsActive = 1
                                 GROUP BY DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId";
 
-    var dt = _context.QueryData<DayPlan>(VendorQry);
-    List<Orders> OrderList = new List<Orders>();
-    List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
+            var dt = _context.QueryData<DayPlan>(VendorQry);
+            List<Orders> OrderList = new List<Orders>();
+            List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
 
-    foreach (var d in dt)
-    {
-        DateTime OrderDate;
-        if (d.D2LDays != 0)
-            OrderDate = d.OrderDate.AddDays(-d.D2LDays);
-        else if (d.NonD2LDays != 0)
-            OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
-        else
-            OrderDate = d.OrderDate;
+            foreach (var d in dt)
+            {
+                DateTime OrderDate;
+                if (d.D2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+                else if (d.NonD2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+                else
+                    OrderDate = d.OrderDate;
 
 
-        var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
-        string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
+                var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
+                string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
                             where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
                             Group by PalletPartNo,Description,VendorId,OrderDate ";
-        var Data = _context.QueryData<DayPlan>(sql);
+                var Data = _context.QueryData<DayPlan>(sql);
 
 
 
-        OrderList.Add(new Orders()
+                OrderList.Add(new Orders()
+                {
+                    OrderNo = OrderId,
+                    VendorId = d.VendorId,
+                    NoOfPartsOrdered = int.Parse(d.ReqPart),
+                    OrderQty = d.Qty,
+                    OrderTypeId = 1,
+                    OrderStatusId = OrderStatus.Open,
+                    OrderCreatedDate = DateTime.Now,
+                    OrderDate = d.OrderDate,
+                });
+
+                string UpdateQry = $"UPDATE DayPlan SET IsActive=0,OrderNo='{OrderId}' WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
+                _context.ExecuteSql(UpdateQry);
+            }
+
+
+
+
+
+
+            if (OrderList.Count > 0)
+            {
+
+                var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate", "OrderDate" };
+                _context.BulkCopy(OrderList, ColList, 1, "Orders");
+
+                OrderList = new List<Orders>();
+                palletsByOrderTrans = new List<PalletsByOrderTrans>();
+            }
+
+
+
+
+        }
+
+        public void AssignPalletForDayOrder()
         {
-            OrderNo = OrderId,
-            VendorId = d.VendorId,
-            NoOfPartsOrdered = int.Parse(d.ReqPart),
-            OrderQty = d.Qty,
-            OrderTypeId = 1,
-            OrderStatusId = OrderStatus.Open,
-            OrderCreatedDate = DateTime.Now,
-            OrderDate = d.OrderDate,
-        });
-
-        string UpdateQry = $"UPDATE DayPlan SET IsActive=0,OrderNo='{OrderId}' WHERE IsActive = 1 and VendorId = '{d.VendorId}' and OrderDate = '{d.OrderDate}'";
-        _context.ExecuteSql(UpdateQry);
-    }
-
-
-
-
-
-
-    if (OrderList.Count > 0)
-    {
-
-        var ColList = new List<string> { "OrderNo", "VendorId", "NoOfPartsOrdered", "OrderQty", "OrderTypeId", "OrderStatusId", "OrderCreatedDate", "OrderDate" };
-        _context.BulkCopy(OrderList, ColList, 1, "Orders");
-
-        OrderList = new List<Orders>();
-        palletsByOrderTrans = new List<PalletsByOrderTrans>();
-    }
-
-
-
-
-}
-
-public void AssignPalletForDayOrder()
-{
-    string VendorQry = @"select distinct OrderDate,OrderNo,OrderQty,ISNULL(Shortage,0) Shortage from Orders O								
+            string VendorQry = @"select distinct OrderDate,OrderNo,OrderQty,ISNULL(Shortage,0) Shortage from Orders O								
 								where o.palletassignedflag=1
 								order by ISNULL(Shortage,0) desc";
-    var dt = _context.QueryData<DayPlan>(VendorQry);
+            var dt = _context.QueryData<DayPlan>(VendorQry);
 
-    foreach (var d in dt)
-    {
-        List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
-
-        DateTime OrderDate;
-        if (d.D2LDays != 0)
-            OrderDate = d.OrderDate.AddDays(-d.D2LDays);
-        else if (d.NonD2LDays != 0)
-            OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
-        else
-            OrderDate = d.OrderDate.AddDays(-6);
-
-        if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
-        {
-
-            if (d.Shortage == 0)
+            foreach (var d in dt)
             {
-                string qryPalletPart = $"select PalletPartNo,RequiredQty from DayPlan where OrderNo='{d.OrderNo}'";
+                List<PalletsByOrderTrans> palletsByOrderTrans = new List<PalletsByOrderTrans>();
 
-                var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
+                DateTime OrderDate;
+                if (d.D2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+                else if (d.NonD2LDays != 0)
+                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+                else
+                    OrderDate = d.OrderDate.AddDays(-6);
 
-                foreach (var pallet in palletPartData)
+                if (OrderDate.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
                 {
-                    var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
+
+                    if (d.Shortage == 0)
+                    {
+                        string qryPalletPart = $"select PalletPartNo,RequiredQty from DayPlan where OrderNo='{d.OrderNo}'";
+
+                        var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
+
+                        foreach (var pallet in palletPartData)
+                        {
+                            var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
                                       ,[PalletPartNo]                                     
                                       ,[LocationId]
                                   FROM[PalletMaster] Where PalletPartNo = '{pallet.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
 
-                    var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
+                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
 
-                    foreach (var pl in PalletList)
-                    {
-                        palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                            foreach (var pl in PalletList)
+                            {
+                                palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                                {
+                                    OrderNo = d.OrderNo,
+                                    PalletId = pl.PalletId,
+                                    AssignedQty = 1,
+                                    LocationId = pl.LocationId,
+                                    PalletStatus = PalletStatus.Assigned,
+                                    ModifiedDate = DateTime.Now,
+                                    ModifiedBy = "ADMIN"
+                                });
+                            }
+                        }
+
+                        if (palletsByOrderTrans.Count > 0)
                         {
-                            OrderNo = d.OrderNo,
-                            PalletId = pl.PalletId,
-                            AssignedQty = 1,
-                            LocationId = pl.LocationId,
-                            PalletStatus = PalletStatus.Assigned,
-                            ModifiedDate = DateTime.Now,
-                            ModifiedBy = "ADMIN"
-                        });
-                    }
-                }
 
-                if (palletsByOrderTrans.Count > 0)
-                {
-
-                    var ColList = new List<string> {
+                            var ColList = new List<string> {
                 "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
                 };
-                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+                            _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
 
-                    if (d.OrderQty == palletsByOrderTrans.Count)
-                    {
+                            if (d.OrderQty == palletsByOrderTrans.Count)
+                            {
 
-                        _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
-                        Thread.Sleep(4000);
-                        SendMailToTMS(palletsByOrderTrans.First().OrderNo);
+                                _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+                                Thread.Sleep(4000);
+                                SendMailToTMS(palletsByOrderTrans.First().OrderNo);
 
+                            }
+                            else
+                            {
+                                _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                        }
                     }
                     else
                     {
-                        _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
-
-                    }
-                }
-            }
-            else
-            {
-                string qryPalletPart = @$"
+                        string qryPalletPart = @$"
                             WITH
                             A(PalletPart, Qty)
                             as
@@ -638,82 +638,82 @@ public void AssignPalletForDayOrder()
                             where RequiredQty-Qty > 0
                             ";
 
-                var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
+                        var palletPartData = _context.QueryData<DayPlan>(qryPalletPart);
 
-                foreach (var pallet in palletPartData)
-                {
-                    var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
+                        foreach (var pallet in palletPartData)
+                        {
+                            var Pallets = @"SELECT TOP  " + pallet.RequiredQty + @$"[PalletId]
                                       ,[PalletPartNo]                                     
                                       ,[LocationId]
                                   FROM[PalletMaster] Where PalletPartNo = '{pallet.PalletPartNo}' and Availability= {(int)PalletAvailability.Ideal}";
 
-                    var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
+                            var PalletList = _context.QueryData<PalletDetails>(Pallets).ToList();
 
-                    foreach (var pl in PalletList)
-                    {
-                        palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                            foreach (var pl in PalletList)
+                            {
+                                palletsByOrderTrans.Add(new PalletsByOrderTrans()
+                                {
+                                    OrderNo = d.OrderNo,
+                                    PalletId = pl.PalletId,
+                                    AssignedQty = 1,
+                                    LocationId = pl.LocationId,
+                                    PalletStatus = PalletStatus.Assigned,
+                                    ModifiedDate = DateTime.Now,
+                                    ModifiedBy = "ADMIN"
+                                });
+                            }
+                        }
+
+                        if (palletsByOrderTrans.Count > 0)
                         {
-                            OrderNo = d.OrderNo,
-                            PalletId = pl.PalletId,
-                            AssignedQty = 1,
-                            LocationId = pl.LocationId,
-                            PalletStatus = PalletStatus.Assigned,
-                            ModifiedDate = DateTime.Now,
-                            ModifiedBy = "ADMIN"
-                        });
-                    }
-                }
 
-                if (palletsByOrderTrans.Count > 0)
-                {
-
-                    var ColList = new List<string> {
+                            var ColList = new List<string> {
                 "OrderNo","PalletId","AssignedQty","LocationId","PalletStatus","ModifiedDate","ModifiedBy"
                 };
-                    _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
+                            _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
 
 
 
-                    int qty = _context.QueryData<int>($"select COUNT(*) from PalletsByOrderTrans where OrderNo='{d.OrderNo}'").FirstOrDefault();
+                            int qty = _context.QueryData<int>($"select COUNT(*) from PalletsByOrderTrans where OrderNo='{d.OrderNo}'").FirstOrDefault();
 
-                    if (d.OrderQty == qty)
-                    {
+                            if (d.OrderQty == qty)
+                            {
 
-                        _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(Shortage-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
-                        Thread.Sleep(4000);
-                        SendMailToTMS(palletsByOrderTrans.First().OrderNo);
+                                _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(Shortage-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+                                Thread.Sleep(4000);
+                                SendMailToTMS(palletsByOrderTrans.First().OrderNo);
 
+                            }
+                            else
+                            {
+                                _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
+
+                            }
+                        }
                     }
-                    else
-                    {
-                        _context.ExecuteSql($"Update Orders set Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
 
-                    }
+
+
+
                 }
             }
+        }
 
 
 
+        public class MailModel
+        {
+            public string Email { get; set; }
+            public string OrderNo { get; set; }
+            public string OrderQty { get; set; }
+            public string VendorName { get; set; }
+            public string VendorId { get; set; }
+            public string PalletId { get; set; }
+            public string Qty { get; set; }
+            public string PalletWeight { get; set; }
+            public string Dimensions { get; set; }
+            public string PalletPartNo { get; set; }
 
         }
-    }
-}
-
-
-
-public class MailModel
-{
-    public string Email { get; set; }
-    public string OrderNo { get; set; }
-    public string OrderQty { get; set; }
-    public string VendorName { get; set; }
-    public string VendorId { get; set; }
-    public string PalletId { get; set; }
-    public string Qty { get; set; }
-    public string PalletWeight { get; set; }
-    public string Dimensions { get; set; }
-    public string PalletPartNo { get; set; }
-
-}
     }
 }

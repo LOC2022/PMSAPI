@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -186,6 +187,87 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<OrderDetailsByDate>("[dbo].[Report_OrderDetailsByDate]", sqlParams.ToArray());
         }
 
+        public DBPalletCount GetDBPalletCount(string userId)
+        {
+            DBPalletCount dBPalletCount = new DBPalletCount();
 
+            var dt = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (1, 2, 3, 5, 7)").FirstOrDefault();
+            var dt1 = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (4,8,6)").FirstOrDefault();
+            var dt2 = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (11)").FirstOrDefault();
+
+
+            dBPalletCount.OnSite = Convert.ToString(dt);
+            dBPalletCount.InTransit = Convert.ToString(dt1);
+            dBPalletCount.Maintenance = Convert.ToString(dt2);
+
+
+            return dBPalletCount;
+        }
+
+        public DBOnSite GetDBPalletCountByTypeOnSite(string userId)
+        {
+            DBOnSite dBOnSite = new DBOnSite();
+
+
+            var dt = _context.QueryData<int>(@"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (1, 2)").FirstOrDefault();
+            var dt1 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (5) --AND PM.LocationId={userId}").FirstOrDefault();
+            var dt2 = _context.QueryData<int>(@"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (7)").FirstOrDefault();
+
+
+            dBOnSite.Ace = Convert.ToString(dt);
+            dBOnSite.Supplier = Convert.ToString(dt1);
+            dBOnSite.Cipl = Convert.ToString(dt2);
+
+            return dBOnSite;
+        }
+
+        public DBTransitCount GetDBPalletCountByTypeInTransit(string userId)
+        {
+            DBTransitCount dBOnSite = new DBTransitCount();
+
+
+            var dt = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN[dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (3) --AND PM.LocationId = {userId}").FirstOrDefault();
+            var dt1 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (6) --AND PM.LocationId={userId}").FirstOrDefault();
+            var dt2 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (8) --AND PM.LocationId = {userId}").FirstOrDefault();
+
+
+            dBOnSite.AceToSupplier = Convert.ToString(dt);
+            dBOnSite.SupplierToCipl = Convert.ToString(dt1);
+            dBOnSite.CiplToAce = Convert.ToString(dt2);
+
+            return dBOnSite;
+        }
+
+
+
+        public List<DBPalletPart> GetDBPalletCountByTypeMaintenance(string userId)
+        {
+            var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (11)  AND PM.LocationId = {userId} GROUP BY PalletPartNo").ToList();
+            return dt;
+        }        
+
+        public List<DBPalletPart> GetDBInTransit_AS(string userId)
+        {
+            var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (3)   GROUP BY PalletPartNo").ToList();
+            return dt;
+        }
+
+        public List<DBPalletPart> GetDBInTransit_SC(string userId)
+        {
+            var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (6)   GROUP BY PalletPartNo").ToList();
+            return dt;
+        }
+
+        public List<DBPalletPart> GetDBInTransit_CA(string userId)
+        {
+            var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (8)   GROUP BY PalletPartNo").ToList();
+            return dt;
+        }        
+
+        public List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status,string PalletPartNo)
+        {
+            var dt = _context.QueryData<DBPalletPartDetails>(@$"select distinct PM.PalletId,PalletPartNo,Model from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in ({status}) and PalletPartNo='{PalletPartNo}'").ToList();
+            return dt;
+        }
     }
 }
