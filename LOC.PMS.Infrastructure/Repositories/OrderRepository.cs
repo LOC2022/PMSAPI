@@ -458,13 +458,13 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                 var test = new EmailAddress(fromEmail, "Ace Digital");
 
 
-                toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-                toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-                toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-                toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-                toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-                toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+                //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
+                //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
+                //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
+                //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
+                //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
+                //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
+                //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
                 toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
 
@@ -606,11 +606,15 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                 };
                             _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
 
+                            var Pallets = string.Join("','", palletsByOrderTrans.Select(s => s.PalletId).ToList());
+                            _context.ExecuteSql($"Update PalletMaster set Availability=2  where PalletId IN ('{Pallets}') ");
+
+
                             if (d.OrderQty == palletsByOrderTrans.Count)
                             {
 
                                 _context.ExecuteSql($"Update Orders set palletassignedflag=0,Shortage=(OrderQty-{palletsByOrderTrans.Count}) where OrderNo='{palletsByOrderTrans.First().OrderNo}' ");
-                                Thread.Sleep(4000);
+                                Thread.Sleep(2000);
                                 SendMailToTMS(palletsByOrderTrans.First().OrderNo);
 
                             }
@@ -672,7 +676,8 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                 };
                             _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
 
-
+                            var Pallets = string.Join("','", palletsByOrderTrans.Select(s => s.PalletId).ToList());
+                            _context.ExecuteSql($"Update PalletMaster set Availability=2  where PalletId IN '{Pallets}' ");
 
                             int qty = _context.QueryData<int>($"select COUNT(*) from PalletsByOrderTrans where OrderNo='{d.OrderNo}'").FirstOrDefault();
 
