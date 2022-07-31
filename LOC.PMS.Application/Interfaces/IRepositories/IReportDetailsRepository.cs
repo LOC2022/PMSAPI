@@ -1,4 +1,5 @@
 ﻿using LOC.PMS.Model;
+using LOC.PMS.Model.DashBoard;
 using LOC.PMS.Model.Report;
 using System;
 using System.Collections.Generic;
@@ -44,5 +45,9 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         List<DBPalletPart> GetDBInTransit_CA(string userId);
 
         List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status, string PalletPartNo);
+        SupplierInOutFlow GetSupplierInOutFlowDB(string vendorId, string startDate, string endDate);
+        PlannedDBData GetPlannedDBDetails(string startDate, string endDate);
+        TripDetails GetTripDBDetails(string startDate, string endDate);
+        PalletAgingDetails GetPalletAgingDB(string vendorId, string aging);
     }
 }

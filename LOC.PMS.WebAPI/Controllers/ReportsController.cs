@@ -370,7 +370,6 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-
         /// <returns>List of Orders</returns>
         [SwaggerOperation(
             Description = "GetPalletDetailsByPart.",
@@ -385,6 +384,82 @@ namespace LOC.PMS.WebAPI.Controllers
             var response = _reportDetailsProvider.GetPalletDetailsByPart(UserId, Status, PalletPartNo);
             return Ok(response);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Supplier Plan In And Out Flow",
+            Tags = new[] { "Supplier Plan In And Out Flow" },
+            OperationId = "Supplier Plan In And Out Flow")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetSupplierInOutFlowDB"), MapToApiVersion("1.0")]
+        public IActionResult GetSupplierInOutFlowDB([FromQuery] string VendorId = GETALL, [FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
+        {
+            var response = _reportDetailsProvider.GetSupplierInOutFlowDB(VendorId, StartDate, EndDate);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetPlannedDBDetails",
+            Tags = new[] { "GetPlannedDBDetails" },
+            OperationId = "GetPlannedDBDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetPlannedDBDetails"), MapToApiVersion("1.0")]
+        public IActionResult GetPlannedDBDetails([FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
+        {
+            var response = _reportDetailsProvider.GetPlannedDBDetails(StartDate, EndDate);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Trip Details",
+            Tags = new[] { "Trip Details" },
+            OperationId = "Trip Details")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetTripDBDetails"), MapToApiVersion("1.0")]
+        public IActionResult GetTripDBDetails([FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
+        {
+            var response = _reportDetailsProvider.GetTripDBDetails(StartDate, EndDate);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "Aging Details",
+            Tags = new[] { "Aging Details" },
+            OperationId = "Aging Details")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetPalletAgingDB"), MapToApiVersion("1.0")]
+        public IActionResult GetPalletAgingDB([FromQuery] string VendorId = GETALL, [FromQuery] string Aging = "")
+        {
+            var response = _reportDetailsProvider.GetPalletAgingDB(VendorId, Aging);
+            return Ok(response);
+        }
+
+
+
 
 
     }
