@@ -1,6 +1,7 @@
 ﻿using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using LOC.PMS.Model.DashBoard;
 using LOC.PMS.Model.Report;
 using Serilog;
 using System;
@@ -226,7 +227,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             DBTransitCount dBOnSite = new DBTransitCount();
 
 
-            var dt = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN[dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (3) --AND PM.LocationId = {userId}").FirstOrDefault();
+            var dt = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN[dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (4) --AND PM.LocationId = {userId}").FirstOrDefault();
             var dt1 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (6) --AND PM.LocationId={userId}").FirstOrDefault();
             var dt2 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (8) --AND PM.LocationId = {userId}").FirstOrDefault();
 
@@ -244,7 +245,7 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (11)  AND PM.LocationId = {userId} GROUP BY PalletPartNo").ToList();
             return dt;
-        }        
+        }
 
         public List<DBPalletPart> GetDBInTransit_AS(string userId)
         {
@@ -262,12 +263,143 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             var dt = _context.QueryData<DBPalletPart>(@$"select COUNT(distinct PM.PalletId) Count,PalletPartNo from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (8)   GROUP BY PalletPartNo").ToList();
             return dt;
-        }        
+        }
 
-        public List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status,string PalletPartNo)
+        public List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status, string PalletPartNo)
         {
             var dt = _context.QueryData<DBPalletPartDetails>(@$"select distinct PM.PalletId,PalletPartNo,Model from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in ({status}) and PalletPartNo='{PalletPartNo}'").ToList();
             return dt;
+        }
+
+        public SupplierInOutFlow GetSupplierInOutFlowDB(string vendorId, string startDate, string endDate)
+        {
+            string Condition = "";
+            if (!string.IsNullOrEmpty(vendorId))
+            {
+                Condition = $" and VendorId={vendorId}";
+            }
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";
+            }
+            var Obj = new SupplierInOutFlow();
+            Obj.supplierInOutFlowDB = new SupplierInOutFlowDB();
+            Obj.supplierInOutFlowDB.Dispatched = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where DCType=1 {Condition}").FirstOrDefault();
+            Obj.supplierInOutFlowDB.Received = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where DCType=1 {Condition}").FirstOrDefault();
+            Obj.supplierInOutFlowGrid = _context.QueryData<SupplierInOutFlowGrid>(@$"select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'Received' Status from [dbo].[DeliveryChallanTrans] DC
+                                        Join PalletMaster PM on DC.PalletId=PM.PalletId
+                                        JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
+                                        where DCType=1 {Condition}
+                                        Group BY PM.PalletPartNo,VM.VendorName
+                                        UNION ALL
+                                        select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'DisPatched' Status from [dbo].[DeliveryChallanTrans] DC
+                                        Join PalletMaster PM on DC.PalletId=PM.PalletId
+                                        JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
+                                        where DCType=2 {Condition}
+                                        Group BY PM.PalletPartNo,VM.VendorName
+                                        ORDER BY Status").ToList();
+            return Obj;
+        }
+
+        public PlannedDBData GetPlannedDBDetails(string startDate, string endDate)
+        {
+            string Condition = "";
+            string Condition1 = "";
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";
+                Condition1 = $" and OrderCreatedDate between '{startDate}' and '{endDate}' ";
+            }
+            PlannedDBData plannedDBData = new PlannedDBData();
+            plannedDBData.Planned = _context.QueryData<int>(@$"select ISNULL(SUM(OrderQty),0) from Orders where PalletAssignedFlag=0  {Condition1}").FirstOrDefault();
+            plannedDBData.Actual = _context.QueryData<int>(@$"select ISNULL(COUNT(PalletId),0) from DeliveryChallanTrans where DCStatus=1  {Condition}").FirstOrDefault();
+            plannedDBData.Missed = Convert.ToInt32(plannedDBData.Planned) - Convert.ToInt32(plannedDBData.Actual);
+            return plannedDBData;
+        }
+
+        public TripDetails GetTripDBDetails(string startDate, string endDate)
+        {
+            string Condition = "";
+
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                Condition = $" and CAST (TD.ModifiedDate as Date) between '{startDate}' and '{endDate}' ";
+            }
+
+            var Obj = new TripDetails();
+
+            Obj.tripDetailsDB = _context.QueryData<TripDetailsDB>(@$"
+                select ISNULL(SUM(Trip),0) as Value,'WHToSupplier' Flag from ( 
+                select COUNT(Distinct VehicleNo) Trip,CAST (TD.ModifiedDate as Date) DLDate  from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=1 {Condition}
+                Group By CAST (TD.ModifiedDate as Date)
+                ) a
+                UNION ALL
+                select ISNULL(SUM(Trip),0) as Value,  'SupplierToCIPL' Flag from (
+                select COUNT(Distinct VehicleNo) Trip,CAST (TD.ModifiedDate as Date) DLDate  from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=2 {Condition}
+                Group By CAST (TD.ModifiedDate as Date)
+                ) b
+                UNION ALL
+                select ISNULL(SUM(Trip),0) as Value,  'CIPLToWH' Flag from (
+                select COUNT(Distinct VehicleNo) Trip,CAST (TD.ModifiedDate as Date) DLDate from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=3 {Condition}
+                Group By CAST (TD.ModifiedDate as Date)
+                ) c ").ToList();
+
+            Obj.tripDetailsGrid = _context.QueryData<TripDetailsGrid>(@$"
+                select CAST (TD.ModifiedDate as Date) DCDate,DC.DCNo,COUNT(PalletId) Qty ,  'WHToSupplier' Flag from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=1 {Condition}
+                Group By CAST (TD.ModifiedDate as Date),DC.DCNo
+                UNION ALL
+                select CAST (TD.ModifiedDate as Date) DCDate,DC.DCNo,COUNT(PalletId) Qty,  'SupplierToCIPL' Flag  from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=2 {Condition}
+                Group By CAST (TD.ModifiedDate as Date),DC.DCNo
+                UNION ALL
+                select CAST (TD.ModifiedDate as Date) DCDate,DC.DCNo,COUNT(PalletId) Qty,  'CIPLToWH' Flag  from DeliveryChallanTrans  DC
+                JOIN [dbo].[TransportDetails] TD on DC.DCNo=TD.DCNo 
+                where DCType=3 {Condition}
+                Group By CAST (TD.ModifiedDate as Date),DC.DCNo
+                Order by DCDate ").ToList();
+
+            return Obj;
+        }
+
+        public PalletAgingDetails GetPalletAgingDB(string VendorId, string Aging)
+        {
+            string condition = "";
+
+            if (!string.IsNullOrEmpty(VendorId))
+            {
+                condition = $" and DC.VendorId={VendorId}";
+            }
+            if (string.IsNullOrEmpty(Aging))
+            {
+                Aging = "10";
+            }
+            var Obj = new PalletAgingDetails();
+            Obj.palletAgingDetailsDB = _context.QueryData<PalletAgingDetailsDB>($@"
+                    select PM.PalletPartNo,COUNT(DC.PalletId) QTY, DATEDIFF(DAY, DC.CreatedDate, GETDATE()) AS Aging from DeliveryChallanTrans DC
+                    Join PalletMaster PM On PM.PalletId=DC.PalletId
+                    where PM.Availability=5 {condition}
+                    GROUP BY PM.PalletPartNo,DATEDIFF(DAY, DC.CreatedDate, GETDATE())
+                    having DATEDIFF(DAY, DC.CreatedDate, GETDATE())>={Aging}
+                    ").ToList();
+            Obj.palletAgingDetailsGrid = _context.QueryData<PalletAgingDetailsGrid>($@"
+            select PM.PalletPartNo,COUNT(DC.PalletId) QTY,VM.VendorName, DATEDIFF(DAY, DC.CreatedDate, GETDATE()) AS Aging from DeliveryChallanTrans DC
+            Join VendorMaster VM on VM.VendorId = DC.VendorId
+            Join PalletMaster PM On PM.PalletId=DC.PalletId
+            where PM.Availability=5 {condition}
+            GROUP BY PM.PalletPartNo,VM.VendorName,DATEDIFF(DAY, DC.CreatedDate, GETDATE())
+            having DATEDIFF(DAY, DC.CreatedDate, GETDATE())>={Aging}
+            ").ToList();
+
+            return Obj;
         }
     }
 }

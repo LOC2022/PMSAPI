@@ -1,6 +1,7 @@
 ﻿using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using LOC.PMS.Model.DashBoard;
 using LOC.PMS.Model.Report;
 using Serilog;
 using System;
@@ -502,6 +503,86 @@ namespace LOC.PMS.Application
                 var response = _reportDetailsRepository.GetPalletDetailsByPart(userId, status, PalletPartNo);
 
                 _logger.Information("Pallet part trans details report request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public SupplierInOutFlow GetSupplierInOutFlowDB(string vendorId, string startDate, string endDate)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetSupplierInOutFlowDB(vendorId, startDate, endDate);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public TripDetails GetTripDBDetails(string startDate, string endDate)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetTripDBDetails(startDate, endDate);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public PlannedDBData GetPlannedDBDetails(string startDate, string endDate)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetPlannedDBDetails(startDate, endDate);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public PalletAgingDetails GetPalletAgingDB(string vendorId, string aging)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetPalletAgingDB(vendorId, aging);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
                 return response;
             }
             catch (Exception exception)
