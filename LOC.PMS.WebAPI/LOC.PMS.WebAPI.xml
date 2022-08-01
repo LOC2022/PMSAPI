@@ -457,6 +457,13 @@
             <param name="NewPalletId"></param>        
             <returns>Save Order</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetManualDcDetails(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="VendorId"></param>            
+            <returns>Save Order</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.VendorDetailsController">
             <summary>
             

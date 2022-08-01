@@ -22,6 +22,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 
         Task UpdatePalletWriteCount(string PalletId);
         Task<string> SwapPallets(string oldPalletId, string newPalletId, string OrderNo);
+        Task<IEnumerable<DCDetails>> GetManualDcDetails(string vendorId);
     }
 }
 
