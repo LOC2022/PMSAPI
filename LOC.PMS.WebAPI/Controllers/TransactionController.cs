@@ -287,6 +287,27 @@ namespace LOC.PMS.WebAPI.Controllers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VendorId"></param>            
+        /// <returns>Save Order</returns>
+        [SwaggerOperation(
+            Description = "SwapPallets.",
+            Tags = new[] { "SwapPallets" },
+            OperationId = "SwapPallets")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("GetManualDcDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> GetManualDcDetails([FromQuery] string VendorId)
+        {
+            var res = await _transactionDetailsProvider.GetManualDcDetails(VendorId);
+            return Ok(res);
+        }
+
+
+
 
     }
 

@@ -113,8 +113,17 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             foreach (var PalletId in PalletIds)
             {
-                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
-                _context.ExecuteSql(UpdatePalletQry);
+                if(ToStatus == "VendorDispatchScan")
+                {
+                    string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='5', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
+                    _context.ExecuteSql(UpdatePalletQry);
+                }
+                else
+                {
+                    string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
+                    _context.ExecuteSql(UpdatePalletQry);
+                }
+                
             }
 
             if (ToStatus == "VendorDispatchScan")
@@ -372,6 +381,11 @@ namespace LOC.PMS.Infrastructure.Repositories
             }
             return "Updated SuccessFully";
 
+        }
+
+        public async Task<IEnumerable<DCDetails>> GetManualDcDetails(string vendorId)
+        {
+            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[PalletsForPutAway_Select]");
         }
 
         public class MailModel
