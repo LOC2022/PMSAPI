@@ -9,6 +9,6 @@ namespace LOC.PMS.Application.Interfaces
     {
         Task SMSNotification(SmsNotification smsNotificationRequest);
 
-        Task EmailNotification(EmailNotification emailNotificationRequest);
+        Task<string> EmailNotification(EmailNotification emailNotificationRequest);
     }
 }

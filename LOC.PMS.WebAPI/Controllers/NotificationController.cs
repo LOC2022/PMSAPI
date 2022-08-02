@@ -57,8 +57,8 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("EmailNotification"), MapToApiVersion("1.0")]
         public async Task<IActionResult> EmailNotification([FromBody] EmailNotification emailNotificationRequest)
         {
-            await _notificationProvider.EmailNotification(emailNotificationRequest);
-            return Ok();
+            var res=await _notificationProvider.EmailNotification(emailNotificationRequest);
+            return Ok(res);
         }
     }
 }
