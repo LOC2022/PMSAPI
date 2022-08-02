@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 
 namespace LOC.PMS.WebAPI.Controllers
 {
@@ -59,6 +60,16 @@ namespace LOC.PMS.WebAPI.Controllers
         {
             var res=await _notificationProvider.EmailNotification(emailNotificationRequest);
             return Ok(res);
+        }
+
+        
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("TestEmail"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> TestEmail()
+        {           
+            return Ok(Environment.GetEnvironmentVariable("SENDGRID_API_KEY"));
         }
     }
 }
