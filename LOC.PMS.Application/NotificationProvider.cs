@@ -54,17 +54,18 @@ namespace LOC.PMS.Application
 
                 await EmailNotificationProcess(emailNotificationRequest);
 
-                return "Success";
+                return "Success" + Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
 
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                         .Information("Email Notificaiton= - End");
             }
             catch (Exception exception)
             {
+                return exception.Message + Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                     .Error(exception, "Exception occurred while sending Email Notificaiton");
                 await Task.FromException(exception);
-                return exception.Message;
+
             }
         }
 
