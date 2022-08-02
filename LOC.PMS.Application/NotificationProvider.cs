@@ -45,7 +45,7 @@ namespace LOC.PMS.Application
             }
         }
 
-        public async Task EmailNotification(EmailNotification emailNotificationRequest)
+        public async Task<string> EmailNotification(EmailNotification emailNotificationRequest)
         {
             try
             {
@@ -53,6 +53,8 @@ namespace LOC.PMS.Application
                    .Information("Email Notificaiton= - Start");
 
                 await EmailNotificationProcess(emailNotificationRequest);
+
+                return "Success";
 
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                         .Information("Email Notificaiton= - End");
@@ -62,6 +64,7 @@ namespace LOC.PMS.Application
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                     .Error(exception, "Exception occurred while sending Email Notificaiton");
                 await Task.FromException(exception);
+                return exception.Message;
             }
         }
 
