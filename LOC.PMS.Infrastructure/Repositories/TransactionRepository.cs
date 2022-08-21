@@ -1,5 +1,6 @@
 ﻿using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using Microsoft.Extensions.Configuration;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
@@ -15,10 +16,12 @@ namespace LOC.PMS.Infrastructure.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly IContext _context;
+        private readonly IConfiguration _config;
 
-        public TransactionRepository(IContext context)
+        public TransactionRepository(IContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         public async Task<IEnumerable<DCDetails>> GetDCDetails(string orderNo, string DCStatus, string UserName)
@@ -273,7 +276,8 @@ namespace LOC.PMS.Infrastructure.Repositories
                 HtmlContent += "</tbody></table>";
 
 
-                string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                //string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                string apiKey = _config.GetValue<string>("NotificationSettings:EmailNotification:SENDGRID_API_KEY");
                 string fromEmail = "victor@theacedigi.com";
 
                 var client = new SendGridClient(apiKey);
@@ -336,7 +340,8 @@ namespace LOC.PMS.Infrastructure.Repositories
                     Email = dt.FirstOrDefault().Email;
 
 
-                    string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                    //string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                    string apiKey = _config.GetValue<string>("NotificationSettings:EmailNotification:SENDGRID_API_KEY");
                     string fromEmail = "victor@theacedigi.com";
 
                     var client = new SendGridClient(apiKey);

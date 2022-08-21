@@ -54,14 +54,14 @@ namespace LOC.PMS.Application
 
                 await EmailNotificationProcess(emailNotificationRequest);
 
-                return "Success" + Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                return "Success";
 
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                         .Information("Email Notificaiton= - End");
             }
             catch (Exception exception)
             {
-                return exception.Message + Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                return exception.Message;
                 _logger.ForContext("emailNotificationRequest", emailNotificationRequest)
                     .Error(exception, "Exception occurred while sending Email Notificaiton");
                 await Task.FromException(exception);
@@ -71,7 +71,7 @@ namespace LOC.PMS.Application
 
         private async Task EmailNotificationProcess(EmailNotification emailNotificationRequest)
         {
-            string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+            string apiKey = _config.GetValue<string>("NotificationSettings:EmailNotification:SENDGRID_API_KEY");
             string fromEmail = emailNotificationRequest.FromEmailAddress ?? _config.GetValue<string>("NotificationSettings:EmailNotification:FromEmail");
 
             var client = new SendGridClient(apiKey);

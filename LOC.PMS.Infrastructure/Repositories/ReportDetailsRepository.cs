@@ -401,5 +401,119 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             return Obj;
         }
+
+        public List<DCDetails> GetDcNoForManual(string vendorId, string flag)
+        {
+            return _context.QueryData<DCDetails>(@$"select distinct DCNo from [dbo].[DeliveryChallanTrans] where  VendorId={vendorId}  and DCStatus IN (2,4,6)").ToList();
+        }
+
+        public List<DCDetails> GetDcDetailsForInward(string DCNo)
+        {
+            return _context.QueryData<DCDetails>(@$"select distinct PM.PalletPartNo,DC.PalletId,VM.VendorName from [dbo].[DeliveryChallanTrans] DC
+            JOIN PalletMaster PM on DC.PalletId=PM.PalletId
+            JOIN VendorMaster VM on VM.VendorId=DC.VendorId
+            where DC.DCStatus IN (2,4,6) and
+            DC.DCNo='{DCNo}'").ToList();
+        }
+
+        public void SaveInwardDetails(List<string> lstPallets, string OrderNo)
+        {
+
+            var VendorId = _context.QueryData<string>($"select VendorId from [DeliveryChallanTrans] where DCNo='{OrderNo}'").FirstOrDefault();
+            var Pallets = string.Join("','", lstPallets.ToArray());
+
+
+            if (VendorId.ToString() == "13")
+            {
+                string UpdatePalletQry = @$"UPDATE PalletMaster SET availability=1 WHERE PalletId IN ('{Pallets}') ";
+                _context.ExecuteSql(UpdatePalletQry);
+                string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus=DCStatus+1,Isactive=0 WHERE DCNo='{OrderNo}' and PalletId IN ('{Pallets}')";
+                _context.ExecuteSql(UpdateDCQry);
+            }
+            else
+            {
+                string UpdatePalletQry = @$"UPDATE PalletsByOrderTrans SET PalletStatus=PalletStatus+1, ModifiedDate = GETDATE() WHERE PalletId IN ('{Pallets}') 
+            and OrderNo In (select OrderNo from DeliveryChallanTrans where DCNo='{OrderNo}') ";
+                _context.ExecuteSql(UpdatePalletQry);
+                string UpdateDCQry = $"UPDATE DeliveryChallanTrans SET DCStatus=DCStatus+1,Isactive=0 WHERE DCNo='{OrderNo}' and PalletId IN ('{Pallets}')";
+                _context.ExecuteSql(UpdateDCQry);
+            }
+
+        }
+
+        public string ValidatePalletId(string palletId)
+        {
+            return _context.QueryData<string>(@$"select COUNT(distinct PM.PalletId) from  PalletMaster PM WHERE PM.PalletId='{palletId}'").FirstOrDefault();
+        }
+
+        public void SaveDispatchDetails(List<DCDetails> lstPallets, string vendorId)
+        {
+            string DCNo = $"DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}";
+            string DCType = vendorId == "14" ? "3" : "2";
+            string DCStatus = vendorId == "14" ? "5" : "3";
+            string _vendorId = vendorId == "14" ? "13" : vendorId;
+
+            foreach (var detail in lstPallets)
+            {
+                string UpdateDCQry = @$"INSERT INTO [DeliveryChallanTrans](OrderNo,DCNo,PalletId,VendorId,DCType,DCStatus,CreatedDate,CreatedBy,Isactive)
+                Values('{DCNo}','{DCNo}','{detail.PalletId}',{vendorId},{DCType},{DCStatus},'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{vendorId}',1)";
+                _context.ExecuteSql(UpdateDCQry);
+            }
+
+
+
+
+        }
+
+        public List<Orders> GetOrderNoForManual()
+        {
+            return _context.QueryData<Orders>(@$"SELECT distinct OrderNo FROM Orders O WHERE o.OrderStatusId = 1;").ToList();
+        }
+
+        public List<DCDetails> GetOrderDetailsForDispatch(string orderNo)
+        {
+            return _context.QueryData<DCDetails>(@$"	select DISTINCT O.OrderNo,PO.PalletId,PM.PalletPartNo,VM.VendorName from PalletsByOrderTrans PO
+							JOIN Orders O On PO.OrderNo=O.OrderNo
+							JOIN PalletMaster PM on PM.palletId=Po.PalletId
+							Join VendorMaster VM On VM.VendorId=O.VendorId
+							where O.OrderNo='{orderNo}'").ToList();
+        }
+
+        public void GenerateDCForManual(List<string> lstPallets, string orderNo)
+        {
+            string PalletIds = "";
+            if (lstPallets.Count > 0)
+                PalletIds = string.Join("','", lstPallets.Select(x => x.ToString()));
+
+            string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.Picked} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderNo}';";
+            UpdatePalletQry += $"UPDATE Orders SET OrderStatusId={(int)OrderStatus.InTransit} WHERE  OrderNo='{orderNo}';";
+            UpdatePalletQry += @$"INSERT INTO [dbo].[DeliveryChallanTrans]
+           ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy],[IsActive])
+			select DISTINCT 'DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}',PT.OrderNo,PalletId,O.VendorId,1,1,GETDATE(),'13',1 from 
+			PalletsByOrderTrans PT  
+			JOIN Orders O on O.OrderNo=PT.OrderNo where PalletId IN ('{PalletIds}') AND PT.OrderNo='{orderNo}';";
+
+            _context.ExecuteSql(UpdatePalletQry);
+        }
+
+        public List<DCDetails> GetOrderNoForDispatch()
+        {
+            return _context.QueryData<DCDetails>(@$"select Distinct O.OrderNo from Orders O
+							Join PalletsByOrderTrans PO On O.OrderNo=PO.OrderNo
+							Where PalletStatus=3").ToList();
+        }
+
+        public void DispatchOrder(List<string> lstPallets, string orderNo)
+        {
+            string PalletIds = "";
+            if (lstPallets.Count > 0)
+            {
+                PalletIds = string.Join("','", lstPallets.Select(x => x.ToString()));
+                string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.FixedRead} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderNo}';";
+                _context.ExecuteSql(UpdatePalletQry);
+            }
+        }
+
+
     }
 }

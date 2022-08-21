@@ -379,7 +379,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetPalletDetailsByPart"), MapToApiVersion("1.0")]
-        public IActionResult GetPalletDetailsByPart([FromQuery] string PalletPartNo = GETALL, [FromQuery] string UserId = GETALL, [FromQuery]string Status = "")
+        public IActionResult GetPalletDetailsByPart([FromQuery] string PalletPartNo = GETALL, [FromQuery] string UserId = GETALL, [FromQuery] string Status = "")
         {
             var response = _reportDetailsProvider.GetPalletDetailsByPart(UserId, Status, PalletPartNo);
             return Ok(response);
@@ -458,8 +458,193 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetDcNoForManual",
+            Tags = new[] { "GetDcNoForManual" },
+            OperationId = "GetDcNoForManual")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDcNoForManual"), MapToApiVersion("1.0")]
+        public IActionResult GetDcNoForManual([FromQuery] string VendorId = GETALL, [FromQuery] string Flag = "")
+        {
+            var response = _reportDetailsProvider.GetDcNoForManual(VendorId, Flag);
+            return Ok(response);
+        }
+
+        //GetDcDetailsForInward
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetDcDetailsForInward",
+            Tags = new[] { "GetDcDetailsForInward" },
+            OperationId = "GetDcDetailsForInward")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetDcDetailsForInward"), MapToApiVersion("1.0")]
+        public IActionResult GetDcDetailsForInward([FromQuery] string DCNo = GETALL)
+        {
+            var response = _reportDetailsProvider.GetDcDetailsForInward(DCNo);
+            return Ok(response);
+        }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "SaveInwardDetails",
+            Tags = new[] { "SaveInwardDetails" },
+            OperationId = "SaveInwardDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SaveInwardDetails"), MapToApiVersion("1.0")]
+        public IActionResult SaveInwardDetails([FromBody] List<string> lstPallets, [FromQuery] string DCNo)
+        {
+            _reportDetailsProvider.SaveInwardDetails(lstPallets, DCNo);
+            return Ok();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "SaveDispatchDetails",
+            Tags = new[] { "SaveDispatchDetails" },
+            OperationId = "SaveDispatchDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SaveDispatchDetails"), MapToApiVersion("1.0")]
+        public IActionResult SaveDispatchDetails([FromBody] List<DCDetails> lstPallets, [FromQuery] string VendorId)
+        {
+            _reportDetailsProvider.SaveDispatchDetails(lstPallets, VendorId);
+            return Ok();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>ValidatePalletId</returns>
+        [SwaggerOperation(
+            Description = "ValidatePalletId",
+            Tags = new[] { "ValidatePalletId" },
+            OperationId = "ValidatePalletId")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("ValidatePalletId"), MapToApiVersion("1.0")]
+        public IActionResult ValidatePalletId([FromQuery] string PalletId)
+        {
+            return Ok(_reportDetailsProvider.ValidatePalletId(PalletId));
+        }
+
+        //GetOrderNoForManual
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetOrderNoForManual",
+            Tags = new[] { "GetOrderNoForManual" },
+            OperationId = "GetOrderNoForManual")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetOrderNoForManual"), MapToApiVersion("1.0")]
+        public IActionResult GetOrderNoForManual([FromQuery] string VendorId = GETALL)
+        {
+            var response = _reportDetailsProvider.GetOrderNoForManual(VendorId);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetOrderDetailsForDispatch",
+            Tags = new[] { "GetOrderDetailsForDispatch" },
+            OperationId = "GetOrderDetailsForDispatch")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetOrderDetailsForDispatch"), MapToApiVersion("1.0")]
+        public IActionResult GetOrderDetailsForDispatch([FromQuery] string OrderNo = GETALL)
+        {
+            var response = _reportDetailsProvider.GetOrderDetailsForDispatch(OrderNo);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GenerateDCForManual",
+            Tags = new[] { "GenerateDCForManual" },
+            OperationId = "GenerateDCForManual")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("GenerateDCForManual"), MapToApiVersion("1.0")]
+        public IActionResult GenerateDCForManual([FromBody] List<string> lstPallets, [FromQuery] string OrderNo = GETALL)
+        {
+             _reportDetailsProvider.GenerateDCForManual(lstPallets,OrderNo);
+            return Ok();
+        }
+
+        //GetOrderNoForDispatch
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "GetOrderNoForDispatch",
+            Tags = new[] { "GetOrderNoForDispatch" },
+            OperationId = "GetOrderNoForDispatch")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetOrderNoForDispatch"), MapToApiVersion("1.0")]
+        public IActionResult GetOrderNoForDispatch()
+        {            
+            return Ok(_reportDetailsProvider.GetOrderNoForDispatch());
+        }
+
+        //DispatchOrder
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List of Orders</returns>
+        [SwaggerOperation(
+            Description = "DispatchOrder",
+            Tags = new[] { "DispatchOrder" },
+            OperationId = "DispatchOrder")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("DispatchOrder"), MapToApiVersion("1.0")]
+        public IActionResult DispatchOrder([FromBody] List<string> lstPallets, [FromQuery] string OrderNo = GETALL)
+        {
+            _reportDetailsProvider.DispatchOrder(lstPallets, OrderNo);
+            return Ok();
+        }
 
 
     }

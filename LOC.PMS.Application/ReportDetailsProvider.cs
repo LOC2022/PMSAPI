@@ -593,5 +593,206 @@ namespace LOC.PMS.Application
 
             }
         }
+
+        public List<DCDetails> GetDcNoForManual(string vendorId, string flag)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetDcNoForManual(vendorId, flag);
+                response.ForEach(x => x.key = x.PalletId);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DCDetails> GetDcDetailsForInward(string dCNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetDcDetailsForInward(dCNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void SaveInwardDetails(List<string> lstPallets, string OrderNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                _reportDetailsRepository.SaveInwardDetails(lstPallets, OrderNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public string ValidatePalletId(string palletId)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.ValidatePalletId(palletId);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void SaveDispatchDetails(List<DCDetails> lstPallets, string vendorId)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                _reportDetailsRepository.SaveDispatchDetails(lstPallets, vendorId);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<Orders> GetOrderNoForManual(string vendorId)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetOrderNoForManual();
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DCDetails> GetOrderDetailsForDispatch(string orderNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetOrderDetailsForDispatch(orderNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void GenerateDCForManual(List<string> lstPallets, string orderNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                _reportDetailsRepository.GenerateDCForManual(lstPallets, orderNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<DCDetails> GetOrderNoForDispatch()
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetOrderNoForDispatch();
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void DispatchOrder(List<string> lstPallets, string orderNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                _reportDetailsRepository.DispatchOrder(lstPallets, orderNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
     }
 }
