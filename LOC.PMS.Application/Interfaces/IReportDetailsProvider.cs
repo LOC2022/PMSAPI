@@ -50,5 +50,15 @@ namespace LOC.PMS.Application.Interfaces
         TripDetails GetTripDBDetails(string startDate, string endDate);
         PlannedDBData GetPlannedDBDetails(string startDate, string endDate);
         PalletAgingDetails GetPalletAgingDB(string vendorId, string aging);
+        List<DCDetails> GetDcNoForManual(string vendorId, string flag);
+        List<DCDetails> GetDcDetailsForInward(string dCNo);
+        void SaveInwardDetails(List<string> lstPallets, string OrderNo);
+        string ValidatePalletId(string palletId);
+        void SaveDispatchDetails(List<DCDetails> lstPallets, string vendorId);
+        List<Orders> GetOrderNoForManual(string vendorId);
+        List<DCDetails> GetOrderDetailsForDispatch(string orderNo);
+        void GenerateDCForManual(List<string> lstPallets, string orderNo);
+        List<DCDetails> GetOrderNoForDispatch();
+        void DispatchOrder(List<string> lstPallets, string orderNo);
     }
 }

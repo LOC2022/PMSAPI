@@ -352,6 +352,66 @@
             </summary>
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDcNoForManual(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetDcDetailsForInward(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.SaveInwardDetails(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.SaveDispatchDetails(System.Collections.Generic.List{LOC.PMS.Model.DCDetails},System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.ValidatePalletId(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>ValidatePalletId</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetOrderNoForManual(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetOrderDetailsForDispatch(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GenerateDCForManual(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetOrderNoForDispatch">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.DispatchOrder(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            
+            </summary>
+            <returns>List of Orders</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             

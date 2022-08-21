@@ -49,6 +49,7 @@ namespace LOC.PMS.Model
         public string ReferenceNo { get; set; }
         public string GSTNo { get; set; }
         public string CreatedBy { get; set; }
+        public string key { get; set; }
 
 
     }

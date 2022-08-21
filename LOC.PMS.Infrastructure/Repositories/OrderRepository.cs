@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces.IRepositories;
 using LOC.PMS.Model;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -16,10 +17,12 @@ namespace LOC.PMS.Infrastructure.Repositories
     public class OrderRepository : IOrderRepository
     {
         private readonly IContext _context;
+        private readonly IConfiguration _config;
 
-        public OrderRepository(IContext context)
+        public OrderRepository(IContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;   
         }
 
         public Task AddDayPlanData(List<DayPlan> order)
@@ -443,7 +446,8 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                             </html>";
 
 
-                string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                //string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                string apiKey = _config.GetValue<string>("NotificationSettings:EmailNotification:SENDGRID_API_KEY");
                 string fromEmail = "victor@theacedigi.com";
 
                 var client = new SendGridClient(apiKey);
