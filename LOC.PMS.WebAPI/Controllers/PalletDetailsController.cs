@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,7 @@ namespace LOC.PMS.WebAPI.Controllers
             this._palletDetailsProvider = palletDetailsProvider;
         }
 
-        
+
         /// <summary>
         /// Add new pallet to the server.
         /// </summary>
@@ -67,6 +69,25 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <summary>
         /// Add new pallet to the server.
         /// </summary>
+        /// <param name="palletDetailsRequest"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Description = "Modify the existing pallet to the server.",
+            Tags = new[] { "ModifyPalletDetails" },
+            OperationId = "ModifyPalletDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("TestModifyPalletDetails"), MapToApiVersion("1.0")]
+        public async Task<IActionResult> TestModifyPalletDetails(PalletDetails palletDetailsRequest)
+        {
+            var response = await _palletDetailsProvider.ModifyPalletDetails(palletDetailsRequest);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Add new pallet to the server.
+        /// </summary>
         /// <param name="palletLocationDetailsRequest"></param>
         /// <returns></returns>
         [SwaggerOperation(
@@ -98,8 +119,12 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpGet("GetPallets"), MapToApiVersion("1.0")]
         public async Task<IActionResult> GetPallets([FromQuery] string palletId = "ALL")
         {
+            string UserId = Request.Headers["UserId"];
+
             var response = await _palletDetailsProvider.GetPalletDetails(palletId);
             return Ok(response);
+
+            // return BadRequest();
         }
 
         /// <summary>

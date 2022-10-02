@@ -53,7 +53,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             {
                 new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate),
-                new SqlParameter("@UserId", UserId=="13"?"":UserId)
+                new SqlParameter("@UserId", UserId)
 
             };
 
@@ -307,7 +307,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             string Condition1 = "";
             if (!string.IsNullOrEmpty(startDate))
             {
-                Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";
+                Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";// N-3 Logic and Vendor Id 
                 Condition1 = $" and OrderCreatedDate between '{startDate}' and '{endDate}' ";
             }
             PlannedDBData plannedDBData = new PlannedDBData();
@@ -467,7 +467,9 @@ namespace LOC.PMS.Infrastructure.Repositories
 
         public List<Orders> GetOrderNoForManual()
         {
-            return _context.QueryData<Orders>(@$"SELECT distinct OrderNo FROM Orders O WHERE o.OrderStatusId = 1;").ToList();
+            return _context.QueryData<Orders>(@$"SELECT distinct O.OrderNo FROM Orders O
+                                JOIN [PalletsByOrderTrans] P ON P.OrderNo=O.OrderNo
+                                WHERE o.OrderStatusId = 1;").ToList();
         }
 
         public List<DCDetails> GetOrderDetailsForDispatch(string orderNo)

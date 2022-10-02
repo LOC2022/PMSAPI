@@ -169,6 +169,13 @@
             <param name="palletDetailsRequest"></param>
             <returns></returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.TestModifyPalletDetails(LOC.PMS.Model.PalletDetails)">
+            <summary>
+            Add new pallet to the server.
+            </summary>
+            <param name="palletDetailsRequest"></param>
+            <returns></returns>
+        </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.PalletDetailsController.AddOrModifyPalletLocation(LOC.PMS.Model.LocationMaster)">
             <summary>
             Add new pallet to the server.

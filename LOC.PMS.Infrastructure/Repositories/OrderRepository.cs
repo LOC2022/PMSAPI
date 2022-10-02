@@ -39,10 +39,10 @@ namespace LOC.PMS.Infrastructure.Repositories
             };
             _context.BulkCopy(order, ColList, order.Count, "DayPlan");
 
-            Thread.Sleep(10000);
+            Thread.Sleep(3000);
             CreateOrder();
 
-            Thread.Sleep(10000);
+            Thread.Sleep(3000);
             AssignPalletForDayOrder();
             return Task.CompletedTask;
         }
@@ -471,6 +471,7 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                 //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
                 toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
+                toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
 
 
 

@@ -29,11 +29,11 @@ namespace LOC.PMS.Infrastructure.Repositories
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@OrderNo", orderNo),
-                new SqlParameter("@Stage", DCStatus),
-                new SqlParameter("@UserName", UserName)
+                new SqlParameter("@Stage", string.IsNullOrEmpty(DCStatus)?"":DCStatus),
+                new SqlParameter("@UserId", UserName)
 
             };
-            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_Select]", sqlParams.ToArray());
+            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_Select_NEW]", sqlParams.ToArray());
         }
 
         public async Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails)
@@ -72,7 +72,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             foreach (var PalletId in PalletIds)
             {
 
-                if(ToStatus == "CIPLInwardScan")
+                if (ToStatus == "CIPLInwardScan")
                 {
                     string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='6', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}')";
                     _context.ExecuteSql(UpdatePalletQry);
@@ -83,7 +83,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     _context.ExecuteSql(UpdatePalletQry);
 
                 }
-                
+
 
                 if (PalletId != "0")
                 {
@@ -92,7 +92,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     {
                         string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',{VendorId},2,3,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,2,3,GETDATE(),'{VendorId}'";
 
                         _context.ExecuteSql(CreateDCQuery);
                         SendMailToVendor($"DC{DCNo}");
@@ -103,7 +103,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     {
                         string CreateDCQuery = @$"INSERT INTO [dbo].[DeliveryChallanTrans]
                    ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy])
-			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',14,3,5,GETDATE(),''";
+			        select DISTINCT 'DC{DCNo}','DC{DCNo}','{PalletId}',13,3,5,GETDATE(),'{VendorId}'";
 
                         _context.ExecuteSql(CreateDCQuery);
                         SendMailToVendor($"DC{DCNo}");
@@ -127,7 +127,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
             foreach (var PalletId in PalletIds)
             {
-                if(ToStatus == "VendorDispatchScan")
+                if (ToStatus == "VendorDispatchScan")
                 {
                     string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='5', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
                     _context.ExecuteSql(UpdatePalletQry);
@@ -137,7 +137,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus='{PalletStatusId.First()}', ModifiedDate = GETDATE() WHERE PalletId IN ('{PalletId}') AND OrderNo='{OrderNumber}'";
                     _context.ExecuteSql(UpdatePalletQry);
                 }
-                
+
             }
 
             if (ToStatus == "VendorDispatchScan")
@@ -168,7 +168,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             UpdatePalletQry += $"UPDATE Orders SET OrderStatusId={(int)OrderStatus.InTransit} WHERE  OrderNo='{orderDetails.First().OrderNo}';";
             UpdatePalletQry += @$"INSERT INTO [dbo].[DeliveryChallanTrans]
            ([DCNo],[OrderNo],[PalletId],[VendorId],[DCType],[DCStatus],[CreatedDate],[CreatedBy],[IsActive])
-			select DISTINCT 'DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}',PT.OrderNo,PalletId,O.VendorId,1,1,GETDATE(),'{orderDetails.First().UserId}',1 from 
+			select DISTINCT 'DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}',PT.OrderNo,PalletId,O.VendorId,1,1,GETDATE(),'13',1 from 
 			PalletsByOrderTrans PT  
 			JOIN Orders O on O.OrderNo=PT.OrderNo where PalletId IN ('{PalletIds}') AND PT.OrderNo='{orderDetails.First().OrderNo}';";
 
@@ -183,6 +183,10 @@ namespace LOC.PMS.Infrastructure.Repositories
             string PalletIds = "";
             if (orderDetails.Count > 0)
                 PalletIds = string.Join("','", orderDetails.Select(x => x.PalletId.ToString()));
+
+            string VendorId = _context.QueryData<string>($"select VendorId from Orders where OrderNo='{orderDetails.First().OrderNo}'").FirstOrDefault();
+
+            _context.ExecuteSql($"update DeliveryChallanTrans set VendorId={VendorId} where OrderNo='{orderDetails.First().OrderNo}'");
 
             string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.FixedRead} WHERE PalletId IN ('{PalletIds}') AND OrderNo='{orderDetails.First().OrderNo}';";
             _context.ExecuteSql(UpdatePalletQry);
@@ -222,7 +226,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             if (orderDetails.FirstOrDefault().Status.ToString() == "INWARD")
             {
                 string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=7;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
-                //string UpdatePalletQry = $"UPDATE PalletsByOrderTrans SET PalletStatus={(int)PalletStatus.WarehouseInward} WHERE PalletId IN ('{PalletIds}') AND PalletStatus=8;UPDATE [DeliveryChallanTrans] SET DCStatus=7 WHERE DCNo='{orderDetails.FirstOrDefault().OrderNo}'";
+                UpdatePalletQry += $"UPDATE PalletMaster SET Availability=1 WHERE PalletId IN ('{PalletIds}') ";
                 _context.ExecuteSql(UpdatePalletQry);
 
                 string qryMaster = $"UPDATE PalletMaster set LocationId=13 where PalletId IN ('{PalletIds}')";
@@ -302,7 +306,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com"));
-
+                toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
 
 
                 var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "Order Details ", "", HtmlContent);
@@ -341,6 +345,7 @@ namespace LOC.PMS.Infrastructure.Repositories
 
 
                     //string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+
                     string apiKey = _config.GetValue<string>("NotificationSettings:EmailNotification:SENDGRID_API_KEY");
                     string fromEmail = "victor@theacedigi.com";
 
@@ -356,18 +361,20 @@ namespace LOC.PMS.Infrastructure.Repositories
 
 
                     toEmailList.Add(new EmailAddress(string.IsNullOrEmpty(Email) ? "muthazagan123@gmail.com" : Email));
-                    toEmailList.Add(new EmailAddress("viswanathan_hemachandran@cat.com"));
-                    toEmailList.Add(new EmailAddress("s_arun_prasath@cat.com"));
-                    toEmailList.Add(new EmailAddress("GTOCITRL@cat.com"));
-                    toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-                    toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-                    toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-                    toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-                    toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-                    toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-                    toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
+                    //toEmailList.Add(new EmailAddress("viswanathan_hemachandran@cat.com"));
+                    //toEmailList.Add(new EmailAddress("s_arun_prasath@cat.com"));
+                    //toEmailList.Add(new EmailAddress("GTOCITRL@cat.com"));
+                    //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
+                    //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
+                    //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
+                    //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
+                    //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
+                    //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
+                    //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
 
-
+                    toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
+                    toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
+                    toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
 
                     var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "DC Details ", "", HtmlContent);
 
