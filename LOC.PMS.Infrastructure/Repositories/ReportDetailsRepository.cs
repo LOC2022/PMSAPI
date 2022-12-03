@@ -192,9 +192,15 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             DBPalletCount dBPalletCount = new DBPalletCount();
 
-            var dt = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (1, 2, 3, 5, 7)").FirstOrDefault();
-            var dt1 = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (4,8,6)").FirstOrDefault();
-            var dt2 = _context.QueryData<int>("select Count(*) from PalletsByOrderTrans where PalletStatus in (11)").FirstOrDefault();
+            var dt = _context.QueryData<int>($"select Count(distinct DC.PalletId) from DeliveryChallanTrans DC JOIN PalletMaster PM ON DC.PalletId=PM.PalletId where PM.Availability in ( 2, 3, 5, 7) and DC.VendorId={userId}").FirstOrDefault();
+            var dt1 = _context.QueryData<int>($"select Count(distinct DC.PalletId) from DeliveryChallanTrans DC JOIN PalletMaster PM ON DC.PalletId=PM.PalletId where PM.Availability in (4,6,8) and DC.VendorId={userId}").FirstOrDefault();
+            var dt2 = _context.QueryData<int>($"select Count(distinct DC.PalletId) from DeliveryChallanTrans DC JOIN PalletMaster PM ON DC.PalletId=PM.PalletId where PM.Availability in (11) and DC.VendorId={userId}").FirstOrDefault();
+
+            if (userId == "13")
+            {
+                var dtw = _context.QueryData<int>($"select Count(distinct PalletId) from  PalletMaster PM where PM.Availability in (1)").FirstOrDefault();
+                dt += dtw;
+            }
 
 
             dBPalletCount.OnSite = Convert.ToString(dt);
@@ -210,9 +216,9 @@ namespace LOC.PMS.Infrastructure.Repositories
             DBOnSite dBOnSite = new DBOnSite();
 
 
-            var dt = _context.QueryData<int>(@"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (1, 2)").FirstOrDefault();
-            var dt1 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (5) --AND PM.LocationId={userId}").FirstOrDefault();
-            var dt2 = _context.QueryData<int>(@"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (7)").FirstOrDefault();
+            var dt = _context.QueryData<int>(@"select COUNT(DISTINCT PalletId) from [PalletMaster] PM  Where Availability  in (1, 2)").FirstOrDefault();
+            var dt1 = _context.QueryData<int>(@$"select COUNT(DISTINCT DC.PalletId) from [dbo].DeliveryChallanTrans DC JOIN [dbo].[PalletMaster] PM ON DC.PalletId=PM.PalletId Where PM.Availability  in (5) --AND PM.LocationId={userId}").FirstOrDefault();
+            var dt2 = _context.QueryData<int>(@"select COUNT(DISTINCT DC.PalletId) from [dbo].DeliveryChallanTrans DC JOIN [dbo].[PalletMaster] PM ON DC.PalletId=PM.PalletId Where PM.Availability  in (7)").FirstOrDefault();
 
 
             dBOnSite.Ace = Convert.ToString(dt);
@@ -227,9 +233,15 @@ namespace LOC.PMS.Infrastructure.Repositories
             DBTransitCount dBOnSite = new DBTransitCount();
 
 
-            var dt = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN[dbo].[PalletMaster] PM ON PR.PalletId = PM.PalletId Where PR.PalletStatus  in (4) --AND PM.LocationId = {userId}").FirstOrDefault();
-            var dt1 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (6) --AND PM.LocationId={userId}").FirstOrDefault();
-            var dt2 = _context.QueryData<int>(@$"select COUNT(*) from [dbo].PalletsByOrderTrans PR JOIN [dbo].[PalletMaster] PM ON PR.PalletId=PM.PalletId Where PR.PalletStatus  in (8) --AND PM.LocationId = {userId}").FirstOrDefault();
+            var dt = _context.QueryData<int>(@$"select COUNT(distinct DC.PalletId) from [dbo].DeliveryChallanTrans DC 
+JOIN [dbo].[PalletMaster] PM ON DC.PalletId = PM.PalletId 
+Where PM.Availability  in (4) --AND PM.LocationId = {userId}").FirstOrDefault();
+            var dt1 = _context.QueryData<int>(@$"select COUNT(distinct DC.PalletId) from [dbo].DeliveryChallanTrans DC 
+JOIN [dbo].[PalletMaster] PM ON DC.PalletId = PM.PalletId 
+Where PM.Availability  in (6) --AND PM.LocationId={userId}").FirstOrDefault();
+            var dt2 = _context.QueryData<int>(@$"select COUNT(distinct DC.PalletId) from [dbo].DeliveryChallanTrans DC 
+JOIN [dbo].[PalletMaster] PM ON DC.PalletId = PM.PalletId 
+Where PM.Availability  in (8) --AND PM.LocationId = {userId}").FirstOrDefault();
 
 
             dBOnSite.AceToSupplier = Convert.ToString(dt);
@@ -284,35 +296,40 @@ namespace LOC.PMS.Infrastructure.Repositories
             }
             var Obj = new SupplierInOutFlow();
             Obj.supplierInOutFlowDB = new SupplierInOutFlowDB();
-            Obj.supplierInOutFlowDB.Dispatched = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where DCType=1 {Condition}").FirstOrDefault();
-            Obj.supplierInOutFlowDB.Received = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where DCType=1 {Condition}").FirstOrDefault();
-            Obj.supplierInOutFlowGrid = _context.QueryData<SupplierInOutFlowGrid>(@$"select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'Received' Status from [dbo].[DeliveryChallanTrans] DC
-                                        Join PalletMaster PM on DC.PalletId=PM.PalletId
-                                        JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
-                                        where DCType=1 {Condition}
-                                        Group BY PM.PalletPartNo,VM.VendorName
-                                        UNION ALL
-                                        select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'DisPatched' Status from [dbo].[DeliveryChallanTrans] DC
-                                        Join PalletMaster PM on DC.PalletId=PM.PalletId
-                                        JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
-                                        where DCType=2 {Condition}
-                                        Group BY PM.PalletPartNo,VM.VendorName
-                                        ORDER BY Status").ToList();
+            Obj.supplierInOutFlowDB.Dispatched = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where   CreatedBy={vendorId}").FirstOrDefault();
+            Obj.supplierInOutFlowDB.Received = _context.QueryData<string>(@$"select COUNT(PalletId) from [dbo].[DeliveryChallanTrans] where VendorId={vendorId}").FirstOrDefault();
+            //Obj.supplierInOutFlowGrid = _context.QueryData<SupplierInOutFlowGrid>(@$"select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'Received' Status from [dbo].[DeliveryChallanTrans] DC
+            //                            Join PalletMaster PM on DC.PalletId=PM.PalletId
+            //                            JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
+            //                            where DCType=1 {Condition}
+            //                            Group BY PM.PalletPartNo,VM.VendorName
+            //                            UNION ALL
+            //                            select COUNT(DC.PalletId) QTY,PM.PalletPartNo PartNo,VM.VendorName Supplier,'DisPatched' Status from [dbo].[DeliveryChallanTrans] DC
+            //                            Join PalletMaster PM on DC.PalletId=PM.PalletId
+            //                            JOIN VendorMaster VM ON VM.VendorId=DC.VendorId
+            //                            where DCType=2 {Condition}
+            //                            Group BY PM.PalletPartNo,VM.VendorName
+            //                            ORDER BY Status").ToList();
             return Obj;
         }
 
-        public PlannedDBData GetPlannedDBDetails(string startDate, string endDate)
+        public PlannedDBData GetPlannedDBDetails(string UserId, string startDate, string endDate)
         {
+            //string Condition = "";
+            //string Condition1 = "";
+            //if (!string.IsNullOrEmpty(startDate))
+            //{
+            //    Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";// N-3 Logic and Vendor Id 
+            //    Condition1 = $" and OrderCreatedDate between '{startDate}' and '{endDate}' ";
+            //}
             string Condition = "";
-            string Condition1 = "";
-            if (!string.IsNullOrEmpty(startDate))
+            if (UserId != "13" && UserId != "14")
             {
-                Condition = $" and CreatedDate between '{startDate}' and '{endDate}' ";// N-3 Logic and Vendor Id 
-                Condition1 = $" and OrderCreatedDate between '{startDate}' and '{endDate}' ";
+                Condition = $"and VendorId={UserId}";
             }
             PlannedDBData plannedDBData = new PlannedDBData();
-            plannedDBData.Planned = _context.QueryData<int>(@$"select ISNULL(SUM(OrderQty),0) from Orders where PalletAssignedFlag=0  {Condition1}").FirstOrDefault();
-            plannedDBData.Actual = _context.QueryData<int>(@$"select ISNULL(COUNT(PalletId),0) from DeliveryChallanTrans where DCStatus=1  {Condition}").FirstOrDefault();
+            plannedDBData.Planned = _context.QueryData<int>(@$"select ISNULL(SUM(OrderQty),0) from Orders where PalletAssignedFlag=0 {Condition} ").FirstOrDefault();
+            plannedDBData.Actual = _context.QueryData<int>(@$"select ISNULL(COUNT(PalletId),0) from DeliveryChallanTrans where 1=1  {Condition}").FirstOrDefault();
             plannedDBData.Missed = Convert.ToInt32(plannedDBData.Planned) - Convert.ToInt32(plannedDBData.Actual);
             return plannedDBData;
         }
@@ -411,7 +428,7 @@ namespace LOC.PMS.Infrastructure.Repositories
         {
             return _context.QueryData<DCDetails>(@$"select distinct PM.PalletPartNo,DC.PalletId,VM.VendorName from [dbo].[DeliveryChallanTrans] DC
             JOIN PalletMaster PM on DC.PalletId=PM.PalletId
-            JOIN VendorMaster VM on VM.VendorId=DC.VendorId
+            JOIN VendorMaster VM on VM.VendorId=DC.CreatedBy
             where DC.DCStatus IN (2,4,6) and
             DC.DCNo='{DCNo}'").ToList();
         }
@@ -451,12 +468,12 @@ namespace LOC.PMS.Infrastructure.Repositories
             string DCNo = $"DC{DateTime.Now.ToString("ddMMyyyyHHmmss")}";
             string DCType = vendorId == "14" ? "3" : "2";
             string DCStatus = vendorId == "14" ? "5" : "3";
-            string _vendorId = vendorId == "14" ? "13" : vendorId;
+            string _vendorId = vendorId == "14" ? "13" : "14";
 
             foreach (var detail in lstPallets)
             {
                 string UpdateDCQry = @$"INSERT INTO [DeliveryChallanTrans](OrderNo,DCNo,PalletId,VendorId,DCType,DCStatus,CreatedDate,CreatedBy,Isactive)
-                Values('{DCNo}','{DCNo}','{detail.PalletId}',{vendorId},{DCType},{DCStatus},'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{vendorId}',1)";
+                Values('{DCNo}','{DCNo}','{detail.PalletId}',{_vendorId},{DCType},{DCStatus},'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}','{vendorId}',1)";
                 _context.ExecuteSql(UpdateDCQry);
             }
 
@@ -516,6 +533,40 @@ namespace LOC.PMS.Infrastructure.Repositories
             }
         }
 
+        public DCAdditionalDetails GetAddtionalDCDetails(string dCNo)
+        {
+            var from = _context.QueryData<string>($"select CreatedBy from DeliveryChallanTrans where DCNo='{dCNo}'").FirstOrDefault();
+            var to = _context.QueryData<string>($"select VendorId from DeliveryChallanTrans where DCNo='{dCNo}'").FirstOrDefault();
 
+
+            return _context.QueryData<DCAdditionalDetails>(@$"select CiplVendorCode SendVendorCode,VendorName +' <br> '+BillToAddress BillFrom
+                ,(select top 1 CiplVendorCode from VendorMaster where VendorId={to} ) ToVendorCode
+                from VendorMaster where VendorId={from}").FirstOrDefault();
+        }
+
+        //FullCycleReport
+
+        public List<FullCycleReport> GetFullCycleReport()
+        {
+            return _context.QueryData<FullCycleReport>(@$"EXEC GETFULLCYCLEREPORT").ToList();
+        }
+
+        public void SaveMailDetails(MailModel mailModel)
+        {
+            _context.ExecuteSql($@"INSERT INTO [tbl_MailConfiguration]([ModuleId],[Email],[Mobile],[Isactive]) VALUES ({mailModel.ModuleId},'{mailModel.Email}','{mailModel.Mobile}',1)");
+        }
+
+        public List<MailModel> GetMailDetails()
+        {
+            return _context.QueryData<MailModel>(@$"EXEC GETMAILDETAILS").ToList();
+        }
+
+        public void DeleteMailDetails(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                _context.ExecuteSql($@"UPDATE  [tbl_MailConfiguration] SET  [Isactive]=0 WHERE Id={id}");
+            }
+        }
     }
 }

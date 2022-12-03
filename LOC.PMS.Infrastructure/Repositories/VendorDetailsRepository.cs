@@ -33,6 +33,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@NonD2LDays", vendorMasterRequest.NonD2LDays),
                 new SqlParameter("@IsActive", vendorMasterRequest.IsActive),
                 new SqlParameter("@ModifiedBy", vendorMasterRequest.ModifiedBy),
+                new SqlParameter("@ciplVendorCode", string.IsNullOrEmpty(vendorMasterRequest.ciplVendorCode)?"":vendorMasterRequest.ciplVendorCode),
                 new SqlParameter("ReturnVendorId",SqlDbType.Int){Direction = ParameterDirection.ReturnValue}
             };
 

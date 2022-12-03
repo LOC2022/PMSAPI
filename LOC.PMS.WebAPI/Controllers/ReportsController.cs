@@ -1,5 +1,6 @@
 ﻿using LOC.PMS.Application.Interfaces;
 using LOC.PMS.Model;
+using LOC.PMS.Model.Report;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -397,9 +398,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetSupplierInOutFlowDB"), MapToApiVersion("1.0")]
-        public IActionResult GetSupplierInOutFlowDB([FromQuery] string VendorId = GETALL, [FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
+        public IActionResult GetSupplierInOutFlowDB([FromQuery] string UserId, [FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
         {
-            var response = _reportDetailsProvider.GetSupplierInOutFlowDB(VendorId, StartDate, EndDate);
+            var response = _reportDetailsProvider.GetSupplierInOutFlowDB(UserId, StartDate, EndDate);
             return Ok(response);
         }
 
@@ -416,9 +417,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetPlannedDBDetails"), MapToApiVersion("1.0")]
-        public IActionResult GetPlannedDBDetails([FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
+        public IActionResult GetPlannedDBDetails([FromQuery] string UserId, [FromQuery] string StartDate = GETALL, [FromQuery] string EndDate = "")
         {
-            var response = _reportDetailsProvider.GetPlannedDBDetails(StartDate, EndDate);
+            var response = _reportDetailsProvider.GetPlannedDBDetails(UserId, StartDate, EndDate);
             return Ok(response);
         }
 
@@ -452,9 +453,9 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetPalletAgingDB"), MapToApiVersion("1.0")]
-        public IActionResult GetPalletAgingDB([FromQuery] string VendorId = GETALL, [FromQuery] string Aging = "")
+        public IActionResult GetPalletAgingDB([FromQuery] string UserId = GETALL, [FromQuery] string Aging = "")
         {
-            var response = _reportDetailsProvider.GetPalletAgingDB(VendorId, Aging);
+            var response = _reportDetailsProvider.GetPalletAgingDB(UserId, Aging);
             return Ok(response);
         }
 
@@ -476,7 +477,7 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok(response);
         }
 
-        //GetDcDetailsForInward
+        //Manual Process
 
         /// <summary>
         /// 
@@ -603,7 +604,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [HttpPost("GenerateDCForManual"), MapToApiVersion("1.0")]
         public IActionResult GenerateDCForManual([FromBody] List<string> lstPallets, [FromQuery] string OrderNo = GETALL)
         {
-             _reportDetailsProvider.GenerateDCForManual(lstPallets,OrderNo);
+            _reportDetailsProvider.GenerateDCForManual(lstPallets, OrderNo);
             return Ok();
         }
 
@@ -622,7 +623,7 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetOrderNoForDispatch"), MapToApiVersion("1.0")]
         public IActionResult GetOrderNoForDispatch()
-        {            
+        {
             return Ok(_reportDetailsProvider.GetOrderNoForDispatch());
         }
 
@@ -646,6 +647,94 @@ namespace LOC.PMS.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>DC Basic Details</returns>
+        [SwaggerOperation(
+            Description = "GetAddtionalDCDetails",
+            Tags = new[] { "GetAddtionalDCDetails" },
+            OperationId = "GetAddtionalDCDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetAddtionalDCDetails"), MapToApiVersion("1.0")]
+        public IActionResult GetAddtionalDCDetails([FromQuery] string DCNo)
+        {
+            return Ok(_reportDetailsProvider.GetAddtionalDCDetails(DCNo));
+        }
 
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>FullCycle Report Data</returns>
+        [SwaggerOperation(
+            Description = "GetFullCycleReport",
+            Tags = new[] { "GetFullCycleReport" },
+            OperationId = "GetFullCycleReport")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetFullCycleReport"), MapToApiVersion("1.0")]
+        public IActionResult GetFullCycleReport()
+        {
+            return Ok(_reportDetailsProvider.GetFullCycleReport());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Save Mail Details</returns>
+        [SwaggerOperation(
+            Description = "SaveMailDetails",
+            Tags = new[] { "SaveMailDetails" },
+            OperationId = "SaveMailDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpPost("SaveMailDetails"), MapToApiVersion("1.0")]
+        public IActionResult SaveMailDetails([FromBody] MailModel mailModel)
+        {
+            _reportDetailsProvider.SaveMailDetails(mailModel);
+            return Ok();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Get Mail Details</returns>
+        [SwaggerOperation(
+            Description = "GetMailDetails",
+            Tags = new[] { "GetMailDetails" },
+            OperationId = "GetMailDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("GetMailDetails"), MapToApiVersion("1.0")]
+        public IActionResult GetMailDetails()
+        {
+
+            return Ok(_reportDetailsProvider.GetMailDetails());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Delete Mail Details</returns>
+        [SwaggerOperation(
+            Description = "DeleteMailDetails",
+            Tags = new[] { "DeleteMailDetails" },
+            OperationId = "DeleteMailDetails")]
+        [SwaggerResponse(200, "OK", typeof(StatusCodeResult))]
+        [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
+        [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
+        [HttpGet("DeleteMailDetails"), MapToApiVersion("1.0")]
+        public IActionResult DeleteMailDetails([FromQuery] string Id)
+        {
+            _reportDetailsProvider.DeleteMailDetails(Id);
+            return Ok();
+        }
     }
 }

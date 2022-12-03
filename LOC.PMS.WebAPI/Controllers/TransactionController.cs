@@ -54,6 +54,7 @@ namespace LOC.PMS.WebAPI.Controllers
         /// <param name="OrderNo"></param>
         /// <param name="DCStatus"></param>
         /// <param name="UserName"></param>
+        /// <param name="UserId"></param>
         /// <returns>List of DC's</returns>
         [SwaggerOperation(
             Description = "GetDCDetails.",
@@ -63,10 +64,20 @@ namespace LOC.PMS.WebAPI.Controllers
         [SwaggerResponse(400, "Bad Request", typeof(StatusCodeResult))]
         [SwaggerResponse(500, "Internal Server Error.", typeof(StatusCodeResult))]
         [HttpGet("GetDCDetails"), MapToApiVersion("1.0")]
-        public async Task<IActionResult> GetDCDetails([FromQuery] string OrderNo = GETALL, [FromQuery] string DCStatus = null, [FromQuery] string UserName = null)
+        public async Task<IActionResult> GetDCDetails([FromQuery] string OrderNo = GETALL, [FromQuery] string DCStatus = null, [FromQuery] string UserName = null, [FromQuery] string UserId="")
         {
-            var response = await _transactionDetailsProvider.GetDCDetails(OrderNo, DCStatus, UserName);
-            return Ok(response);
+            if(!string.IsNullOrEmpty(UserName))
+            {
+                var response = await _transactionDetailsProvider.GetDCDetailsOld(OrderNo, DCStatus, UserName);
+                return Ok(response);
+            }
+            else
+            {
+                var response = await _transactionDetailsProvider.GetDCDetails(OrderNo, DCStatus, UserId);
+                return Ok(response);
+            }
+                       
+            
         }
 
         /// <summary>

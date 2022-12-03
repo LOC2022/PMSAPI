@@ -36,6 +36,18 @@ namespace LOC.PMS.Infrastructure.Repositories
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_Select_NEW]", sqlParams.ToArray());
         }
 
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsOld(string orderNo, string DCStatus, string UserName)
+        {
+            List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
+            {
+                new SqlParameter("@OrderNo", orderNo),
+                new SqlParameter("@Stage", string.IsNullOrEmpty(DCStatus)?"":DCStatus),
+                new SqlParameter("@UserName", UserName)
+
+            };
+            return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[DC_Select]", sqlParams.ToArray());
+        }
+
         public async Task<IEnumerable<OrderDetails>> GetHHTOrderDetails(OrderDetails orderDetails)
         {
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
@@ -295,15 +307,15 @@ namespace LOC.PMS.Infrastructure.Repositories
                 var toEmailList = new List<EmailAddress>();
 
 
-                toEmailList.Add(new EmailAddress("viswanathan_hemachandran@cat.com"));
-                toEmailList.Add(new EmailAddress("s_arun_prasath@cat.com"));
-                toEmailList.Add(new EmailAddress("GTOCITRL@cat.com"));
-                toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-                toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-                toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-                toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-                toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-                toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
+                //toEmailList.Add(new EmailAddress("viswanathan_hemachandran@cat.com"));
+                //toEmailList.Add(new EmailAddress("s_arun_prasath@cat.com"));
+                //toEmailList.Add(new EmailAddress("GTOCITRL@cat.com"));
+                //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
+                //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
+                //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
+                //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
+                //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
+                //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
                 toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
                 toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com"));
                 toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
@@ -359,8 +371,14 @@ namespace LOC.PMS.Infrastructure.Repositories
 
                     var toEmailList = new List<EmailAddress>();
 
+                    var _lstMaild = GetMailIds("2");
 
-                    toEmailList.Add(new EmailAddress(string.IsNullOrEmpty(Email) ? "muthazagan123@gmail.com" : Email));
+                    foreach (var mailId in _lstMaild)
+                    {
+                        toEmailList.Add(new EmailAddress(mailId, ""));
+                    }
+
+                    //toEmailList.Add(new EmailAddress(string.IsNullOrEmpty(Email) ? "muthazagan123@gmail.com" : Email));
                     //toEmailList.Add(new EmailAddress("viswanathan_hemachandran@cat.com"));
                     //toEmailList.Add(new EmailAddress("s_arun_prasath@cat.com"));
                     //toEmailList.Add(new EmailAddress("GTOCITRL@cat.com"));
@@ -370,11 +388,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                     //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
                     //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
                     //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-                    //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
-
-                    toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
-                    toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
-                    toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
+                    //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));                    
 
                     var message = MailHelper.CreateSingleEmailToMultipleRecipients(msg.From, toEmailList, "DC Details ", "", HtmlContent);
 
@@ -409,6 +423,10 @@ namespace LOC.PMS.Infrastructure.Repositories
         public async Task<IEnumerable<DCDetails>> GetManualDcDetails(string vendorId)
         {
             return await _context.QueryStoredProcedureAsync<DCDetails>("[dbo].[PalletsForPutAway_Select]");
+        }
+        private List<string> GetMailIds(string Id)
+        {
+            return _context.QueryData<string>(@$"select Email from tbl_MailConfiguration where ModuleId={Id} and Isactive=1").ToList();
         }
 
         public class MailModel

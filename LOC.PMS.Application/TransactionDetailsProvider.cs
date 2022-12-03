@@ -71,6 +71,30 @@ namespace LOC.PMS.Application
             return null;
         }
 
+        public async Task<IEnumerable<DCDetails>> GetDCDetailsOld(string orderNo, string DCStatus, string UserName)
+        {
+            try
+            {
+                _logger.ForContext("Select Get DC Details", orderNo)
+                    .Information("Select  Get DC Details request - Start");
+
+                var response = await _transactionRepository.GetDCDetailsOld(orderNo, DCStatus, UserName);
+
+                _logger.ForContext("Select  Get DC Details", orderNo)
+                    .Information("Select  Get DC Details - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.ForContext("GetOrderDetails", orderNo)
+                    .Error(exception, "Exception occurred during Select Order Details .");
+                await Task.FromException(exception);
+
+            }
+
+            return null;
+        }
+
         public async Task SaveVehicleAndUpdateStatus(VechicleDetails vechicleDetails, string ToDCStage, string ToPalletStage)
         {
             try

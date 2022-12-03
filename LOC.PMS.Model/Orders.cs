@@ -16,4 +16,12 @@ namespace LOC.PMS.Model
         public DateTime? ModifiedDate { get; set; }
         public DateTime OrderDate { get; set; }
     }
+
+    public class DCAdditionalDetails
+    {
+        public string DCNo { get; set; }
+        public string BillFrom { get; set; }
+        public string SendVendorCode { get; set; }
+        public string ToVendorCode { get; set; }
+    }
 }

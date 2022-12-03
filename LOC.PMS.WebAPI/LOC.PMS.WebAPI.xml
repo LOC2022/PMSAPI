@@ -341,7 +341,7 @@
             </summary>
             <returns>List of Orders</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPlannedDBDetails(System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetPlannedDBDetails(System.String,System.String,System.String)">
             <summary>
             
             </summary>
@@ -419,6 +419,36 @@
             </summary>
             <returns>List of Orders</returns>
         </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetAddtionalDCDetails(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>DC Basic Details</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetFullCycleReport">
+            <summary>
+            
+            </summary>
+            <returns>FullCycle Report Data</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.SaveMailDetails(LOC.PMS.Model.Report.MailModel)">
+            <summary>
+            
+            </summary>
+            <returns>Save Mail Details</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.GetMailDetails">
+            <summary>
+            
+            </summary>
+            <returns>Get Mail Details</returns>
+        </member>
+        <member name="M:LOC.PMS.WebAPI.Controllers.ReportsController.DeleteMailDetails(System.String)">
+            <summary>
+            
+            </summary>
+            <returns>Delete Mail Details</returns>
+        </member>
         <member name="T:LOC.PMS.WebAPI.Controllers.TransactionController">
             <summary>
             
@@ -437,13 +467,14 @@
             <param name="orderDetails"></param>
             <returns>List of Orders</returns>
         </member>
-        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetails(System.String,System.String,System.String)">
+        <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.GetDCDetails(System.String,System.String,System.String,System.String)">
             <summary>
             
             </summary>
             <param name="OrderNo"></param>
             <param name="DCStatus"></param>
             <param name="UserName"></param>
+            <param name="UserId"></param>
             <returns>List of DC's</returns>
         </member>
         <member name="M:LOC.PMS.WebAPI.Controllers.TransactionController.UpdateScanDetails(System.String,System.Int32,System.String,System.String,System.Int32)">

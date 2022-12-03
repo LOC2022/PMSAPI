@@ -46,7 +46,7 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
 
         List<DBPalletPartDetails> GetPalletDetailsByPart(string userId, string status, string PalletPartNo);
         SupplierInOutFlow GetSupplierInOutFlowDB(string vendorId, string startDate, string endDate);
-        PlannedDBData GetPlannedDBDetails(string startDate, string endDate);
+        PlannedDBData GetPlannedDBDetails(string UserId, string startDate, string endDate);
         TripDetails GetTripDBDetails(string startDate, string endDate);
         PalletAgingDetails GetPalletAgingDB(string vendorId, string aging);
         List<DCDetails> GetDcNoForManual(string vendorId, string flag);
@@ -59,5 +59,10 @@ namespace LOC.PMS.Application.Interfaces.IRepositories
         void GenerateDCForManual(List<string> lstPallets, string orderNo);
         List<DCDetails> GetOrderNoForDispatch();
         void DispatchOrder(List<string> lstPallets, string orderNo);
+        DCAdditionalDetails GetAddtionalDCDetails(string dCNo);
+        List<FullCycleReport> GetFullCycleReport();
+        void SaveMailDetails(MailModel mailModel);
+        List<MailModel> GetMailDetails();
+        void DeleteMailDetails(string id);
     }
 }

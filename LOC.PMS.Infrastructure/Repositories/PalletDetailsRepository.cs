@@ -29,7 +29,7 @@ namespace LOC.PMS.Infrastructure.Repositories
                 palletList.Add(new PalletDetails()
                 {
                     PalletId = "A" + util.CreateUnique16DigitString(),
-                    PalletPartNo = palletDetailsRequest.PalletPartNo,
+                    PalletPartNo = palletDetailsRequest.PalletPartNo.Trim(),
                     PalletName = palletDetailsRequest.PalletName,
                     PalletWeight = palletDetailsRequest.PalletWeight,
                     Model = palletDetailsRequest.Model,
@@ -41,16 +41,21 @@ namespace LOC.PMS.Infrastructure.Repositories
                     Availability = PalletAvailability.Ideal,
                     CreatedDate = DateTime.Now,
                     CreatedBy = palletDetailsRequest.CreatedBy,
-                    Dimensions=palletDetailsRequest.Dimensions,
-                    Rate=palletDetailsRequest.Rate,
-                    Assy=palletDetailsRequest.Assy
+                    Dimensions = palletDetailsRequest.Dimensions,
+                    Rate = palletDetailsRequest.Rate,
+                    Assy = palletDetailsRequest.Assy
 
                 });
-            }     
-            
+            }
+
             var ColList = new List<string> { "PalletId", "PalletPartNo", "PalletName", "PalletWeight", "Model", "KitUnit", "WhereUsed", "PalletType", "LocationId", "D2LDays", "Availability", "WriteCount", "CreatedDate", "CreatedBy", "Dimensions", "Rate", "Assy" };
 
             _context.BulkCopy(palletList, ColList, 30, "PalletMaster");
+
+
+
+            string UpdatePalletQry = $"update PalletMaster set D2LDays = {palletDetailsRequest.D2LDays}   WHERE PalletPartNo='{palletDetailsRequest.PalletPartNo.Trim()}' ;";
+            _context.ExecuteSql(UpdatePalletQry);
 
             return await SelectPalletDetails(null);
         }
@@ -60,7 +65,7 @@ namespace LOC.PMS.Infrastructure.Repositories
             List<IDbDataParameter> sqlParams = new List<IDbDataParameter>
             {
                 new SqlParameter("@PalletId", palletDetailsRequest.PalletId),
-                new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletPartNo),
+                new SqlParameter("@PalletPartNo", palletDetailsRequest.PalletPartNo.Trim()),
                 new SqlParameter("@PalletName", palletDetailsRequest.PalletName),
                 new SqlParameter("@PalletWeight", palletDetailsRequest.PalletWeight),
                 new SqlParameter("@Model", palletDetailsRequest.Model),
@@ -71,7 +76,9 @@ namespace LOC.PMS.Infrastructure.Repositories
                 new SqlParameter("@D2LDays", palletDetailsRequest.D2LDays),
                 new SqlParameter("@Availability", palletDetailsRequest.Availability),
                 new SqlParameter("@CreatedBy", palletDetailsRequest.CreatedBy),
-                new SqlParameter("@WriteCount", palletDetailsRequest.WriteCount)
+                new SqlParameter("@WriteCount", palletDetailsRequest.WriteCount),
+                new SqlParameter("@Rate", Convert.ToInt32(palletDetailsRequest.Rate)),
+                new SqlParameter("@Dimension", palletDetailsRequest.Dimensions)
             };
 
             await _context.ExecuteStoredProcedureAsync("[dbo].[PalletMaster_Modify]", sqlParams.ToArray());

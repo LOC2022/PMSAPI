@@ -22,7 +22,7 @@ namespace LOC.PMS.Infrastructure.Repositories
         public OrderRepository(IContext context, IConfiguration config)
         {
             _context = context;
-            _config = config;   
+            _config = config;
         }
 
         public Task AddDayPlanData(List<DayPlan> order)
@@ -462,16 +462,14 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                 var test = new EmailAddress(fromEmail, "Ace Digital");
 
 
-                //toEmailList.Add(new EmailAddress("Raju_Rajendran@cat.com"));
-                //toEmailList.Add(new EmailAddress("Sant_Kumar_Yadav_Astbhuja@cat.com"));
-                //toEmailList.Add(new EmailAddress("B_Babu@cat.com"));
-                //toEmailList.Add(new EmailAddress("Bakthavatchalu_Suresh@cat.com"));
-                //toEmailList.Add(new EmailAddress("Chidambaram_Hariharasubramaniam@cat.com"));
-                //toEmailList.Add(new EmailAddress("Eswaran_Vignesh@cat.com"));
-                //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com"));
-                toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
-                toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
-                toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
+                var _lstMail = GetMailIds("1");
+                foreach (var mail in _lstMail)
+                {
+                    toEmailList.Add(new EmailAddress(mail, ""));
+                }
+                //toEmailList.Add(new EmailAddress("muthazagan123@gmail.com", ""));
+                //toEmailList.Add(new EmailAddress("Saravana.m88@gmail.com", ""));
+                //toEmailList.Add(new EmailAddress("shalibhadra1488@gmail.com", ""));
 
 
 
@@ -486,11 +484,10 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
 
         public void CreateOrder()
         {
-            string VendorQry = @"select DISTINCT SUM(RequiredQty) Qty,COUNT(distinct DP.PalletPartNo) ReqPart, DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId from [dbo].[DayPlan] DP
-                                LEFT JOIN (select distinct PalletPartNo,D2LDays from  PalletMaster) PM on DP.PalletPartNo=PM.PalletPartNo
+            string VendorQry = @"select DISTINCT SUM(RequiredQty) Qty,COUNT(distinct DP.PalletPartNo) ReqPart, DP.VendorId,DP.OrderDate,DP.VendorId from [dbo].[DayPlan] DP                               
                                 LEFT JOIN VendorMaster VM on VM.VendorId=DP.VendorId
                                 where DP.IsActive = 1
-                                GROUP BY DP.VendorId,DP.OrderDate,PM.D2LDays,VM.NonD2LDays,DP.VendorId";
+                                GROUP BY DP.VendorId,DP.OrderDate,DP.VendorId";
 
             var dt = _context.QueryData<DayPlan>(VendorQry);
             List<Orders> OrderList = new List<Orders>();
@@ -498,20 +495,21 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
 
             foreach (var d in dt)
             {
-                DateTime OrderDate;
-                if (d.D2LDays != 0)
-                    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
-                else if (d.NonD2LDays != 0)
-                    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
-                else
-                    OrderDate = d.OrderDate;
+                //DateTime OrderDate;
+                //if (d.D2LDays != 0)
+                //    OrderDate = d.OrderDate.AddDays(-d.D2LDays);
+                //else if (d.NonD2LDays != 0)
+                //    OrderDate = d.OrderDate.AddDays(-d.NonD2LDays);
+                //else
+                //
+                DateTime OrderDate = d.OrderDate.AddDays(-6);
 
 
                 var OrderId = "ORD" + DateTime.Now.ToString("ddMMyyyyHHmmssfff");
-                string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
-                            where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
-                            Group by PalletPartNo,Description,VendorId,OrderDate ";
-                var Data = _context.QueryData<DayPlan>(sql);
+                //string sql = @$"select SUM(RequiredQty) Qty,PalletPartNo,Description PalletPartName,VendorId,OrderDate from [dbo].[DayPlan]
+                //            where IsActive = 1 and VendorId='{d.VendorId}' and OrderDate='{d.OrderDate}'
+                //            Group by PalletPartNo,Description,VendorId,OrderDate ";
+                //var Data = _context.QueryData<DayPlan>(sql);
 
 
 
@@ -682,7 +680,7 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
                             _context.BulkCopy(palletsByOrderTrans, ColList, palletsByOrderTrans.Count, "PalletsByOrderTrans");
 
                             var Pallets = string.Join("','", palletsByOrderTrans.Select(s => s.PalletId).ToList());
-                            _context.ExecuteSql($"Update PalletMaster set Availability=2  where PalletId IN '{Pallets}' ");
+                            _context.ExecuteSql($"Update PalletMaster set Availability=2  where PalletId IN ('{Pallets}') ");
 
                             int qty = _context.QueryData<int>($"select COUNT(*) from PalletsByOrderTrans where OrderNo='{d.OrderNo}'").FirstOrDefault();
 
@@ -707,6 +705,12 @@ Dear All,<br/> The Order has been Created Successfully. Please Find the Order De
 
                 }
             }
+        }
+
+
+        private List<string> GetMailIds(string Id)
+        {
+            return _context.QueryData<string>(@$"select Email from tbl_MailConfiguration where ModuleId={Id} and Isactive=1").ToList();
         }
 
 

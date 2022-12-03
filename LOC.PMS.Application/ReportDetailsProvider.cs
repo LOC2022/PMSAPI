@@ -554,13 +554,13 @@ namespace LOC.PMS.Application
             }
         }
 
-        public PlannedDBData GetPlannedDBDetails(string startDate, string endDate)
+        public PlannedDBData GetPlannedDBDetails(string UserId, string startDate, string endDate)
         {
             try
             {
                 _logger.Information("GetSupplierInOutFlowDB - Start");
 
-                var response = _reportDetailsRepository.GetPlannedDBDetails(startDate, endDate);
+                var response = _reportDetailsRepository.GetPlannedDBDetails(UserId, startDate, endDate);
 
                 _logger.Information("GetSupplierInOutFlowDB request - End");
                 return response;
@@ -784,6 +784,107 @@ namespace LOC.PMS.Application
                 _reportDetailsRepository.DispatchOrder(lstPallets, orderNo);
 
                 _logger.Information("GetSupplierInOutFlowDB request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public DCAdditionalDetails GetAddtionalDCDetails(string DCNo)
+        {
+            try
+            {
+                _logger.Information("GetSupplierInOutFlowDB - Start");
+
+                var response = _reportDetailsRepository.GetAddtionalDCDetails(DCNo);
+
+                _logger.Information("GetSupplierInOutFlowDB request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public List<FullCycleReport> GetFullCycleReport()
+        {
+            try
+            {
+                _logger.Information("GetFullCycleReport - Start");
+
+                var response = _reportDetailsRepository.GetFullCycleReport();
+
+                _logger.Information("GetFullCycleReport request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void SaveMailDetails(MailModel mailModel)
+        {
+            try
+            {
+                _logger.Information("GetFullCycleReport - Start");
+
+                _reportDetailsRepository.SaveMailDetails(mailModel);
+
+                _logger.Information("GetFullCycleReport request - End");
+
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+
+        public List<MailModel> GetMailDetails()
+        {
+            try
+            {
+                _logger.Information("GetMailDetails - Start");
+
+                var response = _reportDetailsRepository.GetMailDetails();
+
+                _logger.Information("GetMailDetails request - End");
+                return response;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error(exception, "Exception occurred while pulling pallet part trans report.");
+
+                throw exception;
+
+            }
+        }
+
+        public void DeleteMailDetails(string id)
+        {
+            try
+            {
+                _logger.Information("GetFullCycleReport - Start");
+
+                _reportDetailsRepository.DeleteMailDetails(id);
+
+                _logger.Information("GetFullCycleReport request - End");
 
             }
             catch (Exception exception)
